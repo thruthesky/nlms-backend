@@ -35,3 +35,9 @@ Backend server for New LMS
 ## User
 
 * many users can have same email address. so, a user can create many id for his family but use only one email for easy management.
+
+* user type
+    * 'S' for student
+    * 'M' for manager
+    * 'T' for teacher
+    

@@ -41,3 +41,7 @@ Backend server for New LMS
     * 'M' for manager
     * 'T' for teacher
     
+    
+# Unit Test
+
+* http://localhost/www/nlms-backend/?mc=user.create&id=user3&email=email2@gmail.com

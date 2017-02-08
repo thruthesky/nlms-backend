@@ -19,7 +19,7 @@ class Create extends User {
 
         $this->reset( $user_idx );
 
-        success( $this->session_id() );
+        success( $this->get_session_id() );
 
 
     }

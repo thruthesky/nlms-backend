@@ -46,6 +46,12 @@ Backend server for New LMS
     * 'session_id' will be returned.
 
 
+### Update user data
+
+* ?session_id=....&email=...
+    * New 'session_id' will be returned.
+    
+    
 # Database
 
 ## User

@@ -16,7 +16,7 @@ class User extends Base {
      * @todo make a good session_id
      * @return string
      */
-    public function session_id() {
+    public function get_session_id() {
 
         $n = $this->f['idx'];
         $i = $this->f['id'];
@@ -29,6 +29,7 @@ class User extends Base {
 
         return $session_id;
     }
+
 
 
     public function get_user_by_session_id( $session_id ) {

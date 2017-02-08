@@ -20,6 +20,6 @@ class Update extends User {
 
         $this->reset( $user );
         $this->update( $data );
-        success( $this->session_id() );
+        success( $this->get_session_id() );
     }
 }

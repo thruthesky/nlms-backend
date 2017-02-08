@@ -2,6 +2,7 @@
 /**
  * @see README.md
  */
+namespace model\user;
 class Create extends User {
     public function __construct()
     {
@@ -20,7 +21,6 @@ class Create extends User {
         $data['password'] = $this->encryptPassword( in('password') );
 
         $user_idx = $this->create( $data );
-
 
         $this->reset( $user_idx );
 

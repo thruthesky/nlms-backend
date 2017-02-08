@@ -1,5 +1,5 @@
 <?php
-
+namespace model\user;
 class Update extends User {
     public function __construct()
     {
@@ -16,9 +16,7 @@ class Update extends User {
         $data['name'] = in('name');
 
 
-        $user = $this->get_user_by_session_id( in('session_id') );
-
-        $this->reset( $user );
+        $this->load_by_session_id( in('session_id') );
         $this->update( $data );
         success( $this->get_session_id() );
     }

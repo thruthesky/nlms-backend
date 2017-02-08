@@ -3,7 +3,14 @@ Backend server for New LMS
 
 # TODO
 
+* autoload
+* namespace
+
+
 * Adding TEST. Test on below.
+    * test on protocol
+        * ?mc=core.info
+        * ?mc=core.info.version
     * base::create
     * base::update
     * base::load
@@ -38,7 +45,8 @@ Backend server for New LMS
     * If you do this, 'model/user/create.php' will be loaded, which means the constructor of the class is the starter of the protocol.
     
     
- * ?mcm=user.create.func
+* ?mc=user.create.func
+* ?mc=core.info.version 
     * If you call this, "model/user/create.php" will be loaded and the method 'func' is the starter of the protocol.
 
 

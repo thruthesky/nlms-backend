@@ -5,21 +5,16 @@
  * @note starter script
  *
  */
-include_once 'etc/defines.php';
-include_once 'etc/core-library.php';
-include_once 'etc/helpers.php';
-include_once 'etc/config.php';
-include_once 'etc/database.php';
-include_once 'model/base/base.php';
 
-include_once 'model/user/user.php';
+include_once 'etc/bootstrap.php';
+
+use core\library as lib;
 
 
-if ( script() ) {
-    include script();
-    $class = script_class();
-    $obj = new $class();
-    $method = script_method();
+if ( lib::script() ) {
+    $path = lib::model_class_path();
+    $obj = new $path();
+    $method = lib::script_method();
     if ( $method ) $obj->$method();
     error(ERROR_NO_HANDLER);
 }

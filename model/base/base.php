@@ -1,6 +1,6 @@
 <?php
 
-
+namespace model\base;
 class Base {
 
     private $table = '';
@@ -51,40 +51,28 @@ class Base {
     }
 
 
-    /**
-     * Quotes database identifier, e.g. table name or column name.
-     * For instance:
-     * tablename -> `tablename`
-     * @param  string $field
-     * @return string
-     */
-    function escape($field) {
-
-        /*
-        static $grammar = false;
-        if (!$grammar) {
-            $grammar = DB::table('user')->getGrammar(); // The table name doesn't matter.
-        }
-        return $grammar->wrap($field);
-        */
-        return $field;
-    }
-
 
 
 
     /**
-     * Returns user record.
+     * Returns a record.
+     *
+     * @attention @important load() resets the $record.
+     *
      * @param $idx - If it is numeric, then it is idx. so, this method will get the record on the idx.
      *  If $idx is a string, then it assumes that is is a WHERE SQL clause.
      * @return array|null
      */
-
     public function load( $idx ) {
+        return self::_load( $idx );
+    }
+    public function _load( $idx ) {
         if ( is_numeric($idx) ) $where = "idx=$idx";
         else $where = " $idx ";
-        return db()->get_row("SELECT * FROM user WHERE $where", ARRAY_A);
+        $this->record = db()->get_row("SELECT * FROM user WHERE $where", ARRAY_A);
+        return $this->record;
     }
+
 
 
     /**
@@ -106,33 +94,6 @@ class Base {
         return db()->update( $this->table, $kvs, "idx={$this->record['idx']}");
     }
 
-
-    /*
-
-    public function update( $kvs, $cond ) {
-
-
-
-        foreach($kvs as $k => $v) {
-            $v = $this->escape($v);
-            $k = $this->escape($k);
-            $sets[] = "$k='$v'";
-        }
-        $set = implode(", ", $sets);
-        $q = "UPDATE {$this->table} SET $set WHERE $cond";
-
-        print_r($q);
-        try {
-            db::update( $q );
-        }
-        catch ( QueryException $e ) {
-            if ( $e->errorInfo[0] == ERROR_KEY_EXISTS ) return ERROR_KEY_EXISTS;
-            else return ERROR_UNKNOWN;
-        }
-        return OK;
-
-    }
-    */
 
 
     public function delete() {

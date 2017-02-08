@@ -9,8 +9,12 @@ Backend server for New LMS
     * base::load
     * base::delete
     * user crud.
-    * session id.
-    * 
+    * get session id.
+    * user::load
+    * get user by session id.
+    * user::login
+    * user::logout
+    
     
 # Installation
 
@@ -41,15 +45,25 @@ Backend server for New LMS
 ### Create a user / User registration
 
 
-* http://localhost/www/nlms-backend/?mc=user.create&id=user3&email=email2@gmail.com
+* ?mc=user.create&id=xxxx&password=xxxxx
 
     * 'session_id' will be returned.
 
-
+###
+* ?mc=user.logout&session_id=xxxxxxx
+    * 'session_id' will be deleted on user's record.
+    
 ### Update user data
 
 * ?session_id=....&email=...
     * New 'session_id' will be returned.
+
+
+### User Login
+
+* ?id=....&password=....
+    * 'session_id' will be returned.
+    
     
     
 # Database

@@ -21,8 +21,8 @@ if ( script() ) {
     $obj = new $class();
     $method = script_method();
     if ( $method ) $obj->$method();
-    error('script-handler-not-found');
+    error(ERROR_NO_HANDLER);
 }
 else {
-    error('script-not-found');
+    error(ERROR_WRONG_MODEL_CLASS);
 }

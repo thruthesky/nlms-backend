@@ -18,6 +18,7 @@ class User extends Base {
      */
     public function get_session_id() {
 
+        if ( empty($this) || !isset( $this->f['idx']) ) error(ERROR_USER_NOT_SET);
         $n = $this->f['idx'];
         $i = $this->f['id'];
         $p = $this->f['password'];
@@ -38,5 +39,30 @@ class User extends Base {
         if ( empty($user) ) error( ERROR_WRONG_SESSION_ID );
         return $user;
     }
+
+
+    /**
+     * @param $idx - if it is a number, it assumes as user.idx
+     *              - or else if it has '=' or 'like' then, it assumes as user.id.
+     *              - or else if it assumes as user.id
+     * @return array|null
+     */
+    public function load( $idx ) {
+        if ( is_numeric( $idx ) ) {
+            $idx = "idx=$idx";
+        }
+        else if ( strpos( $idx, '=' ) || stripos( $idx, ' LIKE ') ) {
+
+        }
+        else {
+            $idx = "id = '$idx'";
+        }
+        return parent::load( $idx );
+    }
+
+
+
+
+
 
 }

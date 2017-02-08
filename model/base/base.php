@@ -138,4 +138,19 @@ class Base {
     public function delete() {
 
     }
+
+    public function encryptPassword( $str ) {
+        return md5( $str );
+    }
+
+    /**
+     * Returns true if password matches.
+     *
+     * @param $plain_text_password
+     * @param $encrypted_password
+     * @return bool
+     */
+    public function checkPassword( $plain_text_password, $encrypted_password ) {
+        return $this->encryptPassword( $plain_text_password ) == $encrypted_password;
+    }
 }

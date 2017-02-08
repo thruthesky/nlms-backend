@@ -95,6 +95,7 @@ class Database extends ezSQL_mysqli {
         }
         $set = implode(", ", $sets);
         $q = "UPDATE $table SET $set WHERE $conds";
+
         $this->query($q);
     }
 

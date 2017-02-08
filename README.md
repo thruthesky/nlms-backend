@@ -14,8 +14,9 @@ Backend server for New LMS
     * get user by session id.
     * user::login
     * user::logout
-    
-    
+
+
+
 # Installation
 
 * Pull out the code

@@ -1,26 +1,25 @@
 <?php
-/**
- * @see README.md
- */
-class Create extends User {
+
+class Update extends User {
     public function __construct()
     {
 
         parent::__construct();
 
+
+
+        if ( in('id') ) error( ERROR_CANNOT_CHANGE_USER_ID );
+
         $data = [];
-        $data['id'] = in('id');
         $data['email'] = in('email');
         $data['nickname'] = in('nickname');
         $data['name'] = in('name');
 
-        $user_idx = $this->create( $data );
 
+        $user = $this->get_user_by_session_id( in('session_id') );
 
-        $this->reset( $user_idx );
-
+        $this->reset( $user );
+        $this->update( $data );
         success( $this->session_id() );
-
-
     }
 }

@@ -5,11 +5,14 @@
  * @note starter script
  *
  */
-
+include_once 'etc/defines.php';
 include_once 'etc/core-library.php';
 include_once 'etc/helpers.php';
 include_once 'etc/config.php';
 include_once 'etc/database.php';
+include_once 'model/base/base.php';
+
+include_once 'model/user/user.php';
 
 
 if ( script() ) {

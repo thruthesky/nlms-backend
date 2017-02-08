@@ -53,11 +53,21 @@ function script_method() {
  * @endcode
  */
 function error( $code, $message='' ) {
+    global $em;
+    if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
     echo json_encode( ['code'=>$code, 'message'=>$message] );
     exit;
 }
 
-function success( $data ) {
-    echo json_encode( ['code'=>'', 'data'=>$data]);
+function success( $data = null ) {
+    echo json_encode( ['code'=>0, 'data'=>$data]);
     exit;
+}
+
+/**
+ * @param $error_code - It gets error code defined in defines.php
+ */
+function result( $error_code ) {
+    if ( $error_code ) error( $error_code );
+    else success();
 }

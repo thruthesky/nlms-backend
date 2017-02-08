@@ -1,7 +1,17 @@
 # nlms-backend
 Backend server for New LMS
 
+# TODO
 
+* Adding TEST. Test on below.
+    * base::create
+    * base::update
+    * base::load
+    * base::delete
+    * user crud.
+    * session id.
+    * 
+    
 # Installation
 
 * Pull out the code
@@ -18,9 +28,6 @@ Backend server for New LMS
 ## Call a method
 
 
-### Create a user
-
-
 * ?mc=user.create
 
     * If you do this, 'model/user/create.php' will be loaded, which means the constructor of the class is the starter of the protocol.
@@ -28,6 +35,15 @@ Backend server for New LMS
     
  * ?mcm=user.create.func
     * If you call this, "model/user/create.php" will be loaded and the method 'func' is the starter of the protocol.
+
+
+
+### Create a user / User registration
+
+
+* http://localhost/www/nlms-backend/?mc=user.create&id=user3&email=email2@gmail.com
+
+    * 'session_id' will be returned.
 
 
 # Database

@@ -10,7 +10,7 @@
 
 
 define('DATABASE_USER', 'root');
-define('DATABASE_PASSWORD', '7777');
+define('DATABASE_PASSWORD', 'root');
 define('DATABASE_NAME', 'nlms');
 define('DATABASE_HOST', 'localhost');
 
@@ -18,4 +18,4 @@ define('DATABASE_HOST', 'localhost');
 /**
  * If 'DEBUG_LOG_FILE_PATH' is false, then debug data will not be saved.
  */
-define('DEBUG_LOG_FILE_PATH', "./debug.log");
+define('DEBUG_LOG_FILE_PATH', "/home/nlms/api/etc/log/debug.log");

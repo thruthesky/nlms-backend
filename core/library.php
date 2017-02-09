@@ -20,7 +20,7 @@ class library {
 
     public final static function script() {
         $mcm = self::mcm();
-        if ( $mcm ) return "model/$mcm[0]/$mcm[1].php";
+        if ( $mcm ) return "../model/$mcm[0]/$mcm[1].php";
         else return null;
     }
 

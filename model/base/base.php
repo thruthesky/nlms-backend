@@ -164,6 +164,8 @@ class Base {
      *
      * Saves an array of meta data.
      *
+     * @attention It does not stop the script even if there is an error ( insdie the self ). It may stop the script if there is an error in a child method( deeper method )
+     *
      * @see readme
      * @param array $arr
      *
@@ -173,8 +175,9 @@ class Base {
      *      - false on failure.
      *
      */
-    public function saveMetas( Array $arr ) {
-        if ( ! $this->isRecordSet() ) error( ERROR_RECORD_NOT_SET );
+    public function saveMetas( $arr ) {
+        if ( ! $this->isRecordSet() ) return false;
+	if ( empty( $arr ) ) return false;
         debug_log("Base::saveMetas()");
         debug_log($arr);
         if ( ! is_array( $arr ) ) {

@@ -20,7 +20,7 @@ class Login extends User {
         if ( ! $this->checkPassword( in('password'), $user['password'] ) ) error( ERROR_WRONG_PASSWORD );
 
         // $this->reset( $user );
-        success( $this->get_session_id() );
+        success( ['session_id' => $this->get_session_id() ] );
 
     }
 }

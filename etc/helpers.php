@@ -35,6 +35,8 @@ function error( $code, $message='' ) {
 }
 
 function success( $data = null ) {
+    if ( empty($data) || is_array( $data ) ) { }
+    else error( ERROR_MALFORMED_RESPONSE );
     echo json_encode( ['code'=>0, 'data'=>$data]);
     exit;
 }

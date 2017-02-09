@@ -32,6 +32,7 @@ class Base {
     /**
      *
      * Sets the record to operate with.
+     *
      * @param $idx number|array
      *
      *  if it is a numeric, it assumes as 'idx'. it gets the record of 'idx' on the table and saves the records into $record.
@@ -42,6 +43,16 @@ class Base {
      *      - if there is no record by 'idx' and null|empty will be return.
      *      - if the $idx is not an array but empty, then it will return empty.
      *
+     * @code
+            $user_idx = $this->create( $data );
+            $this->reset( $user_idx );
+     * @endcode
+     *
+     * @code
+     *      $this->reset( [ 'a'=>'b' ] );
+     * @endcode
+     *
+     * 
      */
     public function reset( $idx ) {
         $this->record = null;

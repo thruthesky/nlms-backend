@@ -19,7 +19,7 @@ $DATABASE_TYPE          = 'mysqli';
 /**
  * If 'DEBUG_LOG_FILE_PATH' is false, then debug data will not be saved.
  */
-$DEBUG_LOG_FILE_PATH = "/data/debug.log";
+$DEBUG_LOG_FILE_PATH = "./data/debug.log";
 
 if ( file_exists("my-config.php") ) require "my-config.php";
 

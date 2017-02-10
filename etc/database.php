@@ -102,7 +102,7 @@ class Database extends ezSQL_mysqli {
 
 }
 
-$db = new Database( DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME, DATABASE_HOST);
+$db = new Database( $DATABASE_USER, $DATABASE_PASSWORD, $DATABASE_NAME, $DATABASE_HOST);
 
 function db() {
     global $db;

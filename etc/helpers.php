@@ -15,8 +15,9 @@
 
 
     function debug_log( $message ) {
+        global $DEBUG_LOG_FILE_PATH;
         static $count_dog = 0;
-        if ( ! DEBUG_LOG_FILE_PATH ) return;
+        if ( ! $DEBUG_LOG_FILE_PATH ) return;
 
         $count_dog ++;
 
@@ -30,7 +31,7 @@
         $message = "[$count_dog] $message\n";
 
 
-        $fd = fopen( DEBUG_LOG_FILE_PATH, 'a' );
+        $fd = fopen( $DEBUG_LOG_FILE_PATH, 'a' );
         if ( $fd ) {
             fwrite( $fd, $message );
             fclose( $fd );

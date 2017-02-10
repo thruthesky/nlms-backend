@@ -9,13 +9,19 @@
  */
 
 
-define('DATABASE_USER', 'root');
-define('DATABASE_PASSWORD', '');
-define('DATABASE_NAME', 'nlms');
-define('DATABASE_HOST', 'localhost');
+$DATABASE_USER          = 'root';
+$DATABASE_PASSWORD      = '';
+$DATABASE_NAME          = 'nlms';
+$DATABASE_HOST          = 'localhost';
+$DATABASE_TYPE          = 'mysqli';
 
 
 /**
  * If 'DEBUG_LOG_FILE_PATH' is false, then debug data will not be saved.
  */
-define('DEBUG_LOG_FILE_PATH', "etc/log/debug.log");
+$DEBUG_LOG_FILE_PATH = "/data/debug.log";
+
+if ( file_exists("my-config.php") ) require "my-config.php";
+
+
+

@@ -3,6 +3,34 @@ Backend server for New LMS
 
 # TODO
 
+* support sqlite for easy use.
+
+    * Use same SQL schema for mysql and sqlite.
+    
+    * make it optional on config.php
+    
+    * 
+
+* make an optional my-config.php to suppress and overwrite the config.php
+
+    * 
+    
+
+* Make a filipino Angular community.
+
+* [ Gem ] Video tutorial on easy installation.
+
+
+    * documentation with video on installing PHP and running with PHP built-in Web server with Backend+sqlite.
+    
+    * shoot video on installing Backend+SQLite with GoDaddy and Cafe24.
+
+    * Gem will shoot it and upload it on filipino Angular community.
+    
+    * Mr. Song will make korean dubbing.
+
+    
+
 
 * User Activity Log.
 
@@ -18,7 +46,10 @@ Backend server for New LMS
 * @done namespace
 
 
-* Adding TEST. Test on below.
+## TODO - Unit Test
+
+* Karma TEST. Test on below.
+
     * test on protocol
         * ?mc=core.info
         * ?mc=core.info.version

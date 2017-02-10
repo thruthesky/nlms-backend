@@ -62,6 +62,13 @@ class Base {
     }
 
 
+    /**
+     * @return bool
+     *      true if the record has set.
+     */
+    public function isRecordSet() {
+        return $this->record && $this->record['idx'];
+    }
 
 
 
@@ -124,5 +131,124 @@ class Base {
      */
     public function checkPassword( $plain_text_password, $encrypted_password ) {
         return $this->encryptPassword( $plain_text_password ) == $encrypted_password;
+    }
+
+
+    /**
+     *
+     * Saves a meta data.
+     *
+     * @warning if there is an error on saving meta data, it stops the script with json error.
+     *
+     * @param $code
+     * @param $data
+     * @return mixed - on error it stops with json error.
+     *              - idx of meta record on success.
+     */
+    public function saveMeta( $code, $data ) {
+        if ( ! $this->isRecordSet() ) error( ERROR_RECORD_NOT_SET );
+        debug_log("Base::saveMetas( $code, $data )");
+        $kvs = [
+            'model' => $this->table,
+            'model_idx' => $this->record['idx'],
+            'code' => $code,
+            'data' => $data
+        ];
+        $idx = db()->insert( 'meta', $kvs );
+        if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
+        return $idx;
+    }
+
+    /**
+     *
+     *
+     * Saves an array of meta data.
+     *
+     * @see readme
+     * @param array $arr
+     *
+     *
+     * @return bool
+     *      - true on success
+     *      - false on failure.
+     *
+     */
+    public function saveMetas( Array $arr ) {
+        if ( ! $this->isRecordSet() ) error( ERROR_RECORD_NOT_SET );
+        debug_log("Base::saveMetas()");
+        debug_log($arr);
+        if ( ! is_array( $arr ) ) {
+            debug_log("saveMetas() arr is not an array");
+            return false;
+        }
+        foreach ( $arr as $code => $data ) {
+            $this->saveMeta( $code, $data );
+        }
+        return true;
+    }
+
+
+    /**
+     * Returns the meta data of the code.
+     *
+     * @warning if there is more than one code, it is unsure which data among the code will be returned.
+     *      So, keep it unique if you need.
+     *
+     * @param $code
+     * @return mixed
+     *  null - if $record is not set or there is no data.
+     */
+    public function getMeta( $code ) {
+        if ( ! $this->isRecordSet() ) return null;
+        $model = $this->table;
+        $model_idx = $this->record['idx'];
+        debug_log("SELECT * FROM meta WHERE model='$model' AND model_idx=$model_idx AND code='$code'");
+        $row = db()->get_row("SELECT * FROM meta WHERE model='$model' AND model_idx=$model_idx AND code='$code'", ARRAY_A);
+        if ( empty($row) ) return null;
+        return $row['data'];
+    }
+
+
+    /**
+     * Returns all the metas of the model and its idx.
+     *
+     * @return mixed
+     *  null - if $record is not set or there is no data.
+     */
+    public function getMetas() {
+
+        if ( ! $this->isRecordSet() ) return null;
+        $model = $this->table;
+        $model_idx = $this->record['idx'];
+        $rows = db()->get_results("SELECT code, data FROM meta WHERE model='$model' AND model_idx=$model_idx", ARRAY_A);
+        if ( empty($rows) ) return null;
+
+        return $rows;
+    }
+
+    /**
+     * @warning there is no return value.
+     * @param $code
+     */
+    public function deleteMata( $code ) {
+        if ( ! $this->isRecordSet() ) return;
+        $model = $this->table;
+        $model_idx = $this->record['idx'];
+        db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx AND code = '$code'");
+    }
+
+
+    /**
+     * Delete meta data of the 'model' & 'model_idx'
+     *
+     * @warning there is no return data.
+     */
+    public function deleteMetas() {
+
+        if ( ! $this->isRecordSet() ) return;
+        $model = $this->table;
+        $model_idx = $this->record['idx'];
+        db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx");
+
     }
 }

@@ -3,8 +3,19 @@ Backend server for New LMS
 
 # TODO
 
-* autoload
-* namespace
+
+* User Activity Log.
+
+    * How many times a user had logged in/out.
+    * How many times a user read a post.
+    * Who did that class reservation?
+    * Who can cancel the class? when, what, ...
+    * last visit of a user.
+    * Search a user who did reservation on last weekend.
+    
+
+* @done autoload
+* @done namespace
 
 
 * Adding TEST. Test on below.
@@ -73,7 +84,19 @@ Backend server for New LMS
 * ?id=....&password=....
     * 'session_id' will be returned.
     
-    
+# Debug Log
+
+do the following.
+
+
+    define('DEBUG_LOG_FILE_PATH', './debug.log');
+    $ touch debug.log
+    $ chmod 777 debug.log 
+    $ tail -f debug.log
+
+
+
+
     
 # Database
 
@@ -85,8 +108,82 @@ Backend server for New LMS
     * 'S' for student
     * 'M' for manager
     * 'T' for teacher
+
     
-    
-# Unit Test
+## Meta
+
+For metadata of all kinds.
+
+model is the model of the database table name.
+model_idx is the idx of the model.
+code is the distinguisher of the record.
+
+Examples of usage.
+
+for user meta data.
+
+user.user_idx.code
+
+user.123.first_name
+
+
+for post meta data.
+
+post.post_idx.code
+
+post.456.writer_address
+
+for comment meta data.
+
+comment.111.writer_address
+
+
+
+
+### base::xxxxMeta* funtions
+
+The model and model_idx are automatically set.
+
+
+So, you must set the user in 'Base::$record' by 'load()' or 'reset()'
+
+For instance,
+
+If you save a meta like
+
+    $this->saveMeta( 'a', 'b')
+
+depending on what is set to Base::$record,
+
+the model and model_idx are set automatically.
+
+If the code is on the user table, then,
+
+'user' as model and its idx as model_idx will be automatically set.
+
+
+@attention since, the index is not unique, same 'model.model.idx.code' index can exist.
+
+
+# Request
 
 * http://localhost/www/nlms-backend/?mc=user.create&id=user3&email=email2@gmail.com
+
+
+* Registration with meta data.
+    * ?id=test-1486715337&password=test-1486715337&name=test-1486715337&nickname=undefined&email=test-1486715337%40gmail.com&mobile=undefined&landline=undefined&gender=undefined&birthday=undefined&meta%5Btype%5D=T&meta%5Bclassid%5D=my-skype-id&mc=user.create&module=ajax&submit=1
+
+
+* How to set user's meta data.
+
+    * ?mc=user.meta.set&session_id=109-821aca27b85169bfd3d33e4d02cc97d5&code=abc&value=1234
+
+* How to get a meta data of user
+
+    * ?mc=user.meta.get&session_id=109-821aca27b85169bfd3d33e4d02cc97d5&code=abc
+
+
+* How to get user's all meta data.
+
+    * ?mc=user.meta.gets&session_id=109-821aca27b85169bfd3d33e4d02cc97d5
+    

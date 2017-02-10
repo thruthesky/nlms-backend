@@ -24,6 +24,10 @@ class Create extends User {
 
         $this->reset( $user_idx );
 
+
+
+        $this->saveMetas( in('meta') );
+
         success( ['session_id'=>$this->get_session_id()] );
 
     }

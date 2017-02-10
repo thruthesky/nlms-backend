@@ -15,7 +15,7 @@ define('ERROR_USER_NOT_FOUND',40055 );              $em[ERROR_USER_NOT_FOUND] = 
 define('ERROR_WRONG_PASSWORD', 40056 );             $em[ERROR_WRONG_PASSWORD] = 'wrong-password';
 define('ERROR_USER_NOT_SET', 40057);                $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
 define('ERROR_MALFORMED_RESPONSE', 40060);          $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response';
-
+define('ERROR_RECORD_NOT_SET', 40070);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
 define('OK', 0);
 
 

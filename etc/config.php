@@ -21,7 +21,7 @@ $DATABASE_TYPE          = 'mysqli';
  */
 $DEBUG_LOG_FILE_PATH = "./data/debug.log";
 
-if ( file_exists("my-config.php") ) require "my-config.php";
+if ( file_exists( __DIR__ . "/my-config.php") ) require __DIR__ . "/my-config.php";
 
 
 

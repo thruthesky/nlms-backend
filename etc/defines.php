@@ -1,6 +1,6 @@
 <?php
 $em = [];
-define('ERROR_MODEL_CLASS_NOT_FOUND', 40040);           $em[ERROR_MODEL_CLASS_NOT_FOUND] = "model-class-not-found";
+define('ERROR_MODEL_CLASS_NOT_FOUND', 40040);       $em[ERROR_MODEL_CLASS_NOT_FOUND] = "model-class-not-found";
 define('ERROR_NO_HANDLER', 40041);                  $em[ERROR_NO_HANDLER] = "handler-not-found";
 define('ERROR_KEY_EXISTS', 23000);                  $em[ERROR_KEY_EXISTS] = 'key-exists';
 define('ERROR_UNKNOWN', 4000);                      $em[ERROR_UNKNOWN] = 'unknown-error';

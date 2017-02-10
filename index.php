@@ -19,5 +19,5 @@ if ( lib::script() ) {
     error(ERROR_NO_HANDLER);
 }
 else {
-    error(ERROR_WRONG_MODEL_CLASS);
+    error(ERROR_MODEL_CLASS_NOT_FOUND);
 }

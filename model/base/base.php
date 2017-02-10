@@ -98,13 +98,19 @@ class Base {
      * This creates a record into a table.
      * @note this always returns success. If there is an error, it does not return. it just stop.
      * @param $kvs
+     *
+     *
      * @return number - same as parent::insert()
-     * @attention If there is any database error, it will just stop running the script and dis play json error
+     *
+     *
+     *
      */
     public function create( $kvs ) {
-        $idx = db()->insert( $this->table, $kvs );
+        return db()->insert( $this->table, $kvs );
+        /*
         if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
         return $idx;
+        */
     }
 
 

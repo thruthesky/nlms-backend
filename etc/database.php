@@ -30,8 +30,14 @@ class Database extends ezSQL_mysqli {
         if ( $this->captured_errors ) {
             foreach ( $this->captured_errors as $e ) {
                 $message = "$e[error_str] - $e[query]";
-                if ( strpos($e['error_str'], "Duplicate entry '") === 0 ) error(ERROR_KEY_EXISTS, $message);
-                error( ERROR_UNKNOWN, $message);
+                debug_log($message);
+                if (strpos($e['error_str'], "Duplicate entry '") === 0) {
+                    debug_log($message);
+                    return ERROR_KEY_EXISTS;
+                }
+                else {
+                    return ERROR_DATABASE_QUERY;
+                }
             }
         }
         return $re;
@@ -50,7 +56,7 @@ class Database extends ezSQL_mysqli {
      * @param associative-array $values
     fields and its values.
      * @return number - idx of last inserted record
-     *          or 0 on failure.
+     *          or error number on failure.
      *
 
     This is the same as PDO_STATEMENT::execute
@@ -69,9 +75,10 @@ class Database extends ezSQL_mysqli {
         $keys = "`".implode("`,`",$key_list)."`";
         $vals = "'".implode("','",$val_list)."'";
         $q = "INSERT INTO `{$table_name}` ({$keys}) VALUES ({$vals})";
-        $this->query($q);
-
-        return $this->insert_id;
+        $re = $this->query($q);
+        if ( $re < 0 ) return $re; // database error.
+        if ( isset( $this->insert_id ) ) return $this->insert_id;
+        else return ERROR_UNKNOWN; // unknown error.
     }
 
 

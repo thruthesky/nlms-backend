@@ -9,6 +9,7 @@ class Create extends User {
 
         parent::__construct();
 
+
         if ( empty( in('id') ) ) error( ERROR_USER_ID_EMPTY );
         if ( empty( in('password') ) ) error( ERROR_PASSWORD_EMPTY );
 
@@ -22,9 +23,9 @@ class Create extends User {
 
         $user_idx = $this->create( $data );
 
+        if ( $user_idx <= 0 ) return error( $user_idx );
+
         $this->reset( $user_idx );
-
-
 
         $this->saveMetas( in('meta') );
 

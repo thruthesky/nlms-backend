@@ -16,7 +16,9 @@ if ( lib::script() ) {
     $obj = new $path();
     $method = lib::script_method();
     if ( $method ) $obj->$method();
-    error( ERROR_NO_HANDLER );
+
+
+    // error( ERROR_NO_HANDLER ); // @deprecated since the success json does not stop the script.
 }
 else {
     error( ERROR_MODEL_CLASS_EMPTY );

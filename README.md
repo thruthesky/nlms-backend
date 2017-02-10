@@ -8,13 +8,8 @@ Backend server for New LMS
     * Use same SQL schema for mysql and sqlite.
     
     * make it optional on config.php
-    
-    * 
 
-* make an optional my-config.php to suppress and overwrite the config.php
 
-    * 
-    
 
 * Make a filipino Angular community.
 
@@ -30,7 +25,15 @@ Backend server for New LMS
     * Mr. Song will make korean dubbing.
 
     
+* file upload and download.
 
+    * DO some think like
+        * index.php?mc=data.image&width=120&height=80&quality=70&resize=crop and create a realtime optimized image.
+            * md5 filename with mime type. "md5.image+png", "md5.application+x-download", "md5.video"
+                * replace '/' to '+'
+            * documentation of cache the image with etag on web server configuration.
+            * cache image after create with name like "filename-120-80-70-resize.jpg"
+                * and check if file exists with same name. if yes, just send it. if not, create a new optimized image.
 
 * User Activity Log.
 
@@ -40,6 +43,10 @@ Backend server for New LMS
     * Who can cancel the class? when, what, ...
     * last visit of a user.
     * Search a user who did reservation on last weekend.
+
+* backend-admin project.
+
+    * create a backend-admin with aonic to manage backend and unit test.
     
 
 * @done autoload
@@ -75,6 +82,25 @@ Backend server for New LMS
 * Access thru website.
 
 
+# Configuration
+
+* edit etc/config.php to configure the system.
+* Developers can create an optional my-config.php to suppress and overwrite the config.php
+    * For instance, you don't want to touch the default config.php but to add your own database information.
+    
+  
+# Resources
+
+## Backend Angular API
+
+* It is a ready-to-use Angular API Module for backend. Use it angular and ionic project.
+    * https://github.com/thruthesky/backend-angular-api
+    
+## Backend Admin
+
+* It is a client-end admin site to manage 'backend'.
+
+    * https://github.com/thruthesky/backend-api
 
 # API PROTOCOLS
 

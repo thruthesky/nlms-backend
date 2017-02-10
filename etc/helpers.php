@@ -52,6 +52,9 @@ function in ( $code, $default = null ) {
 
 
 /**
+ *
+ * @attention this method does not stop the script. This is for mainly debug/unit test purpose.
+ *
  * @param $code
  * @param string $message
  *
@@ -66,14 +69,17 @@ function error( $code, $message='' ) {
     global $em;
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
     echo json_encode( ['code'=>$code, 'message'=>$message] );
-    exit;
+
 }
 
+/**
+ * @attention when success json data printed out, it does not stop the script. Meaning the script will continue.
+ * @param null $data
+ */
 function success( $data = null ) {
     if ( empty($data) || is_array( $data ) ) { }
     else error( ERROR_MALFORMED_RESPONSE );
     echo json_encode( ['code'=>0, 'data'=>$data]);
-    exit;
 }
 
 /**

@@ -26,6 +26,5 @@ class Create extends User {
 
         success( ['session_id'=>$this->get_session_id()] );
 
-
     }
 }

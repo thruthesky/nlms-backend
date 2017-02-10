@@ -120,10 +120,10 @@ Backend server for New LMS
 do the following.
 
 
-    define('DEBUG_LOG_FILE_PATH', './debug.log');
-    $ touch debug.log
-    $ chmod 777 debug.log 
-    $ tail -f debug.log
+    define('DEBUG_LOG_FILE_PATH', './data/debug.log');
+    touch data/debug.log
+    chmod 777 data/debug.log 
+    tail -f data/debug.log
 
 
 

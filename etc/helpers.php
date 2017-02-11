@@ -53,6 +53,8 @@ function in ( $code, $default = null ) {
 
 /**
  *
+ * Saves JSON error info $system['error'];
+ *
  * @attention this method does not stop the script. This is for mainly debug/unit test purpose.
  *
  * @param $code
@@ -64,12 +66,15 @@ function in ( $code, $default = null ) {
  *      error('error-code', 'explanation message');
  *
  * @endcode
+ * @return mixed - error code.
+ *
  */
 function error( $code, $message='' ) {
-    global $em;
+    global $em, $system;
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
-    echo json_encode( ['code'=>$code, 'message'=>$message] );
-
+    $system['error'][] = ['code'=>$code, 'message'=>$message];
+    debug_log("ERROR >> $code : $message");
+    return $code;
 }
 
 /**
@@ -77,9 +82,10 @@ function error( $code, $message='' ) {
  * @param null $data
  */
 function success( $data = null ) {
+    global $system;
     if ( empty($data) || is_array( $data ) ) { }
     else error( ERROR_MALFORMED_RESPONSE );
-    echo json_encode( ['code'=>0, 'data'=>$data]);
+    $system['success'] = ['code'=>OK, 'data'=>$data];
 }
 
 /**
@@ -88,4 +94,30 @@ function success( $data = null ) {
 function result( $error_code ) {
     if ( $error_code ) error( $error_code );
     else success();
+}
+
+
+/**
+ * Returns JSON encoded string.
+ *
+ * @attention Call this method to get result After a run of 'model\class' or 'model::class->method()'
+ *
+ * If there is any error
+ *      - [code=>'last error code', message=>'last error code', all=>'all error code in array'] will be return.
+ */
+function json_result() {
+    global $system;
+    if ( ! isset($system['error']) && ! isset($system['success'] ) ) {
+        error( ERROR_NO_RESPONSE );
+    }
+    if ( isset( $system['error'] ) ) {
+        $last = array_pop( $system['error'] );
+        $last['all'] = $system['error'];
+        $re = $last;
+    }
+    else {
+        $re = $system['success'];
+    }
+
+    return json_encode( $re );
 }

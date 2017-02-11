@@ -18,6 +18,6 @@ class Update extends User {
 
         $this->load_by_session_id( in('session_id') );
         $this->update( $data );
-        success( $this->get_session_id() );
+        success( [ 'session_id' => $this->get_session_id() ] );
     }
 }

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ *
+ * @attention Database Query must be inside this class only.
+ *
+ *
+ *
+ */
 namespace model\base;
 class Base {
 

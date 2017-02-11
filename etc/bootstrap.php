@@ -1,5 +1,8 @@
 <?php
 
+$system = []; // system variable used for holding system data.
+
+
 
 if ($_SERVER['REQUEST_METHOD']=='OPTIONS') {
     header('Access-Control-Allow-Origin : *');
@@ -23,15 +26,23 @@ require __DIR__ . '/database.php';
 debug_log(">>>>>>>> Backend begins : " . date('r') );
 
 
-
-
+/**
+ *
+ *
+ *
+ * @warning If the class does not exists, it just don't do anything. Do not even return a value.
+ * @attention So, you need to check if the class exists or not before you use a class.
+ *
+ *
+ */
 spl_autoload_register( function( $what ) {
 
     $what = str_replace('\\', '/', $what);
     $path = "$what.php";
     $path = strtolower( $path );
-    if ( file_exists( $path ) ) require_once $path;
-    else error(ERROR_MODEL_CLASS_NOT_FOUND);
+    if ( file_exists( $path ) ) {
+        require_once $path;
+    }
 
 });
 

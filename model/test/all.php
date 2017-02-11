@@ -8,7 +8,7 @@ namespace model\test;
 
 
 function test( $re, $code ) {
-    if ( $re['code'] ) echo "<div>ERROR on $code : $re[message]</div>";
+    if ( $re['code'] ) echo "<div style='color:darkred;'>ERROR : ( $re[code] ) - $re[message]</div>";
     else echo "<div>SUCCESS on $code</div>";
 }
 function ok( $re ) {
@@ -32,7 +32,8 @@ class All extends \model\base\Base {
 
     private function testUser() {
 
-        $this->createUser();
+        $session_id = $this->createUser();
+        $session_id = $this->updateUser($session_id, ['name' => 'Updated Name']);
     }
 
     private function createUser() {
@@ -53,15 +54,33 @@ class All extends \model\base\Base {
 
     }
 
+    private function updateUser( $session_id, $data ) {
+
+        $data['session_id'] = $session_id;
+        $re = $this->ex( "\\model\\user\\Update", $data );
+        test( $re, "user update: session_id:$session_id");
+        di($data);
+
+    }
+
+    /**
+     * It runs and returns RESULT ( JSON Decoded Array Value )
+     * @param $class
+     * @param array $params
+     * @return array|mixed
+     */
     private function ex( $class, $params = [] ) {
 
         $_REQUEST = $params;
 
-        ob_start();
-        new $class();
-        $re = ob_get_clean();
 
+
+        new $class();
+
+        $re = json_result();
         $json = json_decode( $re, true );
+
+
         if ( json_last_error() ) {
             di( $re );
             return ['code' => 1, 'message' => "JSON ERROR: " . json_last_error_msg() ];

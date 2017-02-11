@@ -102,6 +102,8 @@ Backend server for New LMS
 
     * https://github.com/thruthesky/backend-api
 
+
+
 # API PROTOCOLS
 
 
@@ -116,6 +118,30 @@ Backend server for New LMS
 * ?mc=user.create.func
 * ?mc=core.info.version 
     * If you call this, "model/user/create.php" will be loaded and the method 'func' is the starter of the protocol.
+
+
+## Response
+
+### Success Response
+
+
+### Error Response
+
+When there is error
+* 'code' is not 0.
+* if there are many errors, 'code' is the code of last error, 'message' is the message of last error, 'all' has the rest of errors.
+
+````
+    {
+      "code": -40081,
+      "message": "insert-failed",
+      "all": [
+        {"code":-40040,"message":"model-class-not-found"},
+        {"code":-40042,"message":"model-class-empty"}
+      ]
+    }
+````
+
 
 
 

@@ -71,5 +71,16 @@ class library {
         return "model\\$model\\$class";
     }
 
+    /**
+     * @see readme
+     * @return string
+     */
+    public static function model_model_class_path()
+    {
+
+        $model = self::script_model();
+        return "model\\$model\\$model";
+    }
+
 
 }

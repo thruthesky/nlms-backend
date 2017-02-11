@@ -14,7 +14,9 @@ class User extends \model\base\Base {
     }
 
     /**
-     * @todo make a good session_id
+     *
+     * Return unique session id for each user.
+     *
      * @return string
      */
     public function get_session_id() {
@@ -24,8 +26,10 @@ class User extends \model\base\Base {
         $i = $this->f['id'];
         $p = $this->f['password'];
         $r = $this->f['stamp_registration'];
-        $t = time();
+        $t = md5(uniqid(rand(), true));
+
         $session_id = $n . '-' . md5( "$i,$r,$t,$n,$p" );
+
 
         $this->update( ['session_id' => $session_id] );
 
@@ -85,8 +89,13 @@ class User extends \model\base\Base {
     }
 
 
+    /**
+     *      HTTP INTERFACES
+     */
 
-
+    public function data() {
+        success( $this->load_by_session_id( in('session_id') ) );
+    }
 
 
 }

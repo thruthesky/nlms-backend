@@ -20,7 +20,10 @@ header('P3P: CP="NOI ADM DEV COM NAV OUR STP"'); /** cookie share on iframe */
 require __DIR__ . '/helpers.php';
 require __DIR__ . '/defines.php';
 require __DIR__ . '/config.php';
-require __DIR__ . '/database.php';
+
+
+
+require __DIR__ . "/database.$DATABASE_TYPE.php";
 
 
 debug_log(">>>>>>>> Backend begins : " . date('r') );
@@ -46,3 +49,14 @@ spl_autoload_register( function( $what ) {
 
 });
 
+
+
+/**
+ *
+ *
+ * @return \model\user\User
+ *
+ */
+function user() {
+    return new \model\user\User();
+}

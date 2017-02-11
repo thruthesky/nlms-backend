@@ -15,7 +15,8 @@ define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);    $em[ERROR_MODEL_CLASS_M
 define('ERROR_KEY_EXISTS', -40080);                  $em[ERROR_KEY_EXISTS] = 'key-exists';
 define('ERROR_DATABASE_INSERT_FAILED', -40081);      $em[ERROR_DATABASE_INSERT_FAILED] = 'insert-failed';
 define('ERROR_DATABASE_QUERY', -40083);             $em[ERROR_DATABASE_QUERY] = 'database-query-failed';
-
+define('ERROR_EMPTY_SQL_CONDITION', -40084);            $em[ERROR_EMPTY_SQL_CONDITION] = 'error-empty-sql-condition';
+define('ERROR_INSCURE_SQL_CONDITION', -40085);          $em[ERROR_INSCURE_SQL_CONDITION] = 'sql-condition-not-secure';
 
 define('ERROR_MALFORMED_RESPONSE', -40101);          $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 

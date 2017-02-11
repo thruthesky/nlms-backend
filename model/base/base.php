@@ -33,6 +33,9 @@ class Base {
     protected function setTable( $name ) {
         $this->table = $name;
     }
+    protected function getTable() {
+        return $this->table;
+    }
 
 
     /**
@@ -93,8 +96,38 @@ class Base {
     public function _load( $idx ) {
         if ( is_numeric($idx) ) $where = "idx=$idx";
         else $where = " $idx ";
-        $this->record = db()->get_row("SELECT * FROM user WHERE $where", ARRAY_A);
+        $this->record = db()->get_row("SELECT * FROM {$this->getTable()} WHERE $where", ARRAY_A);
         return $this->record;
+    }
+
+
+    /**
+     * Reload the data and reset $record.
+     * @return array|null
+     */
+    public function reload() {
+        if ( ! isset( $this->record['idx'] ) ) return null;
+        return $this->load( $this->record['idx'] );
+    }
+
+
+    /**
+     * Deletes $record from the database and set $record to empty.
+     *
+     * @return void
+     *
+     * @waring there is no return value.
+     *
+     * @see model/test/all.php
+     *
+     */
+    public function destroy() {
+
+        if ( isset( $this->record['idx'] ) ) {
+            $this->delete( 'idx=' . $this->record['idx'] );
+        }
+        $this->record = [];
+
     }
 
 
@@ -112,7 +145,7 @@ class Base {
      *
      */
     public function create( $kvs ) {
-        return db()->insert( $this->table, $kvs );
+        return db()->insert( $this->getTable(), $kvs );
         /*
         if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
         return $idx;
@@ -120,18 +153,51 @@ class Base {
     }
 
 
+    /**
+     * @param $kvs
+     *
+     * @warning No return value.
+     */
     public function update( $kvs ) {
-        return db()->update( $this->table, $kvs, "idx={$this->record['idx']}");
+        if ( $this->record && isset( $this->record['idx'] ) ) {
+            db()->update( $this->getTable(), $kvs, "idx={$this->record['idx']}");
+        }
     }
 
 
-
-    public function delete() {
-
+    /**
+     * @warning No result return.
+     * @attention But if there is any error on database query, JSON error message will be saved and displayed to client.
+     * @param $cond
+     * @return void
+     */
+    public function delete( $cond ) {
+        if ( empty($cond) ) return;
+        db()->query(" DELETE FROM {$this->getTable()} WHERE $cond ");
     }
+
+
+    /**
+     * Return number of rows in the table.
+     * @param $cond
+     * @return int|null
+     */
+    public function count( $cond ) {
+        if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
+        return db()->get_var("SELECT count(*) FROM {$this->getTable()} WHERE $cond" );
+    }
+
+    /**
+     * Return total number of records in the table.
+     * @return null
+     */
+    public function countAll() {
+        return $this->count( 1 );
+    }
+
 
     public function encryptPassword( $str ) {
-        return md5( $str );
+        return password_hash( $str, PASSWORD_DEFAULT );
     }
 
     /**
@@ -142,7 +208,7 @@ class Base {
      * @return bool
      */
     public function checkPassword( $plain_text_password, $encrypted_password ) {
-        return $this->encryptPassword( $plain_text_password ) == $encrypted_password;
+        return password_verify( $plain_text_password, $encrypted_password );
     }
 
 
@@ -154,6 +220,8 @@ class Base {
      *
      * @param $code
      * @param $data
+     *
+     *
      * @return mixed - on error it stops with json error.
      *              - idx of meta record on success.
      */
@@ -161,7 +229,7 @@ class Base {
         if ( ! $this->isRecordSet() ) error( ERROR_RECORD_NOT_SET );
         debug_log("Base::saveMetas( $code, $data )");
         $kvs = [
-            'model' => $this->table,
+            'model' => $this->getTable(),
             'model_idx' => $this->record['idx'],
             'code' => $code,
             'data' => $data
@@ -215,7 +283,7 @@ class Base {
      */
     public function getMeta( $code ) {
         if ( ! $this->isRecordSet() ) return null;
-        $model = $this->table;
+        $model = $this->getTable();
         $model_idx = $this->record['idx'];
         debug_log("SELECT * FROM meta WHERE model='$model' AND model_idx=$model_idx AND code='$code'");
         $row = db()->get_row("SELECT * FROM meta WHERE model='$model' AND model_idx=$model_idx AND code='$code'", ARRAY_A);
@@ -233,7 +301,7 @@ class Base {
     public function getMetas() {
 
         if ( ! $this->isRecordSet() ) return null;
-        $model = $this->table;
+        $model = $this->getTable();
         $model_idx = $this->record['idx'];
         $rows = db()->get_results("SELECT code, data FROM meta WHERE model='$model' AND model_idx=$model_idx", ARRAY_A);
         if ( empty($rows) ) return null;
@@ -247,7 +315,7 @@ class Base {
      */
     public function deleteMata( $code ) {
         if ( ! $this->isRecordSet() ) return;
-        $model = $this->table;
+        $model = $this->getTable();
         $model_idx = $this->record['idx'];
         db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx AND code = '$code'");
     }
@@ -261,7 +329,7 @@ class Base {
     public function deleteMetas() {
 
         if ( ! $this->isRecordSet() ) return;
-        $model = $this->table;
+        $model = $this->getTable();
         $model_idx = $this->record['idx'];
         db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx");
 

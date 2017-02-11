@@ -15,8 +15,10 @@
 
 
     function debug_log( $message ) {
-        global $DEBUG_LOG_FILE_PATH;
+        global $DEBUG, $DEBUG_LOG_FILE_PATH;
         static $count_dog = 0;
+
+        if ( ! $DEBUG ) return;
         if ( ! $DEBUG_LOG_FILE_PATH ) return;
 
         $count_dog ++;
@@ -39,7 +41,23 @@
 
     }
 
+    function debug_database_log( $message ) {
+        global $DEBUG, $DEBUG_LOG_DATABASE;
+        if ( ! $DEBUG ) return;
+        if ( ! $DEBUG_LOG_DATABASE ) return;
+        debug_log( $message );
+    }
 
+function debug_print( $obj ) {
+    global $DEBUG;
+    if ( ! $DEBUG ) return;
+
+    echo "<pre style='padding: 1em; background-color: lightgrey;'>
+            <div style='font-size: 1.4em;'>DEBUG MESSAGE</div>
+";
+    print_r($obj);
+    echo "</pre>";
+}
 
 
 function in ( $code, $default = null ) {
@@ -110,8 +128,9 @@ function json_result() {
     if ( ! isset($system['error']) && ! isset($system['success'] ) ) {
         error( ERROR_NO_RESPONSE );
     }
+
     if ( isset( $system['error'] ) ) {
-        $last = array_pop( $system['error'] );
+        $last = array_shift( $system['error'] );
         $last['all'] = $system['error'];
         $re = $last;
     }
@@ -119,5 +138,6 @@ function json_result() {
         $re = $system['success'];
     }
 
+    unset( $system['error'], $system['success'] );
     return json_encode( $re );
 }

@@ -29,19 +29,19 @@
 	class ezSQL_sqlite3 extends ezSQLcore
 	{
 
-		var $rows_affected = false;
+        var $rows_affected = false;
 
-		/**********************************************************************
-		*  Constructor - allow the user to perform a quick connect at the 
-		*  same time as initialising the ezSQL_sqlite3 class
-		*/
+        /**********************************************************************
+         *  Constructor - allow the user to perform a quick connect at the
+         *  same time as initialising the ezSQL_sqlite3 class
+         */
 
-		function ezSQL_sqlite3($dbpath='', $dbname='')
-		{
-			// Turn on track errors 
-			ini_set('track_errors',1);
-			
-			if ( $dbpath && $dbname )
+        function ezSQL_sqlite3($dbpath='', $dbname='')
+        {
+            // Turn on track errors
+            ini_set('track_errors',1);
+
+            if ( $dbpath && $dbname )
 			{
 				$this->connect($dbpath, $dbname);
 			}

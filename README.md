@@ -10,6 +10,10 @@ Backend server for New LMS
     * make it optional on config.php
 
 
+* Make meta functions available on all model.
+
+    * Use traits.
+    
 
 * Make a filipino Angular community.
 
@@ -52,8 +56,12 @@ Backend server for New LMS
 * @done autoload
 * @done namespace
 
+## TODO - Unit Test on PHP
 
-## TODO - Unit Test
+* test on meta.
+ 
+
+## TODO - Unit Test on Karma
 
 * Karma TEST. Test on below.
 
@@ -87,7 +95,17 @@ Backend server for New LMS
 * edit etc/config.php to configure the system.
 * Developers can create an optional my-config.php to suppress and overwrite the config.php
     * For instance, you don't want to touch the default config.php but to add your own database information.
-    
+
+
+# UNIT TEST
+
+* It is a good idea to run a unit test after you install.
+
+    access the end point below.
+
+    * ?mc=test.all
+
+  
   
 # Resources
 
@@ -120,6 +138,14 @@ Backend server for New LMS
     * If you call this, "model/user/create.php" will be loaded and the method 'func' is the starter of the protocol.
 
 
+* when model name and class name are equal and you want to call a method in that class, you can omit class name.
+    ( 번역: 모델 이름과 클래스 이름이 같다면 클래스 이름을 생략 할 수 있다 )
+    * for instance, 'user' model has 'user' class and you to call 'data' method of 'user' class, then
+    ( 번역 예를 들면 'user' 모델에 'user' 클래스가 있고 'user' 클래스의 'data' 메소드를 호출 하고 싶다면 )
+        * "?mc=user.data" will do.
+        ( 번역: "?mc=user.user.data" 와 같이 할 필요 없이 줄여서 "?mc=user.data" 와 같이 할 수 있다 )
+        
+
 ## Response
 
 ### Success Response
@@ -140,7 +166,15 @@ When there is error
         {"code":-40042,"message":"model-class-empty"}
       ]
     }
-````
+````   
+
+
+## User Protocols
+
+### Basics
+
+* "?mc=user.user" MUST response with '{"code":-40041,"message":"no-success-error-response","all":[]}'
+* "/?mc=user.user.data" MUST response with {"code":-40104,"message":"session-id-is-empty","all":[]}
 
 
 
@@ -152,7 +186,8 @@ When there is error
 
     * 'session_id' will be returned.
 
-###
+### Logout
+
 * ?mc=user.logout&session_id=xxxxxxx
     * 'session_id' will be deleted on user's record.
     
@@ -166,6 +201,14 @@ When there is error
 
 * ?id=....&password=....
     * 'session_id' will be returned.
+
+
+
+# Get User Data
+
+* ?mc=user.data&session_id=.........
+
+
     
 # Debug Log
 
@@ -269,4 +312,23 @@ If the code is on the user table, then,
 * How to get user's all meta data.
 
     * ?mc=user.meta.gets&session_id=109-821aca27b85169bfd3d33e4d02cc97d5
+
+
+
+# CODING GUIDELINE - DEVELOPER MANUAL
+
+
+## Customs.
+
+* model folder and class php file name MUST BE in lower characters for OS compatibility.
+
+## Model Base Class
+
+* model must have a model class php file with same name of the model.
+
+    * for instance, if a model name is 'abc', then "mode/abc/abc.php" must exists and must have the base code of the model.
+    
+* model base class SHOULD have "model.class.method" controllers.
+
+    * for instance, if you want to get user data, "?mc=user.user.data" should be queried.
     

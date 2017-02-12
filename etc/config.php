@@ -11,10 +11,10 @@
 $DIR_DATA               = './data';
 
 $DATABASE_USER          = 'root';
-$DATABASE_PASSWORD      = '';
+$DATABASE_PASSWORD      = '7777';
 $DATABASE_NAME          = 'nlms';
 $DATABASE_HOST          = 'localhost';
-$DATABASE_TYPE          = 'sqlite';         // 'mysqli' | 'sqlite'
+$DATABASE_TYPE          = 'sqlite';         // 'mysql' | 'sqlite'
 
 
 /**
@@ -40,5 +40,22 @@ $DEBUG_LOG_FILE_PATH    = $DIR_DATA . "/debug.log";
  */
 $DEBUG_LOG_DATABASE         = true;
 
+
 if ( file_exists( __DIR__ . "/my-config.php") ) require __DIR__ . "/my-config.php";
 
+
+/** DO NOT EDIT BELOW */
+
+define('DATABASE_USER',     $DATABASE_USER);
+define('DATABASE_PASSWORD', $DATABASE_PASSWORD);
+define('DATABASE_NAME',     $DATABASE_NAME);
+define('DATABASE_HOST',     $DATABASE_HOST);
+define('DATABASE_TYPE',     $DATABASE_TYPE);
+
+define('DIR_DATA',          $DIR_DATA);
+
+
+define('DEBUG',             $DEBUG);
+
+
+define('__MODEL_DIR__',     __ROOT_DIR__ . '/model');

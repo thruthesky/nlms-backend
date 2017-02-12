@@ -40,6 +40,7 @@ class All extends \model\base\Base {
         $this->style();
 
 
+        $this->testInstallation();
         $this->testDatabase();
         $this->testBase();
         $this->testUser();
@@ -60,9 +61,31 @@ EOH;
     }
 
 
+    private function testInstallation() {
+        if ( ! db()->tableExists('user') ) {
+            echo "
+<h1>Backend is not installed.</h1>
+To install access to ?mc=system.install
+";
+            exit;
+        }
+    }
+
     private function testDatabase() {
 
 
+
+        db()->createTable( 'abc' );
+
+        test( db()->tableExists('abc'), "abc table exists");
+        test( db()->columnExists('abc', 'idx'), "abc.idx exists");
+
+        db()->dropTable( 'abc' );
+        test( ! db()->tableExists('abc'), "abc table does not exist");
+
+
+
+        //
         db()->update('meta', ['a'=>'b'], '; should be error');
         $re = $this->result();
         test($re['code'], "SHOULD be SQL Condition Not Secure Error for ;");

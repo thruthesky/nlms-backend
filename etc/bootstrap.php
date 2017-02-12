@@ -23,7 +23,7 @@ require __DIR__ . '/config.php';
 
 
 
-require __DIR__ . "/database.$DATABASE_TYPE.php";
+require __ROOT_DIR__ . "/core/database/database.php";
 
 
 debug_log(">>>>>>>> Backend begins : " . date('r') );

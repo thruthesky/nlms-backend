@@ -318,6 +318,7 @@ class Base {
         $model = $this->getTable();
         $model_idx = $this->record['idx'];
         db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx AND code = '$code'");
+
     }
 
 
@@ -334,4 +335,129 @@ class Base {
         db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx");
 
     }
+
+
+
+    // ------------------ DATABASE -----------------
+
+
+    /**
+     * Creates a table.
+     *
+     * @param $table
+     * @return Base
+     */
+    /*
+    public function createTable( $table ) {
+        $this->dropTable($table);
+        if ( DATABASE_TYPE == 'mysqli' ) {
+            $q = "CREATE TABLE IF NOT EXISTS $table (idx INT) DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
+            db()->query($q);
+            $this->addPrimaryKey($table, 'idx');
+            $this->addAutoIncrement($table, 'idx');
+        }
+        else if ( DATABASE_TYPE == 'sqlite' ) {
+            $q = "CREATE TABLE IF NOT EXISTS $table (idx INTEGER PRIMARY KEY);";
+            db()->query($q);
+        }
+
+        $this->add( $table, 'created', 'INT UNSIGNED DEFAULT 0');
+        $this->add( $table, 'changed', 'INT UNSIGNED DEFAULT 0');
+
+        $this->addIndex($table, 'created');
+        $this->addIndex($table, 'changed');
+        return $this;
+    }
+
+
+    /**
+     * Drops a table.
+     * @param $name
+     * @return $this
+     */
+    /*
+    public function dropTable( $name )
+    {
+        $q = "DROP TABLE IF EXISTS $name;";
+        db()->query($q);
+        return $this;
+    }
+
+
+
+
+    /**
+     * Adds primary key on the table
+     *
+     * @param $table
+     * @param $fields
+     * @return $this
+     *
+     * @code
+     *  $this->addPrimaryKey($name, 'idx');
+     *  $this->addPrimaryKey($name, 'idx,name'); // can be two column.
+     * @endcode
+     */
+    /*
+    public function addPrimaryKey($table, $fields)
+    {
+        if ( DATABASE_TYPE == 'mysqli' ) {
+            $q = "ALTER TABLE $table ADD PRIMARY KEY ($fields)";
+            db()->query( $q );
+        }
+        else if ( DATABASE_TYPE == 'sqlite' ) {
+            // No need to create primary ey for sqlite.
+        }
+        return $this;
+    }
+
+
+    public function add( $table, $column, $type, $size=0)  {
+        return $this->addColumn($table, $column, $type, $size);
+    }
+    public function addColumn($table, $column, $type, $size=0)
+    {
+        if ( empty($size) ) {
+            if ( $type == 'varchar' ) $size = 255;
+            else if ( $type == 'char' ) $size = 1;
+        }
+        if ( stripos($type, 'float') !== false ) {
+            if ( DATABASE_TYPE == 'sqlite' ) $type = str_ireplace('float', 'real', $type);
+        }
+        if ( stripos($type, 'double') !== false ) {
+            if ( DATABASE_TYPE == 'sqlite' ) $type = str_ireplace('double', 'real', $type);
+        }
+
+        if ( $size ) $type = "$type($size)";
+        $q = "ALTER TABLE `$table` ADD COLUMN `$column` $type";
+
+        db()->query($q);
+
+
+
+
+
+        return $this;
+    }
+
+
+
+
+    public function addIndex($table, $fields) {
+
+        if ( DATABASE_TYPE == 'mysqli' ) {
+            $q = "ALTER TABLE $table ADD INDEX ($fields)";
+        }
+        else if ( DATABASE_TYPE == 'sqlite' ) {
+            $index_name = str_replace(',', '_', $fields);
+            $q = "CREATE INDEX {$table}_$index_name ON $table ($fields);";
+        }
+
+        db()->query($q);
+        return $this;
+
+    }
+*/
+
+
 }

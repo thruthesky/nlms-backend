@@ -13,8 +13,28 @@ Backend server for New LMS
     * cafe24.com 에서 운용
     \
 
-* Meta module. set/get/sets/gets
 
+* forum
+
+    ?mc=forum.config.create
+    ?mc=forum.config.update
+    ?mc=forum.config.delete
+    
+    ?mc=forum.data.create&parent=...&title=....&content=....
+    
+    ?mc=forum.data.update
+    ?mc=forum.data.delete
+    
+    
+* file management.
+
+    ?mc=file.upload
+    ?mc=file.download
+    ?mc=file.delete
+
+
+
+    
 * @check @re-think Make meta functions available on all model.
 
     * Use traits.

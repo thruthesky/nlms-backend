@@ -22,7 +22,7 @@ class Create extends User {
         $data['name'] = in('name');
         $data['password'] = $this->encryptPassword( in('password') );
 
-        $user_idx = $this->create( $data );
+        $user_idx = $this->insert( $data );
 
         if ( $user_idx <= 0 ) return error( $user_idx );
 

@@ -136,7 +136,7 @@ class Base {
      *
      * This creates a record into a table.
      * @note this always returns success. If there is an error, it does not return. it just stop.
-     * @param $kvs
+     * @param $record
      *
      *
      * @return number - same as parent::insert()
@@ -144,8 +144,9 @@ class Base {
      *
      *
      */
-    public function create( $kvs ) {
-        return db()->insert( $this->getTable(), $kvs );
+    public function insert( $record ) {
+        $kvs['created'] = time();
+        return db()->insert( $this->getTable(), $record );
         /*
         if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
         return $idx;
@@ -159,6 +160,7 @@ class Base {
      * @warning No return value.
      */
     public function update( $kvs ) {
+        $kvs['updated'] = time();
         if ( $this->record && isset( $this->record['idx'] ) ) {
             db()->update( $this->getTable(), $kvs, "idx={$this->record['idx']}");
         }
@@ -212,278 +214,6 @@ class Base {
     public function checkPassword( $plain_text_password, $encrypted_password ) {
         return password_verify( $plain_text_password, $encrypted_password );
     }
-
-
-    /**
-     *
-     * Saves a meta data.
-     *
-     * @warning if there is an error on saving meta data, it stops the script with json error.
-     *
-     * @param $code
-     * @param $data
-     *
-     *
-     * @return mixed - on error it stops with json error.
-     *              - idx of meta record on success.
-     */
-    /*
-    public function saveMeta( $code, $data ) {
-        if ( ! $this->isRecordSet() ) error( ERROR_RECORD_NOT_SET );
-        debug_log("Base::saveMetas( $code, $data )");
-        $kvs = [
-            'model' => $this->getTable(),
-            'model_idx' => $this->record['idx'],
-            'code' => $code,
-            'data' => $data
-        ];
-        $idx = db()->insert( 'meta', $kvs );
-
-
-
-        if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
-        return $idx;
-    }
-    */
-
-    /**
-     *
-     * @deprecated Use 'Meta::set()' instead.
-     *
-     * Saves an array of meta data.
-     *
-     * @attention It does not stop the script even if there is an error ( insdie the self ). It may stop the script if there is an error in a child method( deeper method )
-     *
-     * @see readme
-     * @param array $arr
-     *
-     *
-     * @return bool
-     *      - true on success
-     *      - false on failure.
-     *
-     */
-    /*
-    public function saveMetas( $arr ) {
-        if ( ! $this->isRecordSet() ) return false;
-	if ( empty( $arr ) ) return false;
-        debug_log("Base::saveMetas()");
-        debug_log($arr);
-        if ( ! is_array( $arr ) ) {
-            debug_log("saveMetas() arr is not an array");
-            return false;
-        }
-        foreach ( $arr as $code => $data ) {
-            $this->saveMeta( $code, $data );
-        }
-        return true;
-    }
-
-    */
-
-    /**
-     * @deprecated Use 'Meta::get()' instead.
-     * Returns the meta data of the code.
-     *
-     * @warning if there is more than one code, it is unsure which data among the code will be returned.
-     *      So, keep it unique if you need.
-     *
-     * @param $code
-     * @return mixed
-     *  null - if $record is not set or there is no data.
-     */
-    /*
-    public function getMeta( $code ) {
-        if ( ! $this->isRecordSet() ) return null;
-        $model = $this->getTable();
-        $model_idx = $this->record['idx'];
-        debug_log("SELECT * FROM meta WHERE model='$model' AND model_idx=$model_idx AND code='$code'");
-        $row = db()->get_row("SELECT * FROM meta WHERE model='$model' AND model_idx=$model_idx AND code='$code'", ARRAY_A);
-        if ( empty($row) ) return null;
-        return $row['data'];
-    }
-    */
-
-
-
-    /**
-     * @deprecated Use 'Meta::gets()' instead.
-     * Returns all the metas of the model and its idx.
-     *
-     * @return mixed
-     *  null - if $record is not set or there is no data.
-     */
-    /**
-     *
-     *
-     *
-    public function getMetas() {
-
-        if ( ! $this->isRecordSet() ) return null;
-        $model = $this->getTable();
-        $model_idx = $this->record['idx'];
-        $rows = db()->get_results("SELECT code, data FROM meta WHERE model='$model' AND model_idx=$model_idx", ARRAY_A);
-        if ( empty($rows) ) return null;
-
-        return $rows;
-    }*/
-
-
-
-    /**
-     * @deprecated user 'Meta::delete()'
-     * @warning there is no return value.
-     * @param $code
-     */
-    /*
-    public function deleteMata( $code ) {
-        if ( ! $this->isRecordSet() ) return;
-        $model = $this->getTable();
-        $model_idx = $this->record['idx'];
-        db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx AND code = '$code'");
-
-    }
-    */
-
-    /**
-     * @deprecated user 'meta::deletes()'
-     *
-     * Delete meta data of the 'model' & 'model_idx'
-     *
-     * @warning there is no return data.
-     */
-    /*
-    public function deleteMetas() {
-
-        if ( ! $this->isRecordSet() ) return;
-        $model = $this->getTable();
-        $model_idx = $this->record['idx'];
-        db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx");
-
-    }
-    */
-
-
-    // ------------------ DATABASE -----------------
-
-
-    /**
-     * Creates a table.
-     *
-     * @param $table
-     * @return Base
-     */
-    /*
-    public function createTable( $table ) {
-        $this->dropTable($table);
-        if ( DATABASE_TYPE == 'mysqli' ) {
-            $q = "CREATE TABLE IF NOT EXISTS $table (idx INT) DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
-            db()->query($q);
-            $this->addPrimaryKey($table, 'idx');
-            $this->addAutoIncrement($table, 'idx');
-        }
-        else if ( DATABASE_TYPE == 'sqlite' ) {
-            $q = "CREATE TABLE IF NOT EXISTS $table (idx INTEGER PRIMARY KEY);";
-            db()->query($q);
-        }
-
-        $this->add( $table, 'created', 'INT UNSIGNED DEFAULT 0');
-        $this->add( $table, 'changed', 'INT UNSIGNED DEFAULT 0');
-
-        $this->addIndex($table, 'created');
-        $this->addIndex($table, 'changed');
-        return $this;
-    }
-
-
-    /**
-     * Drops a table.
-     * @param $name
-     * @return $this
-     */
-    /*
-    public function dropTable( $name )
-    {
-        $q = "DROP TABLE IF EXISTS $name;";
-        db()->query($q);
-        return $this;
-    }
-
-
-
-
-    /**
-     * Adds primary key on the table
-     *
-     * @param $table
-     * @param $fields
-     * @return $this
-     *
-     * @code
-     *  $this->addPrimaryKey($name, 'idx');
-     *  $this->addPrimaryKey($name, 'idx,name'); // can be two column.
-     * @endcode
-     */
-    /*
-    public function addPrimaryKey($table, $fields)
-    {
-        if ( DATABASE_TYPE == 'mysqli' ) {
-            $q = "ALTER TABLE $table ADD PRIMARY KEY ($fields)";
-            db()->query( $q );
-        }
-        else if ( DATABASE_TYPE == 'sqlite' ) {
-            // No need to create primary ey for sqlite.
-        }
-        return $this;
-    }
-
-
-    public function add( $table, $column, $type, $size=0)  {
-        return $this->addColumn($table, $column, $type, $size);
-    }
-    public function addColumn($table, $column, $type, $size=0)
-    {
-        if ( empty($size) ) {
-            if ( $type == 'varchar' ) $size = 255;
-            else if ( $type == 'char' ) $size = 1;
-        }
-        if ( stripos($type, 'float') !== false ) {
-            if ( DATABASE_TYPE == 'sqlite' ) $type = str_ireplace('float', 'real', $type);
-        }
-        if ( stripos($type, 'double') !== false ) {
-            if ( DATABASE_TYPE == 'sqlite' ) $type = str_ireplace('double', 'real', $type);
-        }
-
-        if ( $size ) $type = "$type($size)";
-        $q = "ALTER TABLE `$table` ADD COLUMN `$column` $type";
-
-        db()->query($q);
-
-
-
-
-
-        return $this;
-    }
-
-
-
-
-    public function addIndex($table, $fields) {
-
-        if ( DATABASE_TYPE == 'mysqli' ) {
-            $q = "ALTER TABLE $table ADD INDEX ($fields)";
-        }
-        else if ( DATABASE_TYPE == 'sqlite' ) {
-            $index_name = str_replace(',', '_', $fields);
-            $q = "CREATE INDEX {$table}_$index_name ON $table ($fields);";
-        }
-
-        db()->query($q);
-        return $this;
-
-    }
-*/
 
 
 }

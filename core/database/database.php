@@ -129,9 +129,10 @@ class Database extends \PDO {
     }
 
 
-
-
-
+    /**
+     * @param $table
+     * @return Database
+     */
     public function createTable($table) {
         $this->table($table);
         if ( DATABASE_TYPE == 'mysql' ) {
@@ -145,9 +146,19 @@ class Database extends \PDO {
             $this->exec($q);
         }
 
+        $this->add('created', 'INT UNSIGNED DEFAULT 0');
+        $this->add('updated', 'INT UNSIGNED DEFAULT 0');
+        $this->index('created');
+        $this->index('updated');
+
+
         return $this;
     }
 
+    /**
+     * @param $name
+     * @return \Database
+     */
     public function dropTable($name)
     {
         $q = "DROP TABLE IF EXISTS $name;";
@@ -533,7 +544,9 @@ class Database extends \PDO {
 }
 
 
-
+/**
+ * @return \Database
+ */
 function db() {
     return Database::load();
 }

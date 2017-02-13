@@ -124,7 +124,7 @@ To install access to ?mc=system.install
 
         $this->setTable('meta');
         test( $this->getTable() == 'meta', 'base::setTable()');
-        $idx = $this->create(['model'=>'testBase', 'model_idx'=>1, 'code'=>'testCode', 'data'=>'testData']);
+        $idx = $this->insert(['model'=>'testBase', 'model_idx'=>1, 'code'=>'testCode', 'data'=>'testData']);
         test( $idx > 0, "base::create() - meta data create: idx=$idx");
         if ( $idx < 0 ) di($GLOBALS['em'][$idx]);
 
@@ -169,12 +169,12 @@ To install access to ?mc=system.install
         test( $idx != $new_idx, "Meta::set() new insert. data=new data idx: $idx, new_idx: $new_idx");
 
 
-        $count = meta()->count( 'abc', 123, 'code-unit-test' );
+        $count = meta()->getCount( 'abc', 123, 'code-unit-test' );
         test( $count == 1, "Meta abc, 123, code-unit-test has only 1 record as it should.");
 
 
         meta()->delete( 'abc', 111, 'code-unit-test' );
-        $count = meta()->count( 'abc', 111, 'code-unit-test');
+        $count = meta()->getCount( 'abc', 111, 'code-unit-test');
         test( $count == 0, "Meta abc, 111, code-unit-test has deleted.");
 
 

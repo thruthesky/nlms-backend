@@ -110,8 +110,7 @@ class User extends \model\base\Base {
     (
     [idx] => 14
     [id] => user-1486979723
-    [password] => $2y$10$OmFrwFy/nYkjoMqYbQ7Md.vqeZm5q.PYFUiTDBPDrzdn.EvAoa.S2
-    [session_id] => 14-564c8f944bb55a120813f972ab9556eb
+     *
     [domain] =>
     [name] => Updated Name
     [middle_name] =>
@@ -129,7 +128,7 @@ class User extends \model\base\Base {
     [province] =>
     [city] =>
     [zipcode] =>
-    [stamp_registration] => 0
+     *
     [stamp_resign] => 0
     [block] => 0
     [block_reason] =>
@@ -147,6 +146,7 @@ class User extends \model\base\Base {
      */
     public function data() {
         $user = $this->load_by_session_id( in('session_id') );
+        unset( $user['password'], $user['session_id'], $user['stamp_registration'] );
         $_meta = meta()->gets( 'user', $user['idx'] );
         $metas = [];
         foreach( $_meta as $arr ) {

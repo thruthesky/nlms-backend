@@ -8,6 +8,6 @@ db()
     ->add('model_idx', 'INT UNSIGNED DEFAULT 0')
     ->add('code', 'varchar', 32)
     ->add('data', 'LONGTEXT')
-    ->addUniqueKey('model,model_idx,code');
+    ->unique('model,model_idx,code');
 
 

@@ -6,12 +6,13 @@
  */
 
 namespace model\meta;
-class Meta
+class Meta extends \model\base\Base
 {
 
     public function __construct()
     {
-
+        parent::__construct();
+        $this->setTable('meta');
     }
 
 
@@ -27,6 +28,7 @@ class Meta
      *                  - ERROR CODE WILL BE return on error.
      */
     public function set( $model, $model_idx, $code, $data ) {
+
 
         db()->delete( 'meta', " model='$model' AND model_idx = $model_idx AND code='$code' " );
 
@@ -98,7 +100,9 @@ class Meta
      */
     public function delete( $model, $model_idx, $code ) {
 
-        db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx AND code = '$code'");
+        parent::delete( "model = '$model' AND model_idx = $model_idx AND code = '$code'" );
+
+//        db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx AND code = '$code'");
 
     }
 
@@ -110,15 +114,21 @@ class Meta
      * @param $model_idx
      */
     public function deletes( $model, $model_idx ) {
-        db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx");
+
+        parent::delete( "model = '$model' AND model_idx = $model_idx" );
+
+        //db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx");
     }
 
 
 
 
-    public function count( $model, $model_idx, $code ) {
+    public function getCount( $model, $model_idx, $code ) {
 
-        return db()->result("SELECT COUNT(*) FROM meta WHERE model = '$model' AND model_idx = $model_idx AND code = '$code'");
+        return $this->count("model = '$model' AND model_idx = $model_idx AND code = '$code'");
+
+        //parent::count( "model = '$model' AND model_idx = $model_idx AND code = '$code'" );
+        // return db()->result("SELECT COUNT(*) FROM meta WHERE model = '$model' AND model_idx = $model_idx AND code = '$code'");
 
     }
 

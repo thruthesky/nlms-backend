@@ -312,79 +312,19 @@ class Database extends \PDO {
 
     /**
      *
-     *
-     * @param $table
-     * @param $cond
-     * @param string $field
-     * @return mixed
-     *
-     * @code
-     *      $row = $this->row($this->table()); // returns the first row
-     *      $row = $db->row('temp', "name='JaeHo Song'");
-     *      $row = $db->row('temp', db_and()->condition('name','JaeHo Song'));
-     *      $row = $db->row('temp', db_cond('name','JaeHo Song'));
-     * @endcode
-     *
-     * @Attention
-     *
-     */
-    public function row($table, $cond=null, $field='*')
-    {
-        $field = self::escapeField($field);
-        $cond = $this->adjustCondition($cond);
-
-        if ( strpos($cond,'LIMIT') === false ) $cond .= " LIMIT 1";
-        $q = "SELECT $field FROM $table $cond";
-        $statement = $this->query($q);
-        return $statement->fetch(\PDO::FETCH_ASSOC);
-    }
-
-
-    /**
-     * @param $table
-     * @param null $cond
-     * @param string $field
-     * @param null $fetch_mode
-     * @return array
-     */
-    public function rows($table, $cond=null, $field='*', $fetch_mode=null)
-    {
-        $field = self::escapeField($field);
-        if ( $fetch_mode === null ) $fetch_mode = \PDO::FETCH_ASSOC;
-        $cond = $this->adjustCondition($cond);
-        $q = "SELECT $field FROM $table $cond";
-        $statement = $this->query($q);
-        return $statement->fetchAll($fetch_mode);
-        /*
-        $rows = [];
-        while ( $row = $statement->fetch($fetch_mode) ) {
-            $rows[] = $row;
-        }
-        return $rows;
-        */
-    }
-
-
-
-    /**
-     *
      * Returns the first element of the first row.
      *
-     * @param $table
-     * @param $field
-     * @param null $cond
+     * @param $q
      * @return mixed
-     *
      * @code
      *      echo $db->result('sms_numbers'); // return the first element of the first row in the table
      *      echo $db->result('sms_numbers', 'count(*)'); // return the number of record of the table
      *      echo $db->result('sms_numbers', 'count(*)', 'idx >= 123');
      *      echo $db->result('sms_numbers', 'idx, stamp_last_sent', 'idx >= 123'); // return 123
      * @endcode
-     *
      */
-    public function result($table, $field='*', $cond=null) {
-        $row = $this->row($table, $cond, $field);
+    public function result( $q ) {
+        $row = $this->row( $q );
         if ( $row ) {
             foreach( $row as $k => $v ) {
                 return $v;
@@ -395,19 +335,35 @@ class Database extends \PDO {
 
     /**
      *
-     * Returns the number of record based on the condition
      *
-     * @param $table
-     * @param null $cond
+     * @param $q
      * @return mixed
      *
      * @code
-     *      echo $db->count('sms_numbers');
-     *      echo $db->count('sms_numbers', 'idx >= 1000');
+     *      $row = $this->row($this->table()); // returns the first row
+     *      $row = $db->row('temp', "name='JaeHo Song'");
+     *      $row = $db->row('temp', db_and()->condition('name','JaeHo Song'));
+     *      $row = $db->row('temp', db_cond('name','JaeHo Song'));
      * @endcode
+     *
+     * @Attention
      */
-    public function count($table, $cond=null) {
-        return $this->result($table, "COUNT(*)", $cond);
+    public function row($q)
+    {
+        $statement = $this->query($q);
+        return $statement->fetch(\PDO::FETCH_ASSOC);
+    }
+
+
+    /**
+     * @param $q
+     * @return array
+     */
+    public function rows( $q )
+    {
+        $statement = $this->query($q);
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+
     }
 
 
@@ -451,10 +407,16 @@ class Database extends \PDO {
      * @param $table
      * @param $fields
      * @param int $cond
-     * @return \PDOStatement
+     * @return \PDOStatement|bool
+     *
+     *      - ERROR_INSCURE_SQL_CONDITION on condition error.
      */
     public function update($table, $fields, $cond=null)
     {
+
+
+        if ( ! $this->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
+
         $sets = [];
         foreach($fields as $k => $v) {
             $sets[] = "`$k`=" . $this->quote($v);
@@ -514,6 +476,8 @@ class Database extends \PDO {
         }
     }
 
+
+    /*
     private function adjustCondition($cond)
     {
         if ( $cond === null ) $cond = null;
@@ -528,6 +492,7 @@ class Database extends \PDO {
         }
         return $cond;
     }
+    */
 
     public function reset()
     {
@@ -538,6 +503,20 @@ class Database extends \PDO {
     public function restore()
     {
         Database::$db = Database::$db_reset;
+    }
+
+
+
+    public function secure_cond( $cond ) {
+        $secure = true;
+        if ( stripos( $cond, ';' ) !== false ) $secure = false;
+        if ( stripos( $cond, 'SELECT ') !== false ) $secure = false;
+        if ( stripos( $cond, 'replace ') !== false ) $secure = false;
+        if ( stripos( $cond, 'UPDATE ') !== false ) $secure = false;
+        if ( stripos( $cond, 'DELETE ') !== false ) $secure = false;
+        if ( $secure === false ) error( ERROR_INSCURE_SQL_CONDITION );
+
+        return $secure;
     }
 
 

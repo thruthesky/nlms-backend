@@ -12,7 +12,7 @@ db()
     ->add('middle_name', 'varchar', 32)
     ->add('last_name', 'varchar', 64)
     ->add('nickname', 'varchar', 64)
-    ->add('mail', 'varchar', 64)
+    ->add('email', 'varchar', 64)
     ->add('gender', 'char', 1)
     ->add('birth_year', 'int')
     ->add('birth_month', 'int')
@@ -34,7 +34,7 @@ db()
     ->index('domain')
     ->index('name')
     ->index('nickname')
-    ->index('mail')
+    ->index('email')
     ->index('birth_year,birth_month,birth_day');
 
 

@@ -96,7 +96,7 @@ class Base {
     public function _load( $idx ) {
         if ( is_numeric($idx) ) $where = "idx=$idx";
         else $where = " $idx ";
-        $this->record = db()->get_row("SELECT * FROM {$this->getTable()} WHERE $where", ARRAY_A);
+        $this->record = db()->row("SELECT * FROM {$this->getTable()} WHERE $where");
         return $this->record;
     }
 
@@ -172,7 +172,8 @@ class Base {
      * @return void
      */
     public function delete( $cond ) {
-        if ( empty($cond) ) return;
+        if ( empty($cond) ) return error( ERROR_EMPTY_SQL_CONDITION );
+        if ( ! db()->secure_cond( $cond ) ) return error( ERROR_INSCURE_SQL_CONDITION );
         db()->query(" DELETE FROM {$this->getTable()} WHERE $cond ");
     }
 
@@ -184,7 +185,8 @@ class Base {
      */
     public function count( $cond ) {
         if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
-        return db()->get_var("SELECT count(*) FROM {$this->getTable()} WHERE $cond" );
+        if ( ! db()->secure_cond( $cond ) ) return error( ERROR_INSCURE_SQL_CONDITION );
+        return db()->result("SELECT count(*) FROM {$this->getTable()} WHERE $cond" );
     }
 
     /**

@@ -18,6 +18,7 @@ define('ERROR_DATABASE_QUERY', -40083);             $em[ERROR_DATABASE_QUERY] = 
 define('ERROR_EMPTY_SQL_CONDITION', -40084);            $em[ERROR_EMPTY_SQL_CONDITION] = 'error-empty-sql-condition';
 define('ERROR_INSCURE_SQL_CONDITION', -40085);          $em[ERROR_INSCURE_SQL_CONDITION] = 'sql-condition-not-secure';
 
+
 define('ERROR_MALFORMED_RESPONSE', -40101);          $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
 define('ERROR_USER_NOT_EXIST', -40102);              $em[ERROR_USER_NOT_EXIST] = 'user-not-exist';

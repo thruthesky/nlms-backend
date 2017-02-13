@@ -3,7 +3,7 @@
  * @see README.md
  */
 namespace model\forum;
-class config extends Forum {
+class Config extends Forum {
     public function __construct()
     {
 
@@ -15,6 +15,13 @@ class config extends Forum {
     }
 
 
+    /**
+     *
+     *
+     * @return void|mixed
+     *
+     *
+     */
     public function create() {
 
         $data = [];
@@ -22,12 +29,20 @@ class config extends Forum {
         $data['name'] = in('name');
         $data['description'] = in('description');
 
-        $forum = $this->insert( $data );
 
-        if ( $forum <= 0 ) return error( $forum );
-        success( ['forum_config'=>$forum] );
+        $config = $this->getConfig( in('id') );
+        if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST );
+
+        $forum_idx = $this->insert( $data );
+
+        if ( $forum_idx <= 0 ) error( $forum_idx );
+        else success( ['forum_config'=>$forum_idx] );
+
     }
 
+    /**
+     * @return mixed
+     */
     public function edit() {
         $data = [];
         $data['idx'] = in('idx');
@@ -35,19 +50,35 @@ class config extends Forum {
         $data['name'] = in('name');
         $data['description'] = in('description');
 
-        $datas = $this->load($data['idx']);
-        if( ! $datas ) error( ERROR_POST_NOT_EXIST );
-        $forum = $this->update($data);
-        success( ['forum_data'=>$forum] );
+        $config_data = $this->load($data['idx']);
+        if( ! $config_data ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+
+
+        unset( $data['idx'] ); //
+
+        $no = $this->update($data);
+        if ( $no == 0 ) return error( ERROR_UNKNOWN ); // strange error. this error should not happened here.
+
+        success( ['forum_data' => $this->load( in('idx') ) ] );
+
     }
 
-    public function remove() {
-        $idx=in('idx');
-        $data = $this->load( $idx );
-        if( !$data ) error( ERROR_POST_NOT_EXIST );
-        $condition = "idx = $idx";
-        $this->delete( $condition );
+    public function delete( $compatibility_arg1 = null ) {
+        $idx = in('idx');
+        if ( empty($idx) ) $idx = "id='".in('id')."'"; // if it is not string, it is id.
 
-        success( ['deleted' => $idx] );
+
+        // di($idx);
+
+        $config = $this->load( $idx );
+        if( !$config ) error( ERROR_FORUM_CONFIG_NOT_EXIST );
+
+        //$condition = "idx = $idx";
+        //$this->delete( $condition );
+
+        $this->destroy();
+
+        success();
     }
+
 }

@@ -15,5 +15,18 @@ class Forum extends \model\base\Base
     }
 
 
+    /**
+     * @param $id
+     * @return mixed
+     * @code
+     *      $config = $this->getConfig( in('id') );
+     * @endcode
+     */
+    protected final function getConfig($id)
+    {
+        return db()->row(" SELECT * FROM {$this->getTable()} WHERE id='$id'");
+    }
+
+
 }
 

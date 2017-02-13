@@ -428,13 +428,14 @@ class Database extends \PDO {
      * @param $table
      * @param $fields
      * @param int $cond
-     * @return \PDOStatement|bool
+     * @return int - number of affected row.
      *
-     *      - ERROR_INSCURE_SQL_CONDITION on condition error.
+     *      0 - if it did not update anything.
+     *
+     *      ERROR_INSCURE_SQL_CONDITION - on condition error.
      */
     public function update($table, $fields, $cond=null)
     {
-
 
         if ( ! $this->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
 
@@ -446,8 +447,7 @@ class Database extends \PDO {
         $where = null;
         if ( $cond ) $where = "WHERE $cond";
         $q = "UPDATE $table SET $set $where";
-        $statement = $this->query($q);
-        return $statement;
+        return $this->exec($q);
     }
 
 

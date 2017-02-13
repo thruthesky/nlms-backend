@@ -46,6 +46,9 @@ class All extends \model\base\Base {
         $this->testMeta();
         $this->testUser();
 
+
+        $this->testForum();
+
         exit;
 
     }
@@ -328,6 +331,33 @@ To install access to ?mc=system.install
             return ['code' => 1, 'message' => "JSON ERROR: " . json_last_error_msg() ];
         }
         return $json;
+
+
+    }
+
+
+
+    private function testForum() {
+        $this->createForum(['id'=>'test-forum', 'name'=>'Test Forum']);
+    }
+
+
+    private function createForum( $params ) {
+
+        $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        test( $re['code'] == 0, "Creating forum config - $params[id]");
+
+
+        $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]" );
+
+
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == 0, "Deleting forum config - $params[id]");
+
+
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Forum already deleted - $params[id]");
 
 
     }

@@ -124,7 +124,7 @@ class Base {
     public function destroy() {
 
         if ( isset( $this->record['idx'] ) ) {
-            $this->delete( 'idx=' . $this->record['idx'] );
+            self::delete( 'idx=' . $this->record['idx'] );
         }
         $this->record = [];
 
@@ -157,14 +157,18 @@ class Base {
     /**
      * @param $kvs
      *
-     * @warning No return value.
+     * @warning it returns a value now.
+     *
+     * @return bool|\PDOStatement - same as PDO::query. If there is error, FALSE will be return.
+     *
      */
     public function update( $kvs ) {
         $kvs['updated'] = time();
         if ( $this->record && isset( $this->record['idx'] ) ) {
-            db()->update( $this->getTable(), $kvs, "idx={$this->record['idx']}");
+            return db()->update( $this->getTable(), $kvs, "idx={$this->record['idx']}");
         }
     }
+
 
 
     /**
@@ -178,6 +182,9 @@ class Base {
         if ( ! db()->secure_cond( $cond ) ) return error( ERROR_INSCURE_SQL_CONDITION );
         db()->query(" DELETE FROM {$this->getTable()} WHERE $cond ");
     }
+
+
+
 
 
     /**

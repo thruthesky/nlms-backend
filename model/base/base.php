@@ -227,6 +227,7 @@ class Base {
      * @return mixed - on error it stops with json error.
      *              - idx of meta record on success.
      */
+    /*
     public function saveMeta( $code, $data ) {
         if ( ! $this->isRecordSet() ) error( ERROR_RECORD_NOT_SET );
         debug_log("Base::saveMetas( $code, $data )");
@@ -237,12 +238,17 @@ class Base {
             'data' => $data
         ];
         $idx = db()->insert( 'meta', $kvs );
+
+
+
         if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
         return $idx;
     }
+    */
 
     /**
      *
+     * @deprecated Use 'Meta::set()' instead.
      *
      * Saves an array of meta data.
      *
@@ -257,6 +263,7 @@ class Base {
      *      - false on failure.
      *
      */
+    /*
     public function saveMetas( $arr ) {
         if ( ! $this->isRecordSet() ) return false;
 	if ( empty( $arr ) ) return false;
@@ -272,8 +279,10 @@ class Base {
         return true;
     }
 
+    */
 
     /**
+     * @deprecated Use 'Meta::get()' instead.
      * Returns the meta data of the code.
      *
      * @warning if there is more than one code, it is unsure which data among the code will be returned.
@@ -283,6 +292,7 @@ class Base {
      * @return mixed
      *  null - if $record is not set or there is no data.
      */
+    /*
     public function getMeta( $code ) {
         if ( ! $this->isRecordSet() ) return null;
         $model = $this->getTable();
@@ -292,14 +302,21 @@ class Base {
         if ( empty($row) ) return null;
         return $row['data'];
     }
+    */
+
 
 
     /**
+     * @deprecated Use 'Meta::gets()' instead.
      * Returns all the metas of the model and its idx.
      *
      * @return mixed
      *  null - if $record is not set or there is no data.
      */
+    /**
+     *
+     *
+     *
     public function getMetas() {
 
         if ( ! $this->isRecordSet() ) return null;
@@ -309,12 +326,16 @@ class Base {
         if ( empty($rows) ) return null;
 
         return $rows;
-    }
+    }*/
+
+
 
     /**
+     * @deprecated user 'Meta::delete()'
      * @warning there is no return value.
      * @param $code
      */
+    /*
     public function deleteMata( $code ) {
         if ( ! $this->isRecordSet() ) return;
         $model = $this->getTable();
@@ -322,13 +343,16 @@ class Base {
         db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx AND code = '$code'");
 
     }
-
+    */
 
     /**
+     * @deprecated user 'meta::deletes()'
+     *
      * Delete meta data of the 'model' & 'model_idx'
      *
      * @warning there is no return data.
      */
+    /*
     public function deleteMetas() {
 
         if ( ! $this->isRecordSet() ) return;
@@ -337,7 +361,7 @@ class Base {
         db()->query("DELETE FROM meta WHERE model = $model AND modex_idx = $model_idx");
 
     }
-
+    */
 
 
     // ------------------ DATABASE -----------------

@@ -43,6 +43,7 @@ class All extends \model\base\Base {
         $this->testInstallation();
         $this->testDatabase();
         $this->testBase();
+        $this->testMeta();
         $this->testUser();
 
         exit;
@@ -153,10 +154,44 @@ To install access to ?mc=system.install
 
     }
 
+
+    private function testMeta() {
+        $idx = meta()->set('abc', 123, 'code-unit-test', 'data');
+        test( $idx, "Meta::set() code: code, data: data re: idx: $idx");
+
+        //
+        $another_idx = meta()->set('abc', 111, 'code-unit-test', 'another idx');
+        test( $another_idx, "meta::set() another idx is okay");
+
+        $new_idx = meta()->set('abc', 123, 'code-unit-test', 'new data');
+        test( $new_idx, "Meta::set() code: code, data: new data re: new_idx: $new_idx");
+
+        test( $idx != $new_idx, "Meta::set() new insert. data=new data idx: $idx, new_idx: $new_idx");
+
+
+        $count = meta()->count( 'abc', 123, 'code-unit-test' );
+        test( $count == 1, "Meta abc, 123, code-unit-test has only 1 record as it should.");
+
+
+        meta()->delete( 'abc', 111, 'code-unit-test' );
+        $count = meta()->count( 'abc', 111, 'code-unit-test');
+        test( $count == 0, "Meta abc, 111, code-unit-test has deleted.");
+
+
+    }
+
     private function testUser() {
         $id = 'user-' . time();
         $name = 'new user';
-        $session_id = $this->createUser( ['id'=>$id, 'name'=>$name]);
+        $data = [
+            'id'=>$id,
+            'name'=>$name,
+            'meta' => [
+                'age' => 22,
+                'classid' => 'my-id'
+            ]
+        ];
+        $session_id = $this->createUser( $data );
         if ( $session_id ) { // create success.
             $session_id = $this->updateUser($session_id, ['name' => 'Updated Name']);
 
@@ -164,6 +199,10 @@ To install access to ?mc=system.install
                 $user = $this->getUserData( $session_id );
                 test( $user['id'] == $id, "User create() update() ID compare. id should be '$id'");
                 test( $user['name'] == 'Updated Name', "name compare. session_id: $session_id");
+
+
+                // meta test
+                test( $user['meta']['age'] == "22", "meta test");
 
 
 
@@ -191,6 +230,7 @@ To install access to ?mc=system.install
         else {
             // failed on create a user.
         }
+
     }
 
     private function createUser( $params ) {
@@ -249,7 +289,7 @@ To install access to ?mc=system.install
         $params = [ 'session_id' => $session_id ];
 
         $re = $this->ex("\\model\\user\\user::data", $params);
-
+        //di($re);
         test( $re, "user::data() - session_id: $session_id" );
         if ( ok($re) ) return $re['data'];
         else return null;

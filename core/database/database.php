@@ -333,6 +333,9 @@ class Database extends \PDO {
         return null;
     }
 
+
+
+
     /**
      *
      *
@@ -346,21 +349,28 @@ class Database extends \PDO {
      *      $row = $db->row('temp', db_cond('name','JaeHo Song'));
      * @endcode
      *
-     * @Attention
+     * @Attention it returns false if there is no data.
      */
     public function row($q)
     {
-        $statement = $this->query($q);
-        return $statement->fetch(\PDO::FETCH_ASSOC);
+        $re = $this->rows( $q );
+        if ( $re && isset($re[0]) ) return $re[0];
+        return FALSE;
     }
 
 
     /**
      * @param $q
-     * @return array
+     * @return array|int
      */
     public function rows( $q )
     {
+
+        if ( stripos( $q, 'WHERE ') ) {
+            list ( $trash, $where ) = explode( 'where', strtolower( $q ) );
+            if ( ! $this->secure_cond( $where ) ) return ERROR_INSCURE_SQL_CONDITION;
+        }
+
         $statement = $this->query($q);
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
 

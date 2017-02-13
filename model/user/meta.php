@@ -1,8 +1,9 @@
 <?php
 /**
+ * @deprecated
  * @see README.md
  */
-
+/*
 namespace model\user;
 class Meta extends User {
     public function __construct()
@@ -33,3 +34,4 @@ class Meta extends User {
 }
 
 
+*/

@@ -3,6 +3,7 @@
  * @see README.md
  */
 namespace model\user;
+
 class Create extends User {
     public function __construct()
     {
@@ -27,9 +28,10 @@ class Create extends User {
 
         $this->reset( $user_idx );
 
-        $this->saveMetas( in('meta') );
+        meta()->sets( 'user', $user_idx, in('meta') );
 
         success( ['session_id'=>$this->get_session_id()] );
 
     }
+
 }

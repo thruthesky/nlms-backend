@@ -60,3 +60,12 @@ spl_autoload_register( function( $what ) {
 function user() {
     return new \model\user\User();
 }
+/**
+ *
+ *
+ * @return \model\meta\Meta
+ *
+ */
+function meta() {
+    return new \model\meta\Meta();
+}

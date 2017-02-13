@@ -91,10 +91,69 @@ class User extends \model\base\Base {
 
     /**
      *      HTTP INTERFACES
+     *
+     *
      */
 
+    /**
+     * Returns user record and its meta.
+     *
+     *
+     *
+     * @return void
+     *
+     * @expected JSON return.
+    Array
+    (
+    [code] => 0
+    [data] => Array
+    (
+    [idx] => 14
+    [id] => user-1486979723
+    [password] => $2y$10$OmFrwFy/nYkjoMqYbQ7Md.vqeZm5q.PYFUiTDBPDrzdn.EvAoa.S2
+    [session_id] => 14-564c8f944bb55a120813f972ab9556eb
+    [domain] =>
+    [name] => Updated Name
+    [middle_name] =>
+    [last_name] =>
+    [nickname] =>
+    [email] =>
+    [gender] =>
+    [birth_year] =>
+    [birth_month] =>
+    [birth_day] =>
+    [landline] =>
+    [mobile] =>
+    [address] =>
+    [country] =>
+    [province] =>
+    [city] =>
+    [zipcode] =>
+    [stamp_registration] => 0
+    [stamp_resign] => 0
+    [block] => 0
+    [block_reason] =>
+    [resign_reason] =>
+    [meta] => Array
+    (
+    [age] => '22'
+    [classid] => 'my-id'
+    )
+
+    )
+
+    )
+     *
+     */
     public function data() {
-        success( $this->load_by_session_id( in('session_id') ) );
+        $user = $this->load_by_session_id( in('session_id') );
+        $_meta = meta()->gets( 'user', $user['idx'] );
+        $metas = [];
+        foreach( $_meta as $arr ) {
+            $metas[ $arr['code'] ] = $arr['data'];
+        }
+        $user['meta'] = $metas;
+        success( $user );
     }
 
 

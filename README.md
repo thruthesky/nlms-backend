@@ -3,17 +3,31 @@ Backend server for New LMS
 
 # TODO
 
-* support sqlite for easy use.
+@문서화 - php backend server 를 직접 만든 이유
+    * rdbms 를 사용 할 수 있도록. NoSQL 도 괜찮지만, 유료이며 제약 사항들이 있음. 특히 firebase 는 검색이 안됨
+    * 매우 익숙한 구조. 물론 SQL 을 모르는 사람에게는 익숙하지 않겠지만
+    * 무료 또는 웹 호스팅 비용만 지불하면 되는 거의 무료로 무제한적인 사용. 유료 서비스의 경우 사용자가 많을 수록 비용이 많이 올라 감
+
+@문서화 - 동영상 강좌
+    * 윈도우즈에서 php 를 다운로드해서 직접 운용
+    * cafe24.com 에서 운용
+    \
+
+* Meta module. set/get/sets/gets
+
+* @check @re-think Make meta functions available on all model.
+
+    * Use traits.
+    
+    
+    
+* @done support sqlite for easy use.
 
     * Use same SQL schema for mysql and sqlite.
     
     * make it optional on config.php
 
 
-* Make meta functions available on all model.
-
-    * Use traits.
-    
 
 * Make a filipino Angular community.
 
@@ -83,11 +97,14 @@ Backend server for New LMS
 
 # Installation
 
-* Pull out the code
+
+* download/pull-out the code from https://github.com/thruthesky/backend
+* upload to server.
 * Edit 'config.php' for database connection.
-* Import 'etc/sql/lateset-schema.sql' to database.
 * mkdir 777 data
-* Access thru website.
+* Access http://YOUR-WEBSITE.COM/?mc=system.install
+
+
 
 
 # Configuration
@@ -105,8 +122,7 @@ Backend server for New LMS
 
     * ?mc=test.all
 
-  
-  
+
 # Resources
 
 ## Backend Angular API

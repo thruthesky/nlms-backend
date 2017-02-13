@@ -125,7 +125,7 @@ class Meta extends \model\base\Base
 
     public function getCount( $model, $model_idx, $code ) {
 
-        return $this->count("model = '$model' AND model_idx = $model_idx AND code = '$code'");
+        return $this->count("model = '$model' AND model_idx = $model_idx AND code = '$code' AND model = '$model'");
 
         //parent::count( "model = '$model' AND model_idx = $model_idx AND code = '$code'" );
         // return db()->result("SELECT COUNT(*) FROM meta WHERE model = '$model' AND model_idx = $model_idx AND code = '$code'");

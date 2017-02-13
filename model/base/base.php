@@ -145,7 +145,7 @@ class Base {
      *
      */
     public function insert( $record ) {
-        $kvs['created'] = time();
+        $record['created'] = time();
         return db()->insert( $this->getTable(), $record );
         /*
         if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);

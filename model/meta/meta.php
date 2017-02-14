@@ -95,10 +95,10 @@ class Meta extends \model\base\Base
     /**
      * Deletes one(1) record of model, model_idx, code.
      * @param $model
-     * @param $model_idx
-     * @param $code
+     * @param $model_idx - default is null for parent::delete() argument match.
+     * @param $code - default is null for parent::delete() argument match.
      */
-    public function delete( $model, $model_idx, $code ) {
+    public function delete( $model, $model_idx=null, $code=null ) {
 
         parent::delete( "model = '$model' AND model_idx = $model_idx AND code = '$code'" );
 

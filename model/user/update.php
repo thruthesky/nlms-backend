@@ -14,6 +14,14 @@ class Update extends User {
         $data['email'] = in('email');
         $data['nickname'] = in('nickname');
         $data['name'] = in('name');
+        $data['birth_day'] = in('birthday');
+        $data['gender'] = in('gender');
+        $data['mobile'] = in('mobile');
+        $data['landline'] = in('landline');
+        $data['country'] = in('country');
+        $data['city'] = in('city');
+        $data['zipcode'] = in('zipcode');
+        $data['province'] = in('province');
 
 
         $this->load_by_session_id( in('session_id') );

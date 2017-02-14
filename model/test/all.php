@@ -338,11 +338,12 @@ To install access to ?mc=system.install
 
 
     private function testForum() {
-        $this->createForum(['id'=>'test-forum', 'name'=>'Test Forum']);
+        $this->createForumConfig(['id'=>'test-forum', 'name'=>'Test ForumConfig']);
+        $this->createForumData(['title'=>'test-title-formdata', 'content'=>'Test ForumData']);
     }
 
 
-    private function createForum( $params ) {
+    private function createForumConfig( $params ) {
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         test( $re['code'] == 0, "Creating forum config - $params[id]");
@@ -351,15 +352,39 @@ To install access to ?mc=system.install
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]" );
 
+        $editconfig = ['idx'=>1, 'id'=>'edit-forum', 'name'=>'edit ForumConfig'];
 
-        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
-        test( $re['code'] == 0, "Deleting forum config - $params[id]");
+        $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
+        test( $re['code'] == 0, "Updating Forum config - $params[id]");
+
+        $re = $this->ex( "\\model\\forum\\Config::delete", $editconfig );
+        test( $re['code'] == 0, "Deleting forum config - $editconfig[id]");
 
 
-        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Forum already deleted - $params[id]");
+        $re = $this->ex( "\\model\\forum\\Config::delete", $editconfig );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Forum already deleted - $editconfig[id]");
 
 
+
+
+
+    }
+
+    private function createForumData( $params ) {
+        $re = $this->ex( "\\model\\forum\\Data::create", $params );
+        test( $re['code'] == 0, "Creating forum config - $params[title]");
+
+
+        $editdata = ['idx'=>1, 'title'=>'edit-data', 'content' => 'edit ForumData'];
+
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");
+
+        $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
+        test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
+
+        $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
     }
 
 }

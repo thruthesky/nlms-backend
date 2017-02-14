@@ -38,7 +38,7 @@ define('ERROR_RECORD_NOT_SET', -40102);              $em[ERROR_RECORD_NOT_SET] =
 
 define('ERROR_FORUM_CONFIG_EXIST', -40200);               $em[ERROR_FORUM_CONFIG_EXIST] = 'forum-config-exist';
 define('ERROR_FORUM_CONFIG_NOT_EXIST', -40201);               $em[ERROR_FORUM_CONFIG_NOT_EXIST] = 'forum-config-not-exist';
-
+define('ERROR_FORUM_DATA_NOT_EXIST', -40202);               $em[ERROR_FORUM_DATA_NOT_EXIST] = 'forum-data-not-exist';
 define('OK', 0);
 
 

@@ -30,7 +30,7 @@ class Config extends Forum {
         $data['description'] = in('description');
 
 
-        $config = $this->getConfig( in('id') );
+        $config = $this->get( in('id') );
         if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST );
 
         $forum_idx = $this->insert( $data );

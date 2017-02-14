@@ -3,7 +3,7 @@
  * @see README.md
  */
 namespace model\forum;
-class data extends Forum {
+class Data extends Forum {
     public function __construct()
     {
 
@@ -21,10 +21,11 @@ class data extends Forum {
         $data['title'] = in('title');
         $data['content'] = in('content');
 
-        $forum = $this->insert( $data );
 
-        if ( $forum <= 0 ) return error( $forum );
-        success( ['forum_data'=>$forum] );
+        $forumdata_idx = $this->insert( $data );
+
+        if ( $forumdata_idx <= 0 ) return error( $forumdata_idx );
+        success( ['forum_data'=>$forumdata_idx] );
     }
 
     public function edit() {
@@ -34,20 +35,26 @@ class data extends Forum {
         $data['content'] = in('content');
 
         $datas = $this->load($data['idx']);
-        if( ! $datas ) error( ERROR_POST_NOT_EXIST );
-        $forum = $this->update($data);
-        success( ['forum_data'=>$forum] );
+        if( ! $datas ) error( ERROR_FORUM_DATA_NOT_EXIST );
+
+        unset( $data['idx'] ); //
+
+        $no = $this->update($data);
+        if ( $no == 0 ) return error( ERROR_UNKNOWN ); // strange error. this error should not happened here.
+        success( ['forum_data'=> $this->load( in('idx') )] );
     }
 
 
-    public function remove() {
+    public function delete( $compatibility_arg1 = null ) {
         $idx = in('idx');
+        if ( empty($idx) ) $idx = "id='".in('id')."'"; // if it is not string, it is id.
+
         $data = $this->load( $idx );
-        if( !$data ) error( ERROR_POST_NOT_EXIST );
-        $condition = "idx = $idx";
-        $this->delete( $condition );
+        if( !$data ) error( ERROR_FORUM_DATA_NOT_EXIST );
+
+        $this->destroy();
 
 
-        success( ['deleted' => $idx] );
+        success();
     }
 }

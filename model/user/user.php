@@ -56,10 +56,8 @@ class User extends \model\base\Base {
 
     /**
      *
-     * @attention it stop the script if there is no user by $idx(condition)
+     * @Attention it does not stop the script. it just return empty if there is no user by that $idx.
      *
-     *          SO, If you need not to stop the script,
-     *          YOU MUST use '_load()' instead of 'load()'
      *
      * @param $idx - if it is a number, it assumes as user.idx
      *              - or else if it has '=' or 'like' then, it assumes as user.id.
@@ -83,9 +81,8 @@ class User extends \model\base\Base {
         else {
             $idx = "id = '$idx'";
         }
-        $user = parent::load( $idx );
-        if ( empty( $user ) ) error( ERROR_USER_NOT_FOUND );
-        return $user;
+        return parent::load( $idx );
+        
     }
 
 

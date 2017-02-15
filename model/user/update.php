@@ -7,8 +7,8 @@ class Update extends User {
         parent::__construct();
 
 
-
-        if ( in('id') ) error( ERROR_CANNOT_CHANGE_USER_ID );
+        if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+        if ( in('id') ) return error( ERROR_CANNOT_CHANGE_USER_ID );
 
         $data = [];
         $data['email'] = in('email');

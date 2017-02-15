@@ -372,16 +372,16 @@ To install access to ?mc=system.install
 
     private function createForumData( $params ) {
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
-        test( $re['code'] == 0, "Creating forum config - $params[title]");
+        test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Creating forum data");
 
 
         $editdata = ['idx'=>1, 'title'=>'edit-data', 'content' => 'edit ForumData'];
 
         $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
-        test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST, "Updating Forum Data - $editdata[title]");
 
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
-        test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Deleting forum data - $editdata[title]");
 
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");

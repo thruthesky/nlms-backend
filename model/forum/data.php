@@ -18,6 +18,7 @@ class Data extends Forum {
     public function create() {
 
         $data = [];
+        $data['user_idx'] = in('user_idx');
         $data['title'] = in('title');
         $data['content'] = in('content');
 

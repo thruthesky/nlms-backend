@@ -14,9 +14,11 @@ class Logout extends User {
 
         $user = $this->load_by_session_id( in('session_id') );
 
-
-        if ( $user ) $this->update( [ 'session_id' => '' ] );
-        success();
+        if ( $user ) {
+            $this->update(['session_id' => '']);
+            success();
+        }
+        else error( ERROR_WRONG_SESSION_ID );
 
     }
 }

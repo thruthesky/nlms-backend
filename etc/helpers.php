@@ -95,6 +95,11 @@ function error( $code, $message='' ) {
     return $code;
 }
 
+function error_string( $re ) {
+    if ( $re['code'] ) return "ERROR( $re[code] ) - $re[message]";
+    else return null;
+}
+
 /**
  * @attention when success json data printed out, it does not stop the script. Meaning the script will continue.
  * @param null $data

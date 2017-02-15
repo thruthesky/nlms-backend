@@ -71,7 +71,10 @@ class User extends \model\base\Base {
      *      $user = $this->load( "session_id='$session_id'");
      * @endcode
      */
+    /*
     public function load( $idx ) {
+
+
         if ( is_numeric( $idx ) ) {
             $idx = "idx=$idx";
         }
@@ -82,8 +85,10 @@ class User extends \model\base\Base {
             $idx = "id = '$idx'";
         }
         return parent::load( $idx );
+
         
     }
+*/
 
 
     /**

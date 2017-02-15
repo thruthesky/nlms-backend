@@ -339,20 +339,29 @@ To install access to ?mc=system.install
 
     private function testForum() {
         $this->createForumConfig(['id'=>'test-forum', 'name'=>'Test ForumConfig']);
-        $this->createForumData(['title'=>'test-title-formdata', 'content'=>'Test ForumData']);
+        $this->createForumData(['title'=>'test-title-form-data', 'content'=>'Test ForumData']);
     }
 
 
     private function createForumConfig( $params ) {
 
-        $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        test( $re['code'] == 0, "Creating forum config - $params[id]");
 
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]" );
+        if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) { // if exists,
+            $re = $this->ex( "\\model\\forum\\Config::delete", $params ); // delete
+            test( $re['code'] == 0, "Deleteing forum config - $params[id], " . error_string( $re ));
+            $re = $this->ex( "\\model\\forum\\Config::create", $params ); // create
+        }
+        test( $re['code'] == 0, "Creating forum config - $params[id], " . error_string( $re ));
 
-        $editconfig = ['idx'=>1, 'id'=>'edit-forum', 'name'=>'edit ForumConfig'];
+        $forum_config_idx = $re['data']['idx'];
+
+        $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]. " . error_string($re) );
+
+
+        $editconfig = ['idx'=>$forum_config_idx, 'id'=>'edit-forum', 'name'=>'edit ForumConfig'];
 
         $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
         test( $re['code'] == 0, "Updating Forum config - $params[id]");

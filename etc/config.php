@@ -8,6 +8,11 @@
  *
  */
 
+
+$ADMIN_ID               = 'admin';          // this is admin id.
+
+
+
 $DIR_DATA               = './data';
 
 $DATABASE_USER          = 'root';

@@ -375,9 +375,8 @@ To install access to ?mc=system.install
 
 
 
-
-
     }
+
 
     function createForumData( $params ) {
 
@@ -392,8 +391,10 @@ To install access to ?mc=system.install
             ]
         ];
         $params['session_id'] = $this->createUser( $data );
+        
+
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
-        test( $re['code'] == 0, "Creating forum config - $params[title]");
+        test( $re['code'] == 0, "Creating forum config - $params[title]. " . error_string( $re ));
 
         $forum_data_idx = $re['data']['forum_data'];
 

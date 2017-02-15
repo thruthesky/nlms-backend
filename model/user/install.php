@@ -38,3 +38,30 @@ db()
     ->index('birth_year,birth_month,birth_day');
 
 
+
+$admin_user_data = [
+    'id' => $ADMIN_ID,
+    'password' => $ADMIN_ID,
+    'name' => $ADMIN_ID,
+    'email' => ''
+];
+$data['id'] = in('id');
+$data['email'] = in('email');
+$data['nickname'] = in('nickname');
+$data['name'] = in('name');
+$data['birth_day'] = in('birthday');
+$data['gender'] = in('gender');
+$data['mobile'] = in('mobile');
+$data['landline'] = in('landline');
+$data['country'] = in('country');
+$data['city'] = in('city');
+$data['zipcode'] = in('zipcode');
+$data['province'] = in('province');
+$data['password'] = $this->encryptPassword( in('password') );
+
+$user = $this->load( in('id') );
+
+if ( $user ) return error( ERROR_USER_EXIST );
+$user_idx = $this->insert( $data );
+
+

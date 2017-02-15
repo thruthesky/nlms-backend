@@ -159,4 +159,8 @@ class User extends \model\base\Base {
     }
 
 
+    public function create( $data ) {
+
+    }
+
 }

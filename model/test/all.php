@@ -379,12 +379,25 @@ To install access to ?mc=system.install
 
     }
 
-    private function createForumData( $params ) {
+    function createForumData( $params ) {
+
+        $id = 'user-test' . time();
+        $name = 'new user';
+        $data = [
+            'id'=>$id,
+            'name'=>$name,
+            'meta' => [
+                'age' => 22,
+                'classid' => 'my-id'
+            ]
+        ];
+        $params['session_id'] = $this->createUser( $data );
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == 0, "Creating forum config - $params[title]");
 
+        $forum_data_idx = $re['data']['forum_data'];
 
-        $editdata = ['idx'=>1, 'title'=>'edit-data', 'content' => 'edit ForumData'];
+        $editdata = ['idx'=>$forum_data_idx, 'title'=>'edit-data', 'content' => 'edit ForumData'];
 
         $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
         test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");

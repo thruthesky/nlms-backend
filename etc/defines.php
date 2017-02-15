@@ -42,6 +42,9 @@ define('ERROR_RECORD_NOT_SET', -40102);              $em[ERROR_RECORD_NOT_SET] =
 define('ERROR_FORUM_CONFIG_EXIST', -40200);               $em[ERROR_FORUM_CONFIG_EXIST] = 'forum-config-exist';
 define('ERROR_FORUM_CONFIG_NOT_EXIST', -40201);               $em[ERROR_FORUM_CONFIG_NOT_EXIST] = 'forum-config-not-exist';
 define('ERROR_FORUM_DATA_NOT_EXIST', -40202);               $em[ERROR_FORUM_DATA_NOT_EXIST] = 'forum-data-not-exist';
+define('ERROR_FORUM_ID_EMPTY', -40203 );                $em[ERROR_FORUM_ID_EMPTY] = 'forum-id-is-empty';
+define('ERROR_FORUM_DATA_TITLE_EMPTY', -40204);         $em[ERROR_FORUM_DATA_TITLE_EMPTY] = 'forum-data-title-is-empty';
+define('ERROR_FORUM_DATA_CONTENT_EMPTY', -40205);            $em[ERROR_FORUM_DATA_CONTENT_EMPTY] = 'forum-data-content-is-empty';
 define('OK', 0);
 
 

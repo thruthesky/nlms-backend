@@ -24,6 +24,10 @@ class Config extends Forum {
      */
     public function create() {
 
+        if( empty( in('id') ) ) return error( ERROR_USER_ID_EMPTY );
+        if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+
+
         $data = [];
         $data['id'] = in('id');
         $data['name'] = in('name');
@@ -36,7 +40,7 @@ class Config extends Forum {
         $forum_idx = $this->insert( $data );
 
         if ( $forum_idx <= 0 ) error( $forum_idx );
-        else success( ['idx'=>$forum_idx] );
+        else success( ['idx'=>$forum_idx, 'id'=>$data['id']] );
 
     }
 
@@ -79,6 +83,17 @@ class Config extends Forum {
         $this->destroy();
 
         success();
+    }
+
+
+    public function getConfig() {
+        if( empty( in( 'session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+        if( empty( in('id') ) ) return error( ERROR_FORUM_ID_EMPTY );
+
+        $config = $this->get( in('id') );
+        if( empty( $config ) ) error( ERROR_FORUM_CONFIG_NOT_EXIST );
+
+        success( ['forum_data' => $config]);
     }
 
 }

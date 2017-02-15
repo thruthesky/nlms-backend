@@ -86,17 +86,23 @@ class Base {
      *
      * @attention @important load() resets the $record.
      *
-     * @param $idx - If it is numeric, then it is idx. so, this method will get the record on the idx.
-     *  If $idx is a string, then it assumes that is is a WHERE SQL clause.
+     * @param $what
+     *              - If it is numeric, then it is idx. so, this method will get the record on the idx.
+     *              - If it is one word string, then it is an 'ID'
+     *              - If it is a string with ' ', =, <, >, then it assumes that is is a WHERE SQL clause.
      * @return array|null
      */
-    public function load( $idx ) {
-        return self::_load( $idx );
-    }
-    public function _load( $idx ) {
-        if ( is_numeric($idx) ) $where = "idx=$idx";
-        else $where = " $idx ";
-        $this->record = db()->row("SELECT * FROM {$this->getTable()} WHERE $where");
+    public function load( $what ) {
+        if ( is_numeric($what) ) $what = "idx=$what";
+
+        else if ( strpos( $what, ' ' ) || strpos( $what, '=' ) || strpos( $what, '<' ) || strpos( $what, '>' ) ) {
+
+        }
+        else {
+            $what = "id = '$what'";
+        }
+
+        $this->record = db()->row("SELECT * FROM {$this->getTable()} WHERE $what");
         return $this->record;
     }
 

@@ -17,6 +17,14 @@ class Data extends Forum {
 
     public function create() {
 
+        if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+        $user = user()->load_by_session_id( in('session_id') );
+        if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
+
+
+
+
+
         $data = [];
         $data['user_idx'] = in('user_idx');
         $data['title'] = in('title');

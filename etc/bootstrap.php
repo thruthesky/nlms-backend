@@ -69,3 +69,11 @@ function user() {
 function meta() {
     return new \model\meta\Meta();
 }
+
+function forum_config() {
+    return new \model\forum\Config();
+}
+
+function forum_data() {
+    return new \model\forum\Data();
+}

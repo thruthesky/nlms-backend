@@ -93,6 +93,9 @@ class Base {
      * @return array|null
      */
     public function load( $what ) {
+
+        if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
+
         if ( is_numeric($what) ) $what = "idx=$what";
 
         else if ( strpos( $what, ' ' ) || strpos( $what, '=' ) || strpos( $what, '<' ) || strpos( $what, '>' ) ) {
@@ -102,10 +105,11 @@ class Base {
             $what = "id = '$what'";
         }
 
+        if ( ! db()->secure_cond( $what ) ) return ERROR_INSCURE_SQL_CONDITION;
+
         $this->record = db()->row("SELECT * FROM {$this->getTable()} WHERE $what");
         return $this->record;
     }
-
 
     /**
      * Reload the data and reset $record.
@@ -135,6 +139,18 @@ class Base {
         $this->record = [];
 
     }
+
+    public function loads( $cond )
+    {
+        if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
+        if ( ! db()->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
+        return db()->rows("SELECT * FROM {$this->getTable()} WHERE $cond");
+    }
+
+
+
+
+
 
 
 
@@ -184,8 +200,8 @@ class Base {
      * @return void
      */
     public function delete( $cond ) {
-        if ( empty($cond) ) return error( ERROR_EMPTY_SQL_CONDITION );
-        if ( ! db()->secure_cond( $cond ) ) return error( ERROR_INSCURE_SQL_CONDITION );
+        if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
+        if ( ! db()->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
         db()->query(" DELETE FROM {$this->getTable()} WHERE $cond ");
     }
 
@@ -200,7 +216,7 @@ class Base {
      */
     public function count( $cond ) {
         if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
-        if ( ! db()->secure_cond( $cond ) ) return error( ERROR_INSCURE_SQL_CONDITION );
+        if ( ! db()->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
         return db()->result("SELECT count(*) FROM {$this->getTable()} WHERE $cond" );
     }
 

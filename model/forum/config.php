@@ -36,7 +36,7 @@ class Config extends Forum {
         $forum_idx = $this->insert( $data );
 
         if ( $forum_idx <= 0 ) error( $forum_idx );
-        else success( ['forum_config'=>$forum_idx] );
+        else success( ['idx'=>$forum_idx] );
 
     }
 

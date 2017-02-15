@@ -89,7 +89,7 @@ class User extends \model\base\Base {
         
     }
 */
-    
+
 
     /**
      *      HTTP INTERFACES

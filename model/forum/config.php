@@ -24,8 +24,13 @@ class Config extends Forum {
      */
     public function create() {
 
+
         if( empty( in('id') ) ) return error( ERROR_USER_ID_EMPTY );
         if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+
+
+        $user = user()->load_by_session_id( in('session_id') );
+        if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
 
 
         $data = [];

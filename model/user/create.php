@@ -11,8 +11,8 @@ class Create extends User {
         parent::__construct();
 
 
-        if ( empty( in('id') ) ) error( ERROR_USER_ID_EMPTY );
-        if ( empty( in('password') ) ) error( ERROR_PASSWORD_EMPTY );
+        if ( empty( in('id') ) ) return error( ERROR_USER_ID_EMPTY );
+        if ( empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY );
 
 
         $data = [];

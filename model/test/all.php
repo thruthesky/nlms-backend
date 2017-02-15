@@ -378,34 +378,23 @@ To install access to ?mc=system.install
     }
 
 
-    function createForumData( $params ) {
 
-        $id = 'user-test' . time();
-        $name = 'new user';
+
+        private function createForumData( $params ) {
         $data = [
-            'id'=>$id,
-            'name'=>$name,
-            'meta' => [
-                'age' => 22,
-                'classid' => 'my-id'
-            ]
+            'id'=> 'user-id-' . time(),
+            'name'=> 'user-name-' . time()
         ];
-        $params['session_id'] = $this->createUser( $data );
-        
-
+        $session_id = $this->createUser( $data );
+        $params['session_id'] = $session_id;
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == 0, "Creating forum config - $params[title]. " . error_string( $re ));
-
         $forum_data_idx = $re['data']['forum_data'];
-
         $editdata = ['idx'=>$forum_data_idx, 'title'=>'edit-data', 'content' => 'edit ForumData'];
-
         $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
         test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");
-
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
-
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
     }

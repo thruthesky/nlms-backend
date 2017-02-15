@@ -18,6 +18,7 @@ class Data extends Forum {
     public function create() {
 
         if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+
         $user = user()->load_by_session_id( in('session_id') );
         if( empty(in('forum_id')) ) return error( ERROR_FORUM_ID_EMPTY );
         $config = forum_config()->load( in('forum_id') );
@@ -26,6 +27,11 @@ class Data extends Forum {
         if( empty( in('title') ) ) return error( ERROR_FORUM_DATA_TITLE_EMPTY );
         if( empty( in('content') ) ) return error( ERROR_FORUM_DATA_CONTENT_EMPTY );
 
+        if( empty(in('title') ) ) return error(-1, 'error-empty-title');
+        if( empty(in('content') ) ) return error(-1, 'error-empty-content');
+        if( empty( in('forum_id') ) ) return error(-1, 'error-empty-forum_id');
+        $config = forum_config()->load( in('forum_id') );
+        if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
 
 
 

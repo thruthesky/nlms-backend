@@ -109,6 +109,11 @@ class Forum extends \model\base\Base {
         if ( ok($re) ) return $re['data']['session_id'];
         else return null;
 
+
+        success();
+
+
+
     }
 
     private function testForumConfig ( $params ) {

@@ -96,7 +96,7 @@ function error( $code, $message='' ) {
 }
 
 function error_string( $re ) {
-    if ( $re['code'] ) return "ERROR( $re[code] ) - <b>$re[message]</b>";
+    if ( is_array( $re ) && isset($re['code']) ) return "ERROR( $re[code] ) - <b>$re[message]</b>";
     else return null;
 }
 
@@ -166,3 +166,48 @@ function page_item_limit( $n ) {
     else if ( $n < 1 ) return $DEFAULT_NO_OF_PAGE_ITEMS;
     else return $n;
 }
+
+
+/**
+ *
+ * Search files based on $pattern and Return it.
+ *
+ * @param $folder
+ * @param $pattern
+ * @return array
+ */
+function rsearch($folder, $pattern) {
+    $dir = new \RecursiveDirectoryIterator($folder);
+    $ite = new \RecursiveIteratorIterator($dir);
+    $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
+    $fileList = array();
+    foreach($files as $file) {
+        $fileList = array_merge($fileList, $file);
+    }
+    return $fileList;
+}
+
+
+
+
+function test( $re, $code ) {
+    static $count = 0;
+    $count ++;
+    if ( is_array($re) ) {
+        if ( isset($re['code']) && ! isset($re['idx']) ) { // server data.
+            if ( $re['code'] ) echo "<div class='error'>$count - ERROR : ( $re[code] ) - $re[message]</div>";
+            else echo "<div class='success'>$count - SUCCESS: $code</div>";
+        }
+        else { // unknown data.
+            if ( $re ) echo "<div class='success'>$count - SUCCESS: $code</div>";
+            else echo "<div class='error'>$count - ERROR : $code</div>";
+        }
+    }
+    else { //
+        if ( $re ) echo "<div class='success'>$count - SUCCESS: $code</div>";
+        else echo "<div class='error'>$count - ERROR : $code</div>";
+    }
+}
+
+
+

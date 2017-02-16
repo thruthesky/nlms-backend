@@ -22,7 +22,7 @@ class Base {
     protected function setTable( $name ) {
         $this->table = $name;
     }
-    protected function getTable() {
+    public final function getTable() {
         return $this->table;
     }
 

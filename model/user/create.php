@@ -14,6 +14,8 @@ class Create extends User {
 
         $data = [];
         $data['id'] = in('id');
+        $data['password'] = in( 'password' );
+
         $data['email'] = in('email');
         $data['nickname'] = in('nickname');
         $data['name'] = in('name');
@@ -25,7 +27,6 @@ class Create extends User {
         $data['city'] = in('city');
         $data['zipcode'] = in('zipcode');
         $data['province'] = in('province');
-        $data['password'] = in( 'password' );
         $data['meta'] = in('meta');
 
 

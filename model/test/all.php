@@ -295,7 +295,7 @@ To install access to ?mc=system.install
         $re = $this->ex("\\model\\user\\user::data", $params);
         //di($re);
         test( $re, "user::data() - session_id: $session_id" );
-        if ( ok($re) ) return $re['data'];
+        if ( ok($re) ) return $re['data']['user'];
         else return null;
     }
 
@@ -469,18 +469,48 @@ To install access to ?mc=system.install
             test( $no == 1, "1 should be pulled out. $no users pulled out: " . error_string($re) );
         }
 
+        // get user data
         list ( $idx, $rest ) = explode('-', $user_session_id );
         $params = [
             'session_id' => $admin_session_id,
             'idx' => $idx
         ];
-
-        di($params);
         $re = $this->ex("\\model\\user\\user::data", $params );
+        test( $re['code'] == 0, "Admin got user data: " . error_string($re) );
 
-        di($re);
+        // update user data
+        $user_name = $re['data']['user']['name'];
+        $new_name = "new" . time();
+        $params = [
+            'session_id' => $admin_session_id,
+            'idx' => $idx,
+
+                'name' => $new_name
+
+        ];
+        $re = $this->ex("\\model\\user\\update", $params );
+        test( $re['code'] == 0, "Admin updated user data: " . error_string($re) );
 
 
+
+
+        // get updated user data.
+        $params = [
+            'session_id' => $admin_session_id,
+            'idx' => $idx
+        ];
+        $re = $this->ex("\\model\\user\\user::data", $params );
+        test( $re['code'] == 0, "Admin got user data: " . error_string($re) );
+        if ( $re['code'] ) { // update failed
+
+        }
+        else { // update success
+
+            $user = $re['data']['user'];
+
+            // compare.
+            test( $user['name'] == $new_name, "User updated: " . error_string($re) );
+        }
 
 
 

@@ -13,6 +13,7 @@ $ADMIN_ID               = 'admin';          // this is admin id.
 
 
 
+
 $DIR_DATA               = './data';
 
 $DATABASE_USER          = 'root';
@@ -20,6 +21,12 @@ $DATABASE_PASSWORD      = '7777';
 $DATABASE_NAME          = 'nlms';
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'sqlite';         // 'mysql' | 'sqlite'
+
+
+/**
+ * Default number of items in one page list.
+ */
+$DEFAULT_NO_OF_PAGE_ITEMS   = 10;           // number
 
 
 /**

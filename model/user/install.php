@@ -37,4 +37,14 @@ db()
     ->index('email')
     ->index('birth_year,birth_month,birth_day');
 
+global $ADMIN_ID;
+
+
+$admin_user_data = [
+    'id' => $ADMIN_ID,
+    'password' => $ADMIN_ID,
+    'name' => $ADMIN_ID
+];
+
+$re = user()->create( $admin_user_data );
 

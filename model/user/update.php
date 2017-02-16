@@ -11,6 +11,7 @@ class Update extends User {
         if ( in('id') ) return error( ERROR_CANNOT_CHANGE_USER_ID );
 
         $data = [];
+
         $data['email'] = in('email');
         $data['nickname'] = in('nickname');
         $data['name'] = in('name');
@@ -22,9 +23,24 @@ class Update extends User {
         $data['city'] = in('city');
         $data['zipcode'] = in('zipcode');
         $data['province'] = in('province');
+        $data['meta'] = in('meta');
+
+
+        //di($data);
 
 
         $this->load_by_session_id( in('session_id') );
+
+
+
+        if ( $this->isAdmin() ) { // if admin,
+            $this->load( in('idx') ); // admin can update user information.
+        }
+
+
+        //di($this->record);
+
+
         $this->update( $data );
         success( [ 'session_id' => $this->get_session_id() ] );
     }

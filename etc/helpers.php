@@ -96,7 +96,7 @@ function error( $code, $message='' ) {
 }
 
 function error_string( $re ) {
-    if ( $re['code'] ) return "ERROR( $re[code] ) - $re[message]";
+    if ( $re['code'] ) return "ERROR( $re[code] ) - <b>$re[message]</b>";
     else return null;
 }
 
@@ -112,11 +112,11 @@ function success( $data = null ) {
 }
 
 /**
- * @param $error_code - It gets error code defined in defines.php
+ * @param $re - It gets error code defined in defines.php
  */
-function result( $error_code ) {
-    if ( $error_code ) error( $error_code );
-    else success();
+function result( $re ) {
+    if ( isset($re['code'] ) && $re['code'] ) error( $re );
+    else success( $re );
 }
 
 
@@ -145,4 +145,24 @@ function json_result() {
 
     unset( $system['error'], $system['success'] );
     return json_encode( $re );
+}
+
+
+/**
+ * Returns page no.
+ *
+ * @param $n
+ * @return int
+ */
+function page_no( $n ) {
+    if ( ! is_numeric( $n ) ) return 1;
+    else if ( $n < 1 ) return 1;
+    else return $n;
+}
+
+function page_item_limit( $n ) {
+    global $DEFAULT_NO_OF_PAGE_ITEMS;
+    if ( ! is_numeric( $n ) ) return $DEFAULT_NO_OF_PAGE_ITEMS;
+    else if ( $n < 1 ) return $DEFAULT_NO_OF_PAGE_ITEMS;
+    else return $n;
 }

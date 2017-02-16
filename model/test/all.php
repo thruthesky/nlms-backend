@@ -45,6 +45,7 @@ class All extends \model\base\Base {
         $this->testBase();
         $this->testMeta();
         $this->testUser();
+        $this->testUserSearch();
 
 
         $this->testForum();
@@ -243,7 +244,7 @@ To install access to ?mc=system.install
 
         $re = $this->ex( "\\model\\user\\Create", $params );
 
-        test($re, "registration: $params[id]");
+        // test($re, "registration: $params[id]");
 
         if ( ok($re) ) return $re['data']['session_id'];
         else return null;
@@ -294,7 +295,7 @@ To install access to ?mc=system.install
         $re = $this->ex("\\model\\user\\user::data", $params);
         //di($re);
         test( $re, "user::data() - session_id: $session_id" );
-        if ( ok($re) ) return $re['data'];
+        if ( ok($re) ) return $re['data']['user'];
         else return null;
     }
 
@@ -375,25 +376,139 @@ To install access to ?mc=system.install
 
 
 
-
-
     }
 
-    private function createForumData( $params ) {
+
+
+
+        private function createForumData( $params ) {
+        $data = [
+            'id'=> 'user-id-' . time(),
+            'name'=> 'user-name-' . time()
+        ];
+        $session_id = $this->createUser( $data );
+        $params['session_id'] = $session_id;
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
-        test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Creating forum data");
-
-
-        $editdata = ['idx'=>1, 'title'=>'edit-data', 'content' => 'edit ForumData'];
-
+        test( $re['code'] == 0, "Creating forum config - $params[title]. " . error_string( $re ));
+        $forum_data_idx = $re['data']['forum_data'];
+        $editdata = ['idx'=>$forum_data_idx, 'title'=>'edit-data', 'content' => 'edit ForumData'];
         $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
-        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST, "Updating Forum Data - $editdata[title]");
-
+        test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
-        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Deleting forum data - $editdata[title]");
-
+        test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
+    }
+
+    private function testUserSearch()
+    {
+
+        // create 10 users.
+        $id = null;
+        $user_session_id = null;
+        for( $i = 0; $i < 10; $i ++ ) {
+            $id = "user-$i-" . time();
+            $data = [
+                'id'=>$id,
+                'name'=> "name-$id",
+                'meta' => [
+                    'age' => $i,
+                    'classid' => "classid-$i"
+                ]
+            ];
+            $user_session_id = $this->createUser( $data );
+        }
+
+
+        // search permission error.
+        $params = [
+            'limit' => 3,
+            'session_id' => $user_session_id
+        ];
+        $re = $this->ex( "\\model\\user\\user::search", $params );
+        test( $re['code'] == ERROR_PERMISSION_ADMIN, "User search: " . error_string($re) );
+
+
+        // search permission ok.
+        $admin_session_id = user()->forceLogin('admin');
+
+        $params = [
+            'limit' => 3,
+            'session_id' => $admin_session_id
+        ];
+
+
+        $re = $this->ex( "\\model\\user\\user::search", $params );
+        test( $re['code'] == 0, "User search: " . error_string($re) );
+
+
+
+        if ( $re['code'] ) {
+
+        }
+        else {
+
+            $no = count($re['data']['users'] );
+            test( $no == 3, "3 should be pulled out. $no users pulled out: " . error_string($re) );
+
+        }
+
+        $params['cond'] = "id='admin'";
+        $re = $this->ex( "\\model\\user\\user::search", $params );
+        test( $re['code'] == 0, "User search for admin: " . error_string($re) );
+        if ( $re['code'] ) {
+
+        }
+        else {
+            $no = count($re['data']['users'] );
+            test( $no == 1, "1 should be pulled out. $no users pulled out: " . error_string($re) );
+        }
+
+        // get user data
+        list ( $idx, $rest ) = explode('-', $user_session_id );
+        $params = [
+            'session_id' => $admin_session_id,
+            'idx' => $idx
+        ];
+        $re = $this->ex("\\model\\user\\user::data", $params );
+        test( $re['code'] == 0, "Admin got user data: " . error_string($re) );
+
+        // update user data
+        $user_name = $re['data']['user']['name'];
+        $new_name = "new" . time();
+        $params = [
+            'session_id' => $admin_session_id,
+            'idx' => $idx,
+
+                'name' => $new_name
+
+        ];
+        $re = $this->ex("\\model\\user\\update", $params );
+        test( $re['code'] == 0, "Admin updated user data: " . error_string($re) );
+
+
+
+
+        // get updated user data.
+        $params = [
+            'session_id' => $admin_session_id,
+            'idx' => $idx
+        ];
+        $re = $this->ex("\\model\\user\\user::data", $params );
+        test( $re['code'] == 0, "Admin got user data: " . error_string($re) );
+        if ( $re['code'] ) { // update failed
+
+        }
+        else { // update success
+
+            $user = $re['data']['user'];
+
+            // compare.
+            test( $user['name'] == $new_name, "User updated: " . error_string($re) );
+        }
+
+
+
     }
 
 }

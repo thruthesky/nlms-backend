@@ -10,13 +10,16 @@ class Create extends User {
 
         parent::__construct();
 
-
+        
         if ( empty( in('id') ) ) return error( ERROR_USER_ID_EMPTY );
         if ( empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY );
 
 
+
         $data = [];
         $data['id'] = in('id');
+        $data['password'] = in( 'password' );
+
         $data['email'] = in('email');
         $data['nickname'] = in('nickname');
         $data['name'] = in('name');
@@ -28,20 +31,11 @@ class Create extends User {
         $data['city'] = in('city');
         $data['zipcode'] = in('zipcode');
         $data['province'] = in('province');
-        $data['password'] = $this->encryptPassword( in('password') );
+        $data['meta'] = in('meta');
 
-        $user = $this->load( in('id') );
 
-        if ( $user ) return error( ERROR_USER_EXIST );
-        $user_idx = $this->insert( $data );
+        result( $this->create( $data ) );
 
-        if ( $user_idx <= 0 ) return error( $user_idx );
-
-        $this->reset( $user_idx );
-
-        meta()->sets( 'user', $user_idx, in('meta') );
-
-        success( ['session_id'=>$this->get_session_id()] );
 
     }
 

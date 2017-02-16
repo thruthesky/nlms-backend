@@ -535,7 +535,6 @@ class Database extends \PDO {
         if ( stripos( $cond, 'replace ') !== false ) $secure = false;
         if ( stripos( $cond, 'UPDATE ') !== false ) $secure = false;
         if ( stripos( $cond, 'DELETE ') !== false ) $secure = false;
-        if ( $secure === false ) error( ERROR_INSCURE_SQL_CONDITION );
 
         return $secure;
     }

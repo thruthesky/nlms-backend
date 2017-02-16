@@ -1,17 +1,38 @@
-# nlms-backend
-Backend server for New LMS
+# Backend
+
+Backend is a Framework for serving Database through REST API.
+
+## Developers
+
+JaeHo Song <thruthesky@gmail.com>
+
+And withcenter team members.
+
+
+# Overview
+
+## Why?
+
+1. You cannot search fields on firebase database.
+2. You can search fields on many other NoSQL DaaS.
+	1. But those are not free service. The more you get service, the more you pay.
+	2. But NoSQL is not familiar yet and may produce big mistakes.
+	3. NoSQL has no **Standard**. You have to learn everything over again on each NoSQL. Meaning if you change NoSQL, your life will be hard.
+3. SQL is
+	1. Standard
+	2. Good and Open Sourced Databases.
+	3. Very familiar to developers.
+	4. It's almost free. You need to pay only for hosting.
+
+
 
 # TODO
 
-@문서화 - php backend server 를 직접 만든 이유
-    * rdbms 를 사용 할 수 있도록. NoSQL 도 괜찮지만, 유료이며 제약 사항들이 있음. 특히 firebase 는 검색이 안됨
-    * 매우 익숙한 구조. 물론 SQL 을 모르는 사람에게는 익숙하지 않겠지만
-    * 무료 또는 웹 호스팅 비용만 지불하면 되는 거의 무료로 무제한적인 사용. 유료 서비스의 경우 사용자가 많을 수록 비용이 많이 올라 감
+* Video tutorial shooting for easy installation.
+	* Install with php + its built webserver + sqlite.
+	* Install in http://cafe24.com
 
-@문서화 - 동영상 강좌
-    * 윈도우즈에서 php 를 다운로드해서 직접 운용
-    * cafe24.com 에서 운용
-    \
+
 
 
 * forum
@@ -95,9 +116,9 @@ Backend server for New LMS
 * test on meta.
  
 
-## TODO - Unit Test on Karma
+## TODO - Unit Test on Javascript.
 
-* Karma TEST. Test on below.
+* Creat a test class and do it.
 
     * test on protocol
         * ?mc=core.info
@@ -180,6 +201,114 @@ Backend server for New LMS
     ( 번역 예를 들면 'user' 모델에 'user' 클래스가 있고 'user' 클래스의 'data' 메소드를 호출 하고 싶다면 )
         * "?mc=user.data" will do.
         ( 번역: "?mc=user.user.data" 와 같이 할 필요 없이 줄여서 "?mc=user.data" 와 같이 할 수 있다 )
+
+
+
+## User Protocols
+
+
+
+### Create a user / User registration
+
+
+User registration api.
+
+````
+?mc=user.create&id=xxxx&password=xxxxx&other_fields=....
+````
+
+If success, 'session_id' will be returned.
+
+
+### Logout
+
+User login api.
+
+````
+?mc=user.logout&session_id=xxxxxxx
+````
+
+If success, 'session_id' will be deleted on user's record.
+
+
+### Update user data
+
+User can update his data.
+
+````
+?session_id=....&email=...
+````
+
+If success, updated 'session_id' will be returned.
+
+#### Admin can update user data
+
+````
+?session_id=admin_session_id&idx=user_idx&fields=...
+````
+
+
+
+
+
+### User Login
+
+User login api.
+
+````
+?id=....&password=....
+````
+
+If success, new 'session_id' will be returned.
+
+
+
+### Get User Data
+
+* User can get his data like
+
+````
+?mc=user.data&session_id=user_session_id
+````
+
+
+#### Admin can get user data.
+
+Admin can get user's data like
+
+````
+?mc=user.data&session_id=admin_session_id&idx=user_idx
+````
+
+Admin must pass 'idx' parameter or error will be returned.
+
+    
+ 
+### User Search
+
+
+* Only admin can search users.
+
+* You can do the combination of page, limit and cond.
+* 'cond' holds the search condition.
+* You cannot put ';', 'SELECT', 'UPDATE', 'DELETE', 'REPLACE' on 'cond' param.
+* 'cond' param must be url_encoded.
+
+* page and limit
+	* ?mc=user.search&page=3&limit=10
+		* This gets 10 users on 3rd page.
+
+* field search
+	* http://localhost/?mc=user.search&cond=id%3d%27admin%27
+	* http://localhost/?mc=user.search&cond=id%20LIKE%20%27admin%27
+	* http://localhost/?mc=user.search&cond=id%20LIKE%20%27user%-2%%27
+		* To search user like 'user-', you need to submit 'user%-'. This is the way SQL should be. Try to avoid searching hypen(-).
+	
+
+        
+## Forum Protocols
+
+
         
 
 ## Response
@@ -205,47 +334,8 @@ When there is error
 ````   
 
 
-## User Protocols
-
-### Basics
-
-* "?mc=user.user" MUST response with '{"code":-40041,"message":"no-success-error-response","all":[]}'
-* "/?mc=user.user.data" MUST response with {"code":-40104,"message":"session-id-is-empty","all":[]}
 
 
-
-
-### Create a user / User registration
-
-
-* ?mc=user.create&id=xxxx&password=xxxxx
-
-    * 'session_id' will be returned.
-
-### Logout
-
-* ?mc=user.logout&session_id=xxxxxxx
-    * 'session_id' will be deleted on user's record.
-    
-### Update user data
-
-* ?session_id=....&email=...
-    * New 'session_id' will be returned.
-
-
-### User Login
-
-* ?id=....&password=....
-    * 'session_id' will be returned.
-
-
-
-# Get User Data
-
-* ?mc=user.data&session_id=.........
-
-
-    
 # Debug Log
 
 do the following.

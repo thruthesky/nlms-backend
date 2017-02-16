@@ -97,6 +97,11 @@ class User extends \model\base\Base {
      * @return array|mixed
      *      - ERROR CODE ( < 0 ) will be return on error.
      *      - Array will be return on success.
+            - Success return format
+                    Array
+                    (
+                        [session_id] => 943-fccb4a3fbfd77f7606289c6437400be8
+                    )
      *
      * @see readme for detail.
      */

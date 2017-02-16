@@ -164,8 +164,11 @@ And withcenter team members.
 
 * test file should be with the original php script.
 
-
 * test file must be in a class and follow the namespace.
+
+* __constructor() of test class should not run any test.
+
+* test class must have run() method to run all the test.
 
 * To test all tests.
 

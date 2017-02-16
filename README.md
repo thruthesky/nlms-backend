@@ -244,7 +244,7 @@ If success, updated 'session_id' will be returned.
 #### Admin can update user data
 
 ````
-?session_id=admin_session_id&idx=user_idx&fields=...
+?session_id=admin_session_id&idx=user_idx&name=...&other_fields=...
 ````
 
 

@@ -478,14 +478,13 @@ To install access to ?mc=system.install
         $re = $this->ex("\\model\\user\\user::data", $params );
         test( $re['code'] == 0, "Admin got user data: " . error_string($re) );
 
-        // update user data
+        // admin update user data
         $user_name = $re['data']['user']['name'];
         $new_name = "new" . time();
         $params = [
             'session_id' => $admin_session_id,
             'idx' => $idx,
-
-                'name' => $new_name
+            'name' => $new_name
 
         ];
         $re = $this->ex("\\model\\user\\update", $params );

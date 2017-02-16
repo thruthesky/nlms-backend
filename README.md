@@ -157,11 +157,27 @@ And withcenter team members.
 
 # UNIT TEST
 
-* It is a good idea to run a unit test after you install.
 
-    access the end point below.
+## Folder & File sturcture
+
+* test file must end with "_test.php"
+
+* test file should be with the original php script.
+
+
+* test file must be in a class and follow the namespace.
+
+* To test all tests.
 
     * ?mc=test.all
+
+* To test whole tests of a class.
+
+	* ?mc=base.base_test.run
+
+* To test a method
+	* ?mc=base.base_test.method_name
+
 
 
 # Resources

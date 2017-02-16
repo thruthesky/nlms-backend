@@ -96,7 +96,9 @@ function error( $code, $message='' ) {
 }
 
 function error_string( $re ) {
-    if ( is_array( $re ) && isset($re['code']) ) return "ERROR( $re[code] ) - <b>$re[message]</b>";
+    if ( is_error( $re ) ) {
+        return "ERROR( $re[code] ) - <b>$re[message]</b>";
+    }
     else return null;
 }
 
@@ -211,3 +213,14 @@ function test( $re, $code ) {
 
 
 
+function is_success( $re ) {
+    if ( is_array( $re ) ) {
+        if ( array_key_exists( 'code', $re ) ) {
+            if ( $re['code'] ) return false;
+        }
+    }
+    return true;
+}
+function is_error( $re ) {
+    return ! is_success( $re );
+}

@@ -7,8 +7,13 @@ if ( lib::script() ) { // if "?mc=" requested?
 
     $path = lib::model_class_path();
 
+
     if ( class_exists( $path ) ) {      // if 'model/model-name/class.php' exists?
+
+
+
         $obj = new $path();                 // __constructor() runs.
+
         $method = lib::script_method();
 
         if ( $method ) { // if '?mc=model.class.method' request. METHOD to be called exists!

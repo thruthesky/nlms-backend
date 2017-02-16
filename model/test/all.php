@@ -29,13 +29,10 @@ class All extends \model\base\Base {
         /**
          * Move these code into proper test files.
          */
-        /*
-        $this->testBase();
-        $this->testMeta();
+
         $this->testUser();
         $this->testUserSearch();
         $this->testForum();
-*/
 
         /**
          * New way of testing.
@@ -47,10 +44,18 @@ class All extends \model\base\Base {
 
 
 
-        $files = rsearch( __MODEL_DIR__, '/.*\-test\.php$/' );
-        di($files);
+        $files = rsearch( __MODEL_DIR__, '/.*\_test\.php$/' );
+
         foreach ( $files as $file ) {
-            include $file;
+
+
+            $file = str_replace(".php", '', $file);
+            $arr = array_reverse(explode( DIRECTORY_SEPARATOR, $file));
+
+            $path = "model\\$arr[1]\\$arr[0]";
+
+            $obj = new $path();
+            $obj->run();
         }
 
 
@@ -128,38 +133,8 @@ To install access to ?mc=system.install
 
     }
 
-    private function testBase() {
 
 
-        //$this->setTable('meta');
-
-    }
-
-
-    private function testMeta() {
-        $idx = meta()->set('abc', 123, 'code-unit-test', 'data');
-        test( $idx, "Meta::set() code: code, data: data re: idx: $idx");
-
-        //
-        $another_idx = meta()->set('abc', 111, 'code-unit-test', 'another idx');
-        test( $another_idx, "meta::set() another idx is okay");
-
-        $new_idx = meta()->set('abc', 123, 'code-unit-test', 'new data');
-        test( $new_idx, "Meta::set() code: code, data: new data re: new_idx: $new_idx");
-
-        test( $idx != $new_idx, "Meta::set() new insert. data=new data idx: $idx, new_idx: $new_idx");
-
-
-        $count = meta()->getCount( 'abc', 123, 'code-unit-test' );
-        test( $count == 1, "Meta abc, 123, code-unit-test has only 1 record as it should.");
-
-
-        meta()->delete( 'abc', 111, 'code-unit-test' );
-        $count = meta()->getCount( 'abc', 111, 'code-unit-test');
-        test( $count == 0, "Meta abc, 111, code-unit-test has deleted.");
-
-
-    }
 
     private function testUser() {
         $id = 'user-' . time();
@@ -323,15 +298,14 @@ To install access to ?mc=system.install
 
     private function createForumConfig( $params ) {
 
-
-
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) { // if exists,
             $re = $this->ex( "\\model\\forum\\Config::delete", $params ); // delete
             test( $re['code'] == 0, "Deleteing forum config - $params[id], " . error_string( $re ));
             $re = $this->ex( "\\model\\forum\\Config::create", $params ); // create
         }
-        test( $re['code'] == 0, "Creating forum config - $params[id], " . error_string( $re ));
+
+        test( is_success($re), "Creating forum config - $params[id], " . error_string( $re ));
 
         $forum_config_idx = $re['data']['idx'];
 
@@ -408,6 +382,8 @@ To install access to ?mc=system.install
 
         // search permission ok.
         $admin_session_id = user()->forceLogin('admin');
+        test( is_success($admin_session_id), "force log in to admin: $admin_session_id, " . error_string($admin_session_id));
+
 
         $params = [
             'limit' => 3,
@@ -416,7 +392,7 @@ To install access to ?mc=system.install
 
 
         $re = $this->ex( "\\model\\user\\user::search", $params );
-        test( $re['code'] == 0, "User search: " . error_string($re) );
+        test( is_success($re), "User search: " . error_string($re) );
 
 
 

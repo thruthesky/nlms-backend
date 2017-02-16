@@ -99,7 +99,10 @@ class Forum extends \model\base\Base {
         $name = 'new user';
         $data = [
             'id'=>$id,
-            'name'=>$name
+            'name'=>$name,
+            'meta' =>[
+                'age'=>23
+            ]
         ];
 
         $data['password'] = $data['id'];
@@ -109,8 +112,6 @@ class Forum extends \model\base\Base {
         if ( ok($re) ) return $re['data']['session_id'];
         else return null;
 
-
-        success();
 
 
 

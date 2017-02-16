@@ -70,7 +70,7 @@ class Forum extends \model\base\Base {
         return $this->result();
     }
 
-    public function forumtest() {
+    public function run() {
 //        if ( empty(in('forum_id') ) ) return error(-1, "Input forum id");
 //        $config = forum_config()->load( in('forum_id') );
 //        if( empty($config) ) return error(-2, "No forum config by that ID - " . in('forum_id') );
@@ -82,14 +82,16 @@ class Forum extends \model\base\Base {
         $data =[];
         $data['session_id'] = $this->createUser(  );
         print_r( ' --- TEST IF ONE CAN POST --- ');
-        $this->testForumConfig( $data );
+
         $this->testEmptySession_ID( $data );
+        $this->testPostIfUserNotExist( $data );
         $this->testWithoutForumID( $data );
         $this->testWithoutConfig( $data );
         $this->testEmptyTitle( $data );
         $this->testEmptyContent( $data );
         $this->testPostData( $data );
         print_r( '<br/> --- TEST IF ONE CAN CREATE FORUM CONFIG --- ');
+        $this->testForumConfig( $data );
         exit();
 
 
@@ -119,40 +121,6 @@ class Forum extends \model\base\Base {
 
     }
 
-    private function testForumConfig ( $params ) {
-        $params['id'] = $this->randomstring();
-        $re = $this->ex( "\\model\\forum\\Config::getConfig", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG NOT EXIST -$re[code]: $re[message]");
-
-        $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        test( $re['code'] == ERROR_PERMISSION_ADMIN , "FORUM CONFIG CREATE TEST WITHOUT ADMIN ACCOUNT -$re[code]: $re[message]");
-
-        $config=$this->createConfigTest( $params );
-
-        $params['idx'] = $config;
-        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
-        test( $re['code'] == 0, "FORUM CONFIG TEST IF FORUM CONFIG IS DELETED -$params[idx]");
-
-        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG DELETE TEST IF CONFIT NOT EXIST -$re[code]");
-
-
-    }
-
-    private function createConfig( $params ) {
-        $data =['id'=>'admin', 'password'=>'admin'];
-        $admin=$this->ex("\\model\\user\\Login", $data);
-        $params['session_id'] = $admin['data']['session_id'];
-        $params['id'] = '-test' . time() . rand(1, 20);
-        $re=$this->ex( "\\model\\forum\\Config::create", $params );
-        return $re;
-    }
-
-    private function createConfigTest( $params ) {
-        $re = $this->createConfig( $params );
-        test( $re['code'] == 0 ,"CREATE FORUM CONFIG -".$re['data']['idx']);
-        return $re['data']['idx'];
-    }
 
 
     private function testEmptySession_ID( $params ) {
@@ -161,6 +129,12 @@ class Forum extends \model\base\Base {
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == ERROR_SESSION_ID_EMPTY, "FORUM POST TEST WITHOUT SESSION_ID -$re[code]");
 
+    }
+
+    private function testPostIfUserNotExist( $params ) {
+        $params['session_id'] = "-test" . rand(1 , 20);
+        $re = $this->ex( "\\model\\forum\\Data::create", $params );
+        test( $re['code'] == ERROR_WRONG_SESSION_ID, "FORUM POST TEST USER NOT EXIST OR WRONG SESSION ID -$re[code]");
     }
 
     private function testWithoutForumID( $params ) {
@@ -212,8 +186,70 @@ class Forum extends \model\base\Base {
         $params['title'] = $this->randomstring();
         $params['content'] = $this->randomstring();
         $re = $this->ex("\\model\\forum\\Data::create", $params );
-        test( $re['code'] == 0 , "CREATING POST FORUM DATA  - $params[title] ");
+        test( $re['code'] == 0 , "CREATING POST FORUM DATA  - $params[title]");
+
+        $params['idx'] = $re['data']['forum_data'];
+        $params['title'] = 'edit'. rand( 1, 20 );
+
+        $re = $this->ex("\\model\\forum\\Data::edit", $params );
+        $post_data = forum_data()->load($params['idx']);
+        test( $re['data']['forum_data'] == $post_data ,"FORUM POST EDIT TEST -" );
+
+
+        $re = $this->ex("\\model\\forum\\Data::delete", $params );
+        test( $re['code'] == 0 , "DELETING POST FORUM DATA ");
+
+        $re = $this->ex("\\model\\forum\\Data::edit", $params );
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST ,"FORUM POST EDIT TEST POST NOT EXIST -");
+
+        $re = $this->ex("\\model\\forum\\Data::delete", $params );
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST  , "DELETING POST NOT EXIST -$re[code]" );
     }
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////
+    private function testForumConfig ( $params ) {
+        $params['id'] = $this->randomstring();
+        $re = $this->ex( "\\model\\forum\\Config::getConfig", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG NOT EXIST -$re[code]: $re[message]");
+
+        $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        test( $re['code'] == ERROR_PERMISSION_ADMIN , "FORUM CONFIG CREATE TEST WITHOUT ADMIN ACCOUNT -$re[code]: $re[message]");
+
+        $re = $this->createConfig( $params );
+
+        $params['idx'] = $re;
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == ERROR_PERMISSION_ADMIN, "FORUM CONFIG TEST DELETE WITHOUT ADMIN PERMISSION -$re[code]");
+
+        $admin = $this->loginAdmin();
+        $params['session_id'] = $admin['data']['session_id'];
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG IS DELETED -$re[code]");
+
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG DELETE TEST IF CONFIT NOT EXIST -$re[code]");
+
+
+    }
+
+    private function createConfig( $params ) {
+        $admin = $this->loginAdmin();
+        $params['session_id'] = $admin['data']['session_id'];
+        $params['id'] = '-test' . time() . rand(1, 20);
+        $re=$this->ex( "\\model\\forum\\Config::create", $params );
+        return $re;
+    }
+
+
+    private function loginAdmin() {
+        $data =['id'=>'admin', 'password'=>'admin'];
+        $admin=$this->ex("\\model\\user\\Login", $data);
+        return $admin;
+    }
+
+
 
 
 }

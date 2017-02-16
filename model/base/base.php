@@ -10,24 +10,13 @@ namespace model\base;
 class Base {
 
     private $table = '';
-    private $record = [];
+    public $record = [];
 
-    /**
-     * $this->f is just an alias of $this->record for easy to access.
-     * @var array
-     * @code
-     *
-            print_r($this->f);
-            $n = $this->f['idx'];
-            $i = $this->f['id'];
-     *
-     * @endcode
-     */
-    public $f;
+
 
     public function __construct()
     {
-        $this->f = & $this->record;
+        // $this->f = & $this->record;
     }
 
     protected function setTable( $name ) {

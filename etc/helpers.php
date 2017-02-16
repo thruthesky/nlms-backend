@@ -96,7 +96,7 @@ function error( $code, $message='' ) {
 }
 
 function error_string( $re ) {
-    if ( $re['code'] ) return "ERROR( $re[code] ) - $re[message]";
+    if ( $re['code'] ) return "ERROR( $re[code] ) - <b>$re[message]</b>";
     else return null;
 }
 
@@ -164,5 +164,5 @@ function page_item_limit( $n ) {
     global $DEFAULT_NO_OF_PAGE_ITEMS;
     if ( ! is_numeric( $n ) ) return $DEFAULT_NO_OF_PAGE_ITEMS;
     else if ( $n < 1 ) return $DEFAULT_NO_OF_PAGE_ITEMS;
-    else return $DEFAULT_NO_OF_PAGE_ITEMS;
+    else return $n;
 }

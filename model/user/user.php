@@ -17,15 +17,22 @@ class User extends \model\base\Base {
      *
      * Return unique session id for each user.
      *
+     * @attention it does not check if the user has authenticated or not.
+     *
+     * @work
+     *          1. It just generate a new session id based on $this->record
+     *          2. save the session id into database table record.
+     *          3. return it.
+     *
      * @return string
      */
     public function get_session_id() {
 
-        if ( empty($this) || !isset( $this->f['idx']) ) error(ERROR_USER_NOT_SET);
-        $n = $this->f['idx'];
-        $i = $this->f['id'];
-        $p = $this->f['password'];
-        $r = $this->f['stamp_registration'];
+        if ( empty($this) || !isset( $this->record['idx']) ) error(ERROR_USER_NOT_SET);
+        $n = $this->record['idx'];
+        $i = $this->record['id'];
+        $p = $this->record['password'];
+        $r = $this->record['stamp_registration'];
         $t = md5(uniqid(rand(), true));
 
         $session_id = $n . '-' . md5( "$i,$r,$t,$n,$p" );
@@ -53,50 +60,45 @@ class User extends \model\base\Base {
         return $user;
     }
 
+    public function login() {
+        return !! $this->record;
+    }
+
+    public function isAdmin() {
+        if ( ! $this->login() ) return false;
+        if ( array_key_exists( 'id', $this->record ) ) {
+            return $this->record['id'] == $GLOBALS['ADMIN_ID'];
+        }
+        else return false;
+    }
+
 
     /**
+     * Returns a new Session ID of a user.
      *
-     * @Attention it does not stop the script. it just return empty if there is no user by that $idx.
+     * @attention It generates a FAKE session id and save it into user record and returns it.
+     * @attention It does not check user's password.
+     * @attention previous session-id will be invalid.
      *
+     * @param $id
+     * @return int|string
      *
-     * @param $idx - if it is a number, it assumes as user.idx
-     *              - or else if it has '=' or 'like' then, it assumes as user.id.
-     *              - or else if it assumes as user.id
-     * @return array|null
-     *
-     *
-     * @code
-     *      $user = $this->load( 123 );
-     *      $user = $this->load( in('id') );
-     *      $user = $this->load( "session_id='$session_id'");
-     * @endcode
+     *      - int as error code on error
+     *      - string as session-id on success.
      */
-    /*
-    public function load( $idx ) {
-
-
-        if ( is_numeric( $idx ) ) {
-            $idx = "idx=$idx";
-        }
-        else if ( strpos( $idx, '=' ) || stripos( $idx, ' LIKE ') ) {
-
-        }
-        else {
-            $idx = "id = '$idx'";
-        }
-        return parent::load( $idx );
-
-        
+    public function forceLogin( $id ) {
+        if ( empty($id ) ) return ERROR_USER_ID_EMPTY;
+        if ( ! $this->load( $id ) ) return ERROR_USER_NOT_EXIST;
+        return $this->get_session_id();
     }
-*/
-
-
 
     /**
      * @param $data
      * @return array|mixed
      *      - ERROR CODE ( < 0 ) will be return on error.
      *      - Array will be return on success.
+     *
+     * @see readme for detail.
      */
     public function create( $data ) {
 
@@ -109,21 +111,24 @@ class User extends \model\base\Base {
         if ( $user ) return error( ERROR_USER_EXIST );
 
 
-        if ( isset( $data['meta'] ) ) {
+        $meta = null;
+        if ( array_key_exists( 'meta', $data ) ) {
 
             $meta = $data['meta'];
             unset( $data['meta'] );
 
         }
+
         $user_idx = $this->insert( $data );
         if ( $user_idx <= 0 ) return error( $user_idx );
 
         $this->reset( $user_idx );
 
 
-        if ( isset( $meta ) ) {
+        if ( $meta ) {
 
             meta()->sets( 'user', $user_idx, $meta );
+
         }
 
         return [ 'session_id' => $this->get_session_id() ];
@@ -132,6 +137,18 @@ class User extends \model\base\Base {
 
 
 
+    public function pres( &$users ) {
+
+        foreach( $users as &$user ) {
+
+            unset( $user['password'], $user['session_id'] );
+
+            $user['meta'] = meta()->gets( 'user', $user['idx'] );
+
+
+        }
+
+    }
 
 
 
@@ -182,12 +199,33 @@ class User extends \model\base\Base {
      * @attention this is HTTP interface.
      */
     public function search() {
+
+
+        if ( empty( in('session_id') ) ) return error(ERROR_SESSION_ID_EMPTY );
+        if ( ! $this->load_by_session_id( in('session_id') ) ) return error( ERROR_USER_NOT_FOUND );
+        if ( ! $this->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
+
+
+        $cond = in('cond');
+        if ( empty($cond) ) $cond = 1;
+
+        di($cond);
+
         $page = page_no( in('page') );
         $limit = page_item_limit( in('limit') );
-        $from = ( $page - 1 ) * $limit;
-        $to = $page * $limit;
-        $cond = "1 LIMIT $from, $to";
-        $this->loads( $cond );
+        $from = (( $page - 1 ) * $limit);
+        $cond .= " LIMIT $from, $limit";
+
+        $users = $this->loads( $cond );
+        if ( $users < 0 ) return error( $users );
+
+
+        $this->pres( $users );
+
+        success( ['users' => $users ] );
     }
+
+
+
 
 }

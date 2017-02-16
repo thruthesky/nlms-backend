@@ -7,26 +7,6 @@ namespace model\test;
 
 
 
-function test( $re, $code ) {
-    static $count = 0;
-    $count ++;
-    if ( is_array($re) ) {
-        if ( isset($re['code']) && ! isset($re['idx']) ) { // server data.
-            if ( $re['code'] ) echo "<div class='error'>$count - ERROR : ( $re[code] ) - $re[message]</div>";
-            else echo "<div class='success'>$count - SUCCESS: $code</div>";
-        }
-        else { // unknown data.
-            if ( $re ) echo "<div class='success'>$count - SUCCESS: $code</div>";
-            else echo "<div class='error'>$count - ERROR : $code</div>";
-        }
-    }
-    else { //
-        if ( $re ) echo "<div class='success'>$count - SUCCESS: $code</div>";
-        else echo "<div class='error'>$count - ERROR : $code</div>";
-    }
-}
-
-
 function ok( $re ) {
     return $re['code'] == 0;
 }
@@ -40,17 +20,44 @@ class All extends \model\base\Base {
         $this->style();
 
 
-        $this->testInstallation();
-        $this->testDatabase();
+
+    }
+
+    public function run() {
+
+
+        /**
+         * Move these code into proper test files.
+         */
+        /*
         $this->testBase();
         $this->testMeta();
         $this->testUser();
         $this->testUserSearch();
-
-
         $this->testForum();
+*/
+
+        /**
+         * New way of testing.
+         */
+
+        $this->testInstallation();
+
+        $this->testDatabase();
+
+
+
+        $files = rsearch( __MODEL_DIR__, '/.*\-test\.php$/' );
+        di($files);
+        foreach ( $files as $file ) {
+            include $file;
+        }
+
+
+
 
         exit;
+
 
     }
 
@@ -125,36 +132,6 @@ To install access to ?mc=system.install
 
 
         //$this->setTable('meta');
-
-        $this->setTable('meta');
-        test( $this->getTable() == 'meta', 'base::setTable()');
-        $idx = $this->insert(['model'=>'testBase', 'model_idx'=>1, 'code'=>'testCode', 'data'=>'testData']);
-        test( $idx > 0, "base::create() - meta data create: idx=$idx");
-        if ( $idx < 0 ) di($GLOBALS['em'][$idx]);
-
-
-        $cond = " model='testBase' AND model_idx=1 AND code='testCode' ";
-        $count = $this->count( $cond );
-        test( $count > 0, "base::count() - $count");
-        test( $this->countAll() >= $count, "base::countAll()");
-
-
-        $meta = $this->load( $idx );
-        test ( $meta, "Loading a meta. idx: $idx");
-        test ( $meta['data'] == 'testData', "meta data check" );
-
-        $this->update( ['data' => 'new data'] );
-        $updated = $this->reload();
-
-        test( $meta['idx'] == $updated['idx'], "meta updated" );
-        test( $updated['data'] == 'new data', "data updated" );
-
-        $this->destroy();
-
-        $record = $this->load( $meta['idx'] );
-
-        test( empty($record), "meta data destroyed");
-
 
     }
 

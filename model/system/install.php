@@ -26,14 +26,3 @@ class Install extends \model\base\Base {
 
     }
 }
-
-function rsearch($folder, $pattern) {
-    $dir = new \RecursiveDirectoryIterator($folder);
-    $ite = new \RecursiveIteratorIterator($dir);
-    $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
-    $fileList = array();
-    foreach($files as $file) {
-        $fileList = array_merge($fileList, $file);
-    }
-    return $fileList;
-}

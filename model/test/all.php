@@ -458,9 +458,9 @@ To install access to ?mc=system.install
 
         }
 
-        $params['id'] = $id;
+        $params['cond'] = "id='admin'";
         $re = $this->ex( "\\model\\user\\user::search", $params );
-        test( $re['code'] == 0, "User search: " . error_string($re) );
+        test( $re['code'] == 0, "User search for admin: " . error_string($re) );
         if ( $re['code'] ) {
 
         }
@@ -468,6 +468,19 @@ To install access to ?mc=system.install
             $no = count($re['data']['users'] );
             test( $no == 1, "1 should be pulled out. $no users pulled out: " . error_string($re) );
         }
+
+        list ( $idx, $rest ) = explode('-', $user_session_id );
+        $params = [
+            'session_id' => $admin_session_id,
+            'idx' => $idx
+        ];
+
+        di($params);
+        $re = $this->ex("\\model\\user\\user::data", $params );
+
+        di($re);
+
+
 
 
 

@@ -33,8 +33,8 @@ define('ERROR_PASSWORD_EMPTY', -40107 );             $em[ERROR_PASSWORD_EMPTY] =
 define('ERROR_USER_NOT_FOUND',-40108 );              $em[ERROR_USER_NOT_FOUND] = 'user-not-found';
 define('ERROR_WRONG_PASSWORD', -40109 );             $em[ERROR_WRONG_PASSWORD] = 'wrong-password';
 define('ERROR_USER_NOT_SET', -40100);                $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
-define('ERROR_RECORD_NOT_SET', -40102);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
-
+define('ERROR_RECORD_NOT_SET', -40122);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
+define('ERROR_IDX_EMPTY', -40123);                      $em[ERROR_IDX_EMPTY] = 'idx-empty';
 
 
 // forum errors. between from -40200 to -40299

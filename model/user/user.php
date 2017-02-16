@@ -162,6 +162,7 @@ class User extends \model\base\Base {
      * Returns user record and its meta.
      *
      * @attention This is HTTP interface.
+     * @attention if the login user is 'admin', then he can get other user's information.
      *
      *
      * @return void
@@ -183,7 +184,16 @@ class User extends \model\base\Base {
      */
     public function data() {
         $user = $this->load_by_session_id( in('session_id') );
+
+
+        if ( $this->isAdmin() ) { // if admin,
+            if ( ! in('idx') ) return error( ERROR_IDX_EMPTY );
+            $user = $this->load( in('idx') ); // load other user.
+            if ( $user < 0 ) return error( $user );
+        }
+
         unset( $user['password'], $user['session_id'], $user['stamp_registration'] );
+
         $_meta = meta()->gets( 'user', $user['idx'] );
         $metas = [];
         foreach( $_meta as $arr ) {
@@ -209,12 +219,12 @@ class User extends \model\base\Base {
         $cond = in('cond');
         if ( empty($cond) ) $cond = 1;
 
-        di($cond);
 
         $page = page_no( in('page') );
         $limit = page_item_limit( in('limit') );
         $from = (( $page - 1 ) * $limit);
         $cond .= " LIMIT $from, $limit";
+
 
         $users = $this->loads( $cond );
         if ( $users < 0 ) return error( $users );

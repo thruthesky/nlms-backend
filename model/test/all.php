@@ -45,6 +45,7 @@ class All extends \model\base\Base {
         $this->testBase();
         $this->testMeta();
         $this->testUser();
+        $this->testUserSearch();
 
 
         $this->testForum();
@@ -243,7 +244,7 @@ To install access to ?mc=system.install
 
         $re = $this->ex( "\\model\\user\\Create", $params );
 
-        test($re, "registration: $params[id]");
+        // test($re, "registration: $params[id]");
 
         if ( ok($re) ) return $re['data']['session_id'];
         else return null;
@@ -397,6 +398,74 @@ To install access to ?mc=system.install
         test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
+    }
+
+    private function testUserSearch()
+    {
+
+        // create 10 users.
+        $id = null;
+        $user_session_id = null;
+        for( $i = 0; $i < 10; $i ++ ) {
+            $id = "user-$i-" . time();
+            $data = [
+                'id'=>$id,
+                'name'=> "name-$id",
+                'meta' => [
+                    'age' => $i,
+                    'classid' => "classid-$i"
+                ]
+            ];
+            $user_session_id = $this->createUser( $data );
+        }
+
+
+        // search permission error.
+        $params = [
+            'limit' => 3,
+            'session_id' => $user_session_id
+        ];
+        $re = $this->ex( "\\model\\user\\user::search", $params );
+        test( $re['code'] == ERROR_PERMISSION_ADMIN, "User search: " . error_string($re) );
+
+
+        // search permission ok.
+        $admin_session_id = user()->forceLogin('admin');
+
+        $params = [
+            'limit' => 3,
+            'session_id' => $admin_session_id
+        ];
+
+
+        $re = $this->ex( "\\model\\user\\user::search", $params );
+        test( $re['code'] == 0, "User search: " . error_string($re) );
+
+
+
+        if ( $re['code'] ) {
+
+        }
+        else {
+
+            $no = count($re['data']['users'] );
+            test( $no == 3, "3 should be pulled out. $no users pulled out: " . error_string($re) );
+
+        }
+
+        $params['id'] = $id;
+        $re = $this->ex( "\\model\\user\\user::search", $params );
+        test( $re['code'] == 0, "User search: " . error_string($re) );
+        if ( $re['code'] ) {
+
+        }
+        else {
+            $no = count($re['data']['users'] );
+            test( $no == 1, "1 should be pulled out. $no users pulled out: " . error_string($re) );
+        }
+
+
+
     }
 
 }

@@ -125,7 +125,7 @@ class Forum extends \model\base\Base {
         test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG NOT EXIST -$re[code]: $re[message]");
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        test( $re['code'] == ERROR_NO_PERMISSION , "FORUM CONFIG CREATE TEST WITHOUT ADMIN ACCOUNT -$re[code]: $re[message]");
+        test( $re['code'] == ERROR_PERMISSION_ADMIN , "FORUM CONFIG CREATE TEST WITHOUT ADMIN ACCOUNT -$re[code]: $re[message]");
 
         $config=$this->createConfigTest( $params );
 

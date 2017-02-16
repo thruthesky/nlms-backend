@@ -78,20 +78,24 @@ class Forum extends \model\base\Base {
 //
 //
 //        success();
-
         $data =[];
         $data['session_id'] = $this->createUser(  );
-        print_r( ' --- TEST IF ONE CAN POST --- ');
+            print_r( ' --- TEST IF ONE CAN POST --- ');
 
-        $this->testEmptySession_ID( $data );
-        $this->testPostIfUserNotExist( $data );
-        $this->testWithoutForumID( $data );
-        $this->testWithoutConfig( $data );
-        $this->testEmptyTitle( $data );
-        $this->testEmptyContent( $data );
-        $this->testPostData( $data );
-        print_r( '<br/> --- TEST IF ONE CAN CREATE FORUM CONFIG --- ');
-        $this->testForumConfig( $data );
+            $this->testEmptySession_ID( $data );
+            $this->testPostIfUserNotExist( $data );
+            $this->testWithoutForumID( $data );
+            $this->testWithoutConfig( $data );
+            $this->testEmptyTitle( $data );
+            $this->testEmptyContent( $data );
+            $this->testPostData( $data );
+            print_r( '<br/> --- TEST IF ONE CAN CREATE FORUM CONFIG --- ');
+            $this->testForumConfig( $data );
+
+//            print_r( '<br/> --- TEST IF ONE CAN CREATE FORUM CONFIG --- ');
+
+
+
         exit();
 
 
@@ -218,18 +222,43 @@ class Forum extends \model\base\Base {
         test( $re['code'] == ERROR_PERMISSION_ADMIN , "FORUM CONFIG CREATE TEST WITHOUT ADMIN ACCOUNT -$re[code]: $re[message]");
 
         $re = $this->createConfig( $params );
+        test( $re['code'] == 0, "FORUM CONFIG CREATE TEST -");
+        $params['idx'] = $re['data']['idx'];
 
-        $params['idx'] = $re;
+        $re = $this->ex( "\\model\\forum\\Config::edit", $params );
+        test( $re['code'] == ERROR_PERMISSION_ADMIN , "FORUM CONFIG EDIT TEST WITHOUT ADMIN PERMISSION");
+
+
+
         $re = $this->ex( "\\model\\forum\\Config::delete", $params );
-        test( $re['code'] == ERROR_PERMISSION_ADMIN, "FORUM CONFIG TEST DELETE WITHOUT ADMIN PERMISSION -$re[code]");
+        test( $re['code'] == ERROR_PERMISSION_ADMIN, "FORUM CONFIG DELETE TEST WITHOUT ADMIN PERMISSION -$re[code]");
+
+        $params['session_id'] = null;
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == ERROR_SESSION_ID_EMPTY, "FORUM CONFIG DELETE TEST EMPTY SESSION ID -$re[code]");
+
 
         $admin = $this->loginAdmin();
         $params['session_id'] = $admin['data']['session_id'];
-        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG IS DELETED -$re[code]");
+
+        $re = $this->ex( "\\model\\forum\\Config::edit", $params );
+        $edited_config = forum_config()->load($re['data']['forum_data']['idx']);
+        test( $re['data']['forum_data'] == $edited_config, "FORUM CONFIG EDIT TEST ");
 
         $re = $this->ex( "\\model\\forum\\Config::delete", $params );
+        test( $re['code'] == 0, "FORUM CONFIG DELETE TEST");
+
+        $re = $this->ex( "\\model\\forum\\Config::getConfig", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST GETCONFIG AFTER DELETE -$re[code]: $re[message]");
+
+
+        $admin = $this->loginAdmin();
+
+        $params['session_id'] = $admin['data']['session_id'];
+        $re = $this->ex( "\\model\\forum\\Config::delete", $params );
         test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG DELETE TEST IF CONFIT NOT EXIST -$re[code]");
+
+
 
 
     }

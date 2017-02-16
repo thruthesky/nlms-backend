@@ -32,8 +32,10 @@ define('ERROR_USER_ID_EMPTY', -40106 );              $em[ERROR_USER_ID_EMPTY] = 
 define('ERROR_PASSWORD_EMPTY', -40107 );             $em[ERROR_PASSWORD_EMPTY] = 'password-empty';
 define('ERROR_USER_NOT_FOUND',-40108 );              $em[ERROR_USER_NOT_FOUND] = 'user-not-found';
 define('ERROR_WRONG_PASSWORD', -40109 );             $em[ERROR_WRONG_PASSWORD] = 'wrong-password';
-define('ERROR_USER_NOT_SET', -40100);                $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
-define('ERROR_RECORD_NOT_SET', -40102);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
+define('ERROR_USER_NOT_SET', -40110);                $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
+define('ERROR_RECORD_NOT_SET', -40111);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
+define('ERROR_NO_PERMISSION', -40112);               $em[ERROR_NO_PERMISSION] = 'no-permission';
+
 
 
 

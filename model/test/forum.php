@@ -81,6 +81,7 @@ class Forum extends \model\base\Base {
 
         $data =[];
         $data['session_id'] = $this->createUser(  );
+        print_r( ' --- TEST IF ONE CAN POST --- ');
         $this->testForumConfig( $data );
         $this->testEmptySession_ID( $data );
         $this->testWithoutForumID( $data );
@@ -88,6 +89,7 @@ class Forum extends \model\base\Base {
         $this->testEmptyTitle( $data );
         $this->testEmptyContent( $data );
         $this->testPostData( $data );
+        print_r( '<br/> --- TEST IF ONE CAN CREATE FORUM CONFIG --- ');
         exit();
 
 
@@ -120,13 +122,14 @@ class Forum extends \model\base\Base {
     private function testForumConfig ( $params ) {
         $params['id'] = $this->randomstring();
         $re = $this->ex( "\\model\\forum\\Config::getConfig", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG NOT EXIST - $re[code]");
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "FORUM CONFIG TEST IF FORUM CONFIG NOT EXIST -$re[code]: $re[message]");
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        test( $re['code'] == 0, "FORUM CONFIG TEST IF FORUM CONFIG IS CREATED -".$re['data']['idx']);
+        test( $re['code'] == ERROR_NO_PERMISSION , "FORUM CONFIG CREATE TEST WITHOUT ADMIN ACCOUNT -$re[code]: $re[message]");
 
+        $config=$this->createConfigTest( $params );
 
-        $params['idx'] = $re['data']['idx'];
+        $params['idx'] = $config;
         $re = $this->ex( "\\model\\forum\\Config::delete", $params );
         test( $re['code'] == 0, "FORUM CONFIG TEST IF FORUM CONFIG IS DELETED -$params[idx]");
 
@@ -135,6 +138,22 @@ class Forum extends \model\base\Base {
 
 
     }
+
+    private function createConfig( $params ) {
+        $data =['id'=>'admin', 'password'=>'admin'];
+        $admin=$this->ex("\\model\\user\\Login", $data);
+        $params['session_id'] = $admin['data']['session_id'];
+        $params['id'] = '-test' . time() . rand(1, 20);
+        $re=$this->ex( "\\model\\forum\\Config::create", $params );
+        return $re;
+    }
+
+    private function createConfigTest( $params ) {
+        $re = $this->createConfig( $params );
+        test( $re['code'] == 0 ,"CREATE FORUM CONFIG -".$re['data']['idx']);
+        return $re['data']['idx'];
+    }
+
 
     private function testEmptySession_ID( $params ) {
         //test forum_data post without session_id
@@ -168,7 +187,8 @@ class Forum extends \model\base\Base {
     private function testEmptyTitle( $params ) {
         //test forum_data post if title is empty
         $data = ['id'=> $this->randomstring() . time() . "2", 'name'=>$this->randomstring(), 'session_id'=>$params['session_id']];
-        $config = $this->ex("\\model\\forum\\Config::create", $data );
+        $config = $this->createConfig( $params );
+
         $params['forum_id'] = $config['data']['id'];
         $re = $this->ex("\\model\\forum\\Data::create", $params );
         test( $re['code'] == ERROR_FORUM_DATA_TITLE_EMPTY , "FORUM POST TEST IF TITLE IS EMPTY $re[code]");
@@ -177,8 +197,7 @@ class Forum extends \model\base\Base {
 
     private function testEmptyContent( $params ) {
         //test forum_data post if content is empty
-        $data = ['id'=> $this->randomstring() . time() . "2", 'name'=>$this->randomstring(), 'session_id'=>$params['session_id']];
-        $config = $this->ex("\\model\\forum\\Config::create", $data );
+        $config = $this->createConfig( $params );
         if( $config )$params['forum_id'] = $config['data']['id'];
         $params['title'] = $this->randomstring() . "test";
         $re = $this->ex("\\model\\forum\\Data::create", $params );
@@ -187,8 +206,7 @@ class Forum extends \model\base\Base {
 
 
     private function testPostData( $params ) {
-        $data = ['id' =>$this->randomstring(), 'name' => $this->randomstring(), 'session_id'=>$params['session_id'] ];
-        $config = $this->ex("\\model\\forum\\Config::create", $data );
+        $config = $this->createConfig( $params );
 
         if( $config ) $params['forum_id'] = $config['data']['id'];
         $params['title'] = $this->randomstring();

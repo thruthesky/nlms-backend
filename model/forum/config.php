@@ -31,7 +31,7 @@ class Config extends Forum {
 
         $user = user()->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
-
+        if( $user['id'] <>  'admin' ) return error( ERROR_NO_PERMISSION );
 
         $data = [];
         $data['id'] = in('id');

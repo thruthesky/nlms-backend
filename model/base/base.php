@@ -140,6 +140,14 @@ class Base {
 
     }
 
+    /**
+     * Returns rows of table based on the $cond.
+     *
+     * @attention All request to get rows from database MUST use this method IF it is only simple 'SELECT', NOT JOIN-SELECT-QUERY.
+     *
+     * @param $cond
+     * @return array|int
+     */
     public function loads( $cond )
     {
         if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;

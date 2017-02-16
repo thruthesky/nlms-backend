@@ -91,6 +91,50 @@ class User extends \model\base\Base {
 */
 
 
+
+    /**
+     * @param $data
+     * @return array|mixed
+     *      - ERROR CODE ( < 0 ) will be return on error.
+     *      - Array will be return on success.
+     */
+    public function create( $data ) {
+
+        if ( empty( $data['id'] ) ) error( ERROR_USER_ID_EMPTY );
+        if ( empty( $data['password'] ) ) error( ERROR_PASSWORD_EMPTY );
+
+        $data['password'] = $this->encryptPassword( $data['password'] );
+
+        $user = $this->load( $data['id'] );
+        if ( $user ) return error( ERROR_USER_EXIST );
+
+
+        if ( isset( $data['meta'] ) ) {
+
+            $meta = $data['meta'];
+            unset( $data['meta'] );
+
+        }
+        $user_idx = $this->insert( $data );
+        if ( $user_idx <= 0 ) return error( $user_idx );
+
+        $this->reset( $user_idx );
+
+
+        if ( isset( $meta ) ) {
+
+            meta()->sets( 'user', $user_idx, $meta );
+        }
+
+        return [ 'session_id' => $this->get_session_id() ];
+
+    }
+
+
+
+
+
+
     /**
      *      HTTP INTERFACES
      *
@@ -100,50 +144,24 @@ class User extends \model\base\Base {
     /**
      * Returns user record and its meta.
      *
+     * @attention This is HTTP interface.
      *
      *
      * @return void
      *
      * @expected JSON return.
-    Array
-    (
-    [code] => 0
-    [data] => Array
-    (
-    [idx] => 14
-    [id] => user-1486979723
-     *
-    [domain] =>
-    [name] => Updated Name
-    [middle_name] =>
-    [last_name] =>
-    [nickname] =>
-    [email] =>
-    [gender] =>
-    [birth_year] =>
-    [birth_month] =>
-    [birth_day] =>
-    [landline] =>
-    [mobile] =>
-    [address] =>
-    [country] =>
-    [province] =>
-    [city] =>
-    [zipcode] =>
-     *
-    [stamp_resign] => 0
-    [block] => 0
-    [block_reason] =>
-    [resign_reason] =>
-    [meta] => Array
-    (
-    [age] => '22'
-    [classid] => 'my-id'
-    )
+            Array
+            (
+                [code] => 0
+                [data] => Array
+                (
+                    [idx] => 14
+                    [id] => user-1486979723
+                     ...
+                    [meta] => Array( ... )
+                )
 
-    )
-
-    )
+            )
      *
      */
     public function data() {
@@ -158,9 +176,18 @@ class User extends \model\base\Base {
         success( $user );
     }
 
-
-    public function create( $data ) {
-
+    /**
+     * Returns rows of user information.
+     *
+     * @attention this is HTTP interface.
+     */
+    public function search() {
+        $page = page_no( in('page') );
+        $limit = page_item_limit( in('limit') );
+        $from = ( $page - 1 ) * $limit;
+        $to = $page * $limit;
+        $cond = "1 LIMIT $from, $to";
+        $this->loads( $cond );
     }
 
 }

@@ -206,12 +206,84 @@ And withcenter team members.
 
 ## User Protocols
 
-### User Registration
+
+
+### Create a user / User registration
+
+
+User registration api.
+
+````
+?mc=user.create&id=xxxx&password=xxxxx&other_fields=....
+````
+
+If success, 'session_id' will be returned.
+
+
+### Logout
+
+User login api.
+
+````
+?mc=user.logout&session_id=xxxxxxx
+````
+
+If success, 'session_id' will be deleted on user's record.
+
+
+### Update user data
+
+User can update his data.
+
+````
+?session_id=....&email=...
+````
+
+If success, updated 'session_id' will be returned.
+
+#### Admin can update user data
+
+````
+?session_id=admin_session_id&idx=user_idx&fields=...
+````
+
+
+
+
 
 ### User Login
 
-### User Update
+User login api.
 
+````
+?id=....&password=....
+````
+
+If success, new 'session_id' will be returned.
+
+
+
+### Get User Data
+
+* User can get his data like
+
+````
+?mc=user.data&session_id=user_session_id
+````
+
+
+#### Admin can get user data.
+
+Admin can get user's data like
+
+````
+?mc=user.data&session_id=admin_session_id&idx=user_idx
+````
+
+Admin must pass 'idx' parameter or error will be returned.
+
+    
+ 
 ### User Search
 
 
@@ -262,47 +334,8 @@ When there is error
 ````   
 
 
-## User Protocols
-
-### Basics
-
-* "?mc=user.user" MUST response with '{"code":-40041,"message":"no-success-error-response","all":[]}'
-* "/?mc=user.user.data" MUST response with {"code":-40104,"message":"session-id-is-empty","all":[]}
 
 
-
-
-### Create a user / User registration
-
-
-* ?mc=user.create&id=xxxx&password=xxxxx
-
-    * 'session_id' will be returned.
-
-### Logout
-
-* ?mc=user.logout&session_id=xxxxxxx
-    * 'session_id' will be deleted on user's record.
-    
-### Update user data
-
-* ?session_id=....&email=...
-    * New 'session_id' will be returned.
-
-
-### User Login
-
-* ?id=....&password=....
-    * 'session_id' will be returned.
-
-
-
-# Get User Data
-
-* ?mc=user.data&session_id=.........
-
-
-    
 # Debug Log
 
 do the following.

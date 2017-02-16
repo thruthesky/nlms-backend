@@ -136,6 +136,27 @@ class User extends \model\base\Base {
     }
 
 
+    /**
+     * Updates user info.
+     * @attention It updates user data based on $this->record. So, before updating a user, the user info must be saved in $this->record.
+     * @param $data
+     * @return void
+     */
+    public function update( $data ) {
+
+        $meta = null;
+        if ( array_key_exists( 'meta', $data ) ) {
+            $meta = $data['meta'];
+            unset($data['meta']);
+        }
+
+        parent::update( $data );
+        if ( $meta ) {
+            meta()->sets( 'user', $this->record['idx'], $meta );
+        }
+
+    }
+
 
     public function pres( &$users ) {
 
@@ -183,16 +204,23 @@ class User extends \model\base\Base {
      *
      */
     public function data() {
+
+
         $user = $this->load_by_session_id( in('session_id') );
+        if ( empty($user) ) return error( ERROR_WRONG_SESSION_ID );
 
 
         if ( $this->isAdmin() ) { // if admin,
             if ( ! in('idx') ) return error( ERROR_IDX_EMPTY );
             $user = $this->load( in('idx') ); // load other user.
             if ( $user < 0 ) return error( $user );
+            if ( empty($user) ) return error( ERROR_USER_NOT_FOUND );
         }
 
         unset( $user['password'], $user['session_id'], $user['stamp_registration'] );
+
+
+
 
         $_meta = meta()->gets( 'user', $user['idx'] );
         $metas = [];
@@ -200,7 +228,7 @@ class User extends \model\base\Base {
             $metas[ $arr['code'] ] = $arr['data'];
         }
         $user['meta'] = $metas;
-        success( $user );
+        success( ['user'=>$user] );
     }
 
     /**
@@ -233,6 +261,7 @@ class User extends \model\base\Base {
         $this->pres( $users );
 
         success( ['users' => $users ] );
+
     }
 
 

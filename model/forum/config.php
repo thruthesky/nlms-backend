@@ -43,9 +43,24 @@ class Config extends Forum {
         if ( $no == 0 ) return error( ERROR_UNKNOWN ); // strange error. this error should not happened here.
         success( ['forum_data' => $this->load( in('idx') ) ] );
     }
+
+    /**
+     * HTTP interface
+     * @param null $compatibility_arg1
+     * @return mixed|void
+     */
     public function delete( $compatibility_arg1 = null ) {
+
+
         $idx = in('idx');
         if ( empty($idx) ) $idx = "id='".in('id')."'"; // if it is not string, it is id.
+        if ( empty( $idx ) ) return error( ERROR_IDX_EMPTY );
+        if ( ! $this->load( $idx ) ) return error ( ERROR_FORUM_CONFIG_NOT_EXIST );
+        $this->destroy();
+        return success();
+        
+        /*
+
         // di($idx);
         $config = $this->load( $idx );
         if( !$config ) error( ERROR_FORUM_CONFIG_NOT_EXIST );
@@ -53,5 +68,6 @@ class Config extends Forum {
         //$this->delete( $condition );
         $this->destroy();
         success();
+        */
     }
 }

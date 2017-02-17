@@ -20,6 +20,12 @@ class User_Test extends Test {
             ]
         ];
         $session_id = $this->createUser( $data );
+        $user = $this->getUserData( $session_id );
+        test( is_success( $user ), "Checking user register success" );
+        test( $data['id'] == $user['id'], "Register Id matched ");
+        test( $data['name'] == $user['name'], "Register Id matched ");
+        test( $data['meta']['age'] == $user['meta']['age'], "Register meta age matched");
+        test( $data['meta']['classid'] == $user['meta']['classid'], "Register meta age matched");
         if ( $session_id ) { // create success.
             $session_id = $this->updateUser($session_id, ['name' => 'Updated Name']);
 

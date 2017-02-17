@@ -34,6 +34,7 @@ class Create_Test extends \model\test\Test {
 
         test( $user['id'] == $data['id'], "ID matches");
         test( $user['meta']['weight'] == $data['meta']['weight'], "weight matches");
+        test( $user['meta']['height'] == $data['meta']['height'], "height matches");
 
     }
 }

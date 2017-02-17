@@ -24,6 +24,7 @@ class Config extends Forum {
         $config = $this->get( in('id') );
         if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST );
         $forum_idx = $this->insert( $data );
+        print_r( $forum_idx );
         if ( $forum_idx <= 0 ) error( $forum_idx );
         else success( ['idx'=>$forum_idx] );
     }

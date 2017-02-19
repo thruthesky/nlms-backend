@@ -32,6 +32,7 @@ class Create extends User {
         $data['zipcode'] = in('zipcode');
         $data['province'] = in('province');
         $data['meta'] = in('meta');
+        $data['address'] = in('address');
 
 
         result( $this->create( $data ) );

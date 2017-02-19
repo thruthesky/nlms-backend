@@ -11,18 +11,13 @@ class Data extends Forum {
     }
     public function create() {
         if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
-        if( empty(in('forum_idx') ) ) return error( ERROR_FORUM_ID_EMPTY );
-
         $user = user()->load_by_session_id( in('session_id') );
-        // checking if forum config exists.
-        $config = forum_config()->load( in('forum_idx') );
-        if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
-
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
         $data = [];
         $data['user_idx'] = in('user_idx');
         $data['title'] = in('title');
         $data['content'] = in('content');
+        if( empty( $data['title'] ) ) return error( ERROR_FORUM_DATA_TITLE_EMPTY );
         $forumdata_idx = $this->insert( $data );
         if ( $forumdata_idx <= 0 ) return error( $forumdata_idx );
         success( ['forum_data'=>$forumdata_idx] );

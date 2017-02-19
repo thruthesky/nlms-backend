@@ -46,6 +46,7 @@ define('ERROR_FORUM_DATA_NOT_EXIST', -40202);               $em[ERROR_FORUM_DATA
 define('ERROR_FORUM_ID_EMPTY', -40203 );                $em[ERROR_FORUM_ID_EMPTY] = 'forum-id-is-empty';
 define('ERROR_FORUM_DATA_TITLE_EMPTY', -40204);         $em[ERROR_FORUM_DATA_TITLE_EMPTY] = 'forum-data-title-is-empty';
 define('ERROR_FORUM_DATA_CONTENT_EMPTY', -40205);            $em[ERROR_FORUM_DATA_CONTENT_EMPTY] = 'forum-data-content-is-empty';
+define('ERROR_FORUM_CONFIG_IDX_EMPTY', -40206);				$em[ERROR_FORUM_CONFIG_IDX_EMPTY] = 'forum-config-idx-is-empty';
 
 
 

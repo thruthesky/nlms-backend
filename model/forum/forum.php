@@ -27,6 +27,11 @@ class Forum extends \model\base\Base
         return db()->row(" SELECT * FROM {$this->getTable()} WHERE id='$id'");
     }
 
+    protected final function getWithIdx($idx)
+    {
+        return db()->row(" SELECT * FROM {$this->getTable()} WHERE idx='$idx'");
+    }
+
 
 }
 

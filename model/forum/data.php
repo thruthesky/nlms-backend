@@ -47,7 +47,7 @@ class Data extends Forum {
     public function gets() {
         if( empty( in( 'config_idx' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
         $data['config_idx'] = in('config_idx');
-        $config = db() ->row("SELECT * FROM 'forum_config' WHERE idx = '$data[config_idx]'");
+        $config = forum_config()->getWithIdx( $data['config_idx']);
         if( !$config ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
 
         $forum_data = db()->row(" SELECT * FROM 'forum_data' WHERE config_idx='$data[config_idx]'");

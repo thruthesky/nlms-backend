@@ -71,4 +71,9 @@ class Config extends Forum {
         success();
         */
     }
+
+    public function getConfig( $idx) {
+        $config = $this->getWithIdx( $idx );
+        return $config;
+    }
 }

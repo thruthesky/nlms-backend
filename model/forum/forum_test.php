@@ -88,6 +88,9 @@ class Forum_Test extends \model\test\Test {
 
         $this->forumDataGets();
 
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        test( $re['code'] == 0, "Forum Data gets Test");
+
         $this->forumConfigGet($params);
 
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );

@@ -58,6 +58,6 @@ class Data extends Forum {
         $cond = "config_idx=$data[config_idx]" ;
         $forum_data = $this->loads($cond);
 
-        success([$forum_data]);
+        success(['forum_data' => $forum_data]);
     }
 }

@@ -88,7 +88,7 @@ class Forum_Test extends \model\test\Test {
 
         $this->forumDataGets();
 
-        $this->forumConfigGet();
+        $this->forumConfigGet($params);
 
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
         test( $re['code'] == 0, "Getconfig test". $re['code']);
@@ -115,23 +115,29 @@ class Forum_Test extends \model\test\Test {
     }
 
     private function forumDataGets(){
+        $params = [];
+
+        $re = $this->ex( "\\model\\forum\\Data::gets", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY, "Forum Data gets config_idx empty". $re['code']);
 
         $params = ['config_idx' => 12312412413 . rand(100, 300)];
         $re = $this->ex( "\\model\\forum\\Data::gets", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Gets test without config". $re['code']);
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Gets Data gets without config". $re['code']);
     }
 
-    private function forumConfigGet() {
-        $params = [];
+    private function forumConfigGet( $params ) {
+        $params_2 = [];
 
-        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params_2 );
         test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY, "getconfig test config_idx empty". $re['code']);
 
-        $params = ['config_idx' => rand(100, 300)];
-        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        $params_2 = ['config_idx' => rand(100, 300)];
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params_2 );
         test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Getconfig test Forum config not exist". $re['code']);
 
 
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        test( $re['code'] == 0, "GetConfig Test" );
     }
 
 }

@@ -54,7 +54,10 @@ class Data extends Forum {
         $config = forum_config()->getWithIdx( $data['config_idx']);
         if( empty($config) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
 
-        $forum_data = db()->row(" SELECT * FROM 'forum_data' WHERE config_idx='$data[config_idx]'");
-        success(['forum_data' => $forum_data]);
+
+        $cond = "config_idx=$data[config_idx]" ;
+        $forum_data = $this->loads($cond);
+
+        success([$forum_data]);
     }
 }

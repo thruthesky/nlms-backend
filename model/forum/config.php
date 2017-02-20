@@ -24,7 +24,6 @@ class Config extends Forum {
         $config = $this->get( in('id') );
         if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST );
         $forum_idx = $this->insert( $data );
-        print_r( $forum_idx );
         if ( $forum_idx <= 0 ) error( $forum_idx );
         else success( ['idx'=>$forum_idx] );
     }
@@ -73,8 +72,11 @@ class Config extends Forum {
     }
 
     public function getConfig( ) {
-        if( empty($idx) ) $idx = in('config_idx');
+        if( empty( in('config_idx') ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+        $idx = in('config_idx');
         $config = $this->getWithIdx( $idx );
-        return success($config);
+        if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        success($config);
+        return $config;
     }
 }

@@ -59,6 +59,9 @@ class Forum_Test extends \model\test\Test {
 
     private function createForumData( $params ) {
 
+        $re = $this->ex( "\\model\\forum\\Config::create", $params );
+
+        $params['config_idx'] = $re['data']['idx'];
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Creating forum Data without session_id. " . error_string( $re ));
 
@@ -79,6 +82,17 @@ class Forum_Test extends \model\test\Test {
         $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
         test( $re['code'] == ERROR_FORUM_DATA_TITLE_EMPTY, "Creating forum Data without title. " . error_string( $re ));
 
+        $params_2['config_idx'] = null;
+        $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
+        test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY , "Creating forum Data without config_idx -". $re['code'] );
+
+        $this->forumDataGets();
+
+        $this->forumConfigGet();
+
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        test( $re['code'] == 0, "Getconfig test". $re['code']);
+
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == 0, "Creating forum Data - $params[title]. " . error_string( $re ));
         $forum_data_idx = $re['data']['forum_data'];
@@ -98,6 +112,26 @@ class Forum_Test extends \model\test\Test {
 
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
+    }
+
+    private function forumDataGets(){
+
+        $params = ['config_idx' => 12312412413 . rand(100, 300)];
+        $re = $this->ex( "\\model\\forum\\Data::gets", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Gets test without config". $re['code']);
+    }
+
+    private function forumConfigGet() {
+        $params = [];
+
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY, "getconfig test config_idx empty". $re['code']);
+
+        $params = ['config_idx' => rand(100, 300)];
+        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Getconfig test Forum config not exist". $re['code']);
+
+
     }
 
 }

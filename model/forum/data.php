@@ -11,6 +11,10 @@ class Data extends Forum {
     }
     public function create() {
         if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
+        if( empty( in('config_idx') ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+
+        $config = forum_config()->getConfig();
+        if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         $user = user()->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
         $data = [];
@@ -48,7 +52,7 @@ class Data extends Forum {
         if( empty( in( 'config_idx' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
         $data['config_idx'] = in('config_idx');
         $config = forum_config()->getWithIdx( $data['config_idx']);
-        if( !$config ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        if( empty($config) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
 
         $forum_data = db()->row(" SELECT * FROM 'forum_data' WHERE config_idx='$data[config_idx]'");
         success(['forum_data' => $forum_data]);

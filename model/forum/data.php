@@ -17,6 +17,7 @@ class Data extends Forum {
         $data['user_idx'] = in('user_idx');
         $data['title'] = in('title');
         $data['content'] = in('content');
+        $data['config_idx'] = in('config_idx');
         if( empty( $data['title'] ) ) return error( ERROR_FORUM_DATA_TITLE_EMPTY );
         $forumdata_idx = $this->insert( $data );
         if ( $forumdata_idx <= 0 ) return error( $forumdata_idx );
@@ -41,5 +42,15 @@ class Data extends Forum {
         if( !$data ) error( ERROR_FORUM_DATA_NOT_EXIST );
         $this->destroy();
         success();
+    }
+
+    public function gets() {
+        if( empty( in( 'config_idx' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+        $data['config_idx'] = in('config_idx');
+        $config = db() ->row("SELECT * FROM 'forum_config' WHERE idx = '$data[config_idx]'");
+        if( !$config ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+
+        $forum_data = db()->row(" SELECT * FROM 'forum_data' WHERE config_idx='$data[config_idx]'");
+        success(['forum_data' => $forum_data]);
     }
 }

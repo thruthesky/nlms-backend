@@ -12,7 +12,9 @@ class Create extends User {
 
         
         if ( empty( in('id') ) ) return error( ERROR_USER_ID_EMPTY );
+        if( strlen( in('id') ) >64 ) return error( ERROR_ID_IS_TOO_LONG );
         if ( empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY );
+        if ( is_string( in('mobile') ) ) return error( ERROR_MOBILE_NOT_NUMERIC );
 
 
 

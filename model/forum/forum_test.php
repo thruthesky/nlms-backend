@@ -15,7 +15,6 @@ class Forum_Test extends \model\test\Test {
 
     private function createForumConfig( $params ) {
 
-
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) { // if exists,
             $re = $this->ex( "\\model\\forum\\Config::delete", $params ); // delete
@@ -58,7 +57,7 @@ class Forum_Test extends \model\test\Test {
 
 
     private function createForumData( $params ) {
-
+        $params['id']= '-test' . time();
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
 
         $params['config_idx'] = $re['data']['idx'];

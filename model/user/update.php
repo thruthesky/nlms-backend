@@ -9,6 +9,7 @@ class Update extends User {
 
         if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
         if ( in('id') ) return error( ERROR_CANNOT_CHANGE_USER_ID );
+        if ( in('password') ) return error( ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE );
 
         $data = [];
 

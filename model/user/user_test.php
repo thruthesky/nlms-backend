@@ -9,6 +9,17 @@ class User_Test extends Test {
         $this->testUser();
         $this->testUserSearch();
     }
+
+    function randomString($length = 64) {
+        $str = "";
+        $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
+        $max = count($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $rand = mt_rand(0, $max);
+            $str .= $characters[$rand];
+        }
+        return $str;
+    }
     private function testUser() {
         $id = 'user-' . time();
         $name = 'new user';
@@ -20,6 +31,23 @@ class User_Test extends Test {
                 'classid' => 'my-id'
             ]
         ];
+        $data2 = $data;
+        $data2['id'] = null;
+        $re = $this->ex("\\model\\User\\Create", $data2);
+        test( $re['code'] == ERROR_USER_ID_EMPTY , "Create user without id");
+        $data2['id'] = $this->randomString(66);
+//        $data2['password'] = $id;
+//        $re = $this->ex("\\model\\User\\Create", $data2);
+//        test( $re['code'] == ERROR_ID_IS_TOO_LONG , "Create user with more than 64 characters". $re['code']);
+
+        $data2['id'] = $data['id'];
+        $data2['password'] = null;
+        $re = $this->ex("\\model\\User\\Create", $data2);
+        test( $re['code'] == ERROR_PASSWORD_EMPTY , "Create user without password");
+        $data2['password'] = $id;
+        $data2['mobile'] = '-test';
+        $re = $this->ex("\\model\\User\\Create", $data2);
+        test( $re['code'] == ERROR_MOBILE_NOT_NUMERIC , "Create user with mobile not numeric". $re['code']);
         $session_id = $this->createUser( $data );
         $user = $this->getUserData( $session_id );
         test( is_success( $user ), "Checking user register success" );
@@ -27,6 +55,17 @@ class User_Test extends Test {
         test( $data['name'] == $user['name'], "Register Id matched ");
         test( $data['meta']['age'] == $user['meta']['age'], "Register meta age matched");
         test( $data['meta']['classid'] == $user['meta']['classid'], "Register meta age matched");
+        $data2['session_id'] = null;
+        $re = $this->ex("\\model\\User\\Update", $data2);
+        test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Update test without session_id" . $re['code']);
+        $data2['session_id'] = $session_id;
+        $data2['id'] = 'test';
+        $re = $this->ex("\\model\\User\\Update", $data2);
+        test( $re['code'] == ERROR_CANNOT_CHANGE_USER_ID,  "Update test with id" . $re['code']);
+        $data2['id'] = null;
+        $data2['password'] = 'test';
+        $re = $this->ex("\\model\\User\\Update", $data2);
+        test( $re['code'] == ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE,  "Update test with id" . $re['code']);
         if ( $session_id ) { // create success.
             $session_id = $this->updateUser($session_id, ['name' => 'Updated Name']);
 

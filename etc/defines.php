@@ -35,9 +35,9 @@ define('ERROR_WRONG_PASSWORD', -40109 );             $em[ERROR_WRONG_PASSWORD] =
 define('ERROR_USER_NOT_SET', -40100);                $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
 define('ERROR_RECORD_NOT_SET', -40122);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
 define('ERROR_IDX_EMPTY', -40123);                      $em[ERROR_IDX_EMPTY] = 'idx-empty';
-
-
-
+define('ERROR_ID_IS_TOO_LONG', -40124);                 $em[ERROR_ID_IS_TOO_LONG] = 'id-is-too-long';
+define('ERROR_MOBILE_NOT_NUMERIC', -40125);             $em[ERROR_MOBILE_NOT_NUMERIC] = 'mobile-not-numeric';
+define('ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE', -40126);         $em[ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE] = 'password-cannot-change-here';
 // forum errors. between from -40200 to -40299
 
 define('ERROR_FORUM_CONFIG_EXIST', -40200);               $em[ERROR_FORUM_CONFIG_EXIST] = 'forum-config-exist';

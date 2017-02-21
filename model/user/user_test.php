@@ -12,7 +12,7 @@ class User_Test extends Test {
 
     function randomString($length = 64) {
         $str = "";
-        $characters = array_merge(range('A','Z'), range('a','z'), range('0','9'));
+        $characters = array_merge(range('A','Z'), range('a','z'), range('a','z'));
         $max = count($characters) - 1;
         for ($i = 0; $i < $length; $i++) {
             $rand = mt_rand(0, $max);
@@ -36,9 +36,20 @@ class User_Test extends Test {
         $re = $this->ex("\\model\\User\\Create", $data2);
         test( $re['code'] == ERROR_USER_ID_EMPTY , "Create user without id");
         $data2['id'] = $this->randomString(66);
-//        $data2['password'] = $id;
-//        $re = $this->ex("\\model\\User\\Create", $data2);
-//        test( $re['code'] == ERROR_ID_IS_TOO_LONG , "Create user with more than 64 characters". $re['code']);
+        $data2['password'] = $id;
+        $re = $this->ex("\\model\\User\\Create", $data2);
+        test( $re['code'] == ERROR_ID_IS_TOO_LONG , "Create user with id more than 64 characters". $re['code']);
+
+        $data2['id'] = $id;
+        $data2['password'] = $this->randomString(256);
+        $re = $this->ex("\\model\\User\\Create", $data2);
+        test( $re['code'] == ERROR_PASSWORD_TOO_LONG, "Create user with password more than 255 characters" .  $re['code']);
+        $data2['password'] = $id;
+        $data2['mobile'] = $this->randomString(5);
+        $re = $this->ex("\\model\\User\\Create", $data2);
+        test( $re['code'] == ERROR_MOBILE_NOT_NUMERIC, "Create user with mobile non numeric " .$re['code'] );
+
+
 
         $data2['id'] = $data['id'];
         $data2['password'] = null;

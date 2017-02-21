@@ -38,6 +38,8 @@ define('ERROR_IDX_EMPTY', -40123);                      $em[ERROR_IDX_EMPTY] = '
 define('ERROR_ID_IS_TOO_LONG', -40124);                 $em[ERROR_ID_IS_TOO_LONG] = 'id-is-too-long';
 define('ERROR_MOBILE_NOT_NUMERIC', -40125);             $em[ERROR_MOBILE_NOT_NUMERIC] = 'mobile-not-numeric';
 define('ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE', -40126);         $em[ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE] = 'password-cannot-change-here';
+define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWORD_TOO_LONG] = 'password-too-log';
+define('ERROR_MOBILE_TOO_LONG', -40128);                    $em[ERROR_MOBILE_TOO_LONG] = 'mobile-is-too-long';
 // forum errors. between from -40200 to -40299
 
 define('ERROR_FORUM_CONFIG_EXIST', -40200);               $em[ERROR_FORUM_CONFIG_EXIST] = 'forum-config-exist';

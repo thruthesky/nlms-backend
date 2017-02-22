@@ -40,7 +40,7 @@ define('ERROR_MOBILE_NOT_NUMERIC', -40125);             $em[ERROR_MOBILE_NOT_NUM
 define('ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE', -40126);         $em[ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE] = 'password-cannot-change-here';
 define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWORD_TOO_LONG] = 'password-too-log';
 define('ERROR_MOBILE_TOO_LONG', -40128);                    $em[ERROR_MOBILE_TOO_LONG] = 'mobile-is-too-long';
-define('ERROR_USER_IDX_NOT_MATCHED' , -40129);              $em[ERROR_USER_IDX_NOT_MATCHED] = 'user-idx-not-matched';
+define('ERROR_USER_IDX_NOT_MATCHED' , -40129);              $em[ERROR_USER_IDX_NOT_MATCHED] = 'idx-user-not-matched';
 
 
 // forum errors. between from -40200 to -40299

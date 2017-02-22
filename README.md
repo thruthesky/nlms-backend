@@ -136,6 +136,7 @@ And withcenter team members.
 
 
 
+
 # Installation
 
 
@@ -434,7 +435,7 @@ Examples of usage.
 
 for user meta data.
 
-user.user_idx.code
+user.idx_user.code
 
 user.123.first_name
 
@@ -518,3 +519,13 @@ If the code is on the user table, then,
 
     * for instance, if you want to get user data, "?mc=user.user.data" should be queried.
     
+
+
+# Management
+
+## Secret post
+
+* level_write should be low like 0
+* level_list and level_view should be high like 100
+    * but one can list & view his own post.
+    * on the menu, it should have a link to list posts that are belongs to the user so, one can list his own secret posts of the forum.

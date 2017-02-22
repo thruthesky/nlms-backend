@@ -21,10 +21,10 @@ class Data extends Forum {
         if( !is_numeric( in('user_idx') ) ) return error( ERROR_USER_IDX_NOT_NUMBER);
 
         $data = [];
-        $data['user_idx'] = in('user_idx');
+        $data['idx_user'] = in('idx_user');
         $data['title'] = in('title');
         $data['content'] = in('content');
-        $data['config_idx'] = in('config_idx');
+        $data['idx_config'] = in('idx_config');
         if( empty( $data['title'] ) ) return error( ERROR_FORUM_DATA_TITLE_EMPTY );
         if( strlen( $data['title'] ) > 256 ) return error( ERROR_TITLE_TOO_LONG );
         $forumdata_idx = $this->insert( $data );

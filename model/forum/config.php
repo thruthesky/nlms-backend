@@ -21,6 +21,8 @@ class Config extends Forum {
         $data['id'] = in('id');
         $data['name'] = in('name');
         $data['description'] = in('description');
+        if( strlen( in('id') ) > 64 ) return error( ERROR_FORUM_CONFIG_ID_IS_TOO_LONG );
+        if( strlen( in('name') ) >128) return error( ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG );
         $config = $this->get( in('id') );
         if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST );
         $forum_idx = $this->insert( $data );

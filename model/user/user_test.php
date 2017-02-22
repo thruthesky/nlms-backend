@@ -10,16 +10,6 @@ class User_Test extends Test {
         $this->testUserSearch();
     }
 
-    function randomString($length = 64) {
-        $str = "";
-        $characters = array_merge(range('A','Z'), range('a','z'), range('a','z'));
-        $max = count($characters) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $rand = mt_rand(0, $max);
-            $str .= $characters[$rand];
-        }
-        return $str;
-    }
     private function testUser() {
         $id = 'user-' . time();
         $name = 'new user';

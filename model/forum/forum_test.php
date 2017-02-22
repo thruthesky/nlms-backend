@@ -14,9 +14,20 @@ class Forum_Test extends \model\test\Test {
 
 
     private function createForumConfig( $params ) {
-
-
+        $params2 = $params;
+        $params2['id'] = $this->randomString(65);
+        $re = $this->ex( "\\model\\forum\\Config::create", $params2 );
+        test( $re['code'] == ERROR_FORUM_CONFIG_ID_IS_TOO_LONG ,"Forum Config create test with id more than 64 characters" . $re['code']);
+        $params2 = $params;
+        $params2['name'] = $this->randomString(129);
+        $re = $this->ex( "\\model\\forum\\Config::create", $params2 );
+        test( $re['code'] == ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG , "Forum Config create test with name more than 128 characters" . $re['code']);
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        $forum_config_idx = $re['data']['idx'];
+
+        $forum_config = forum_config()->load( $forum_config_idx );
+        test( is_success( $forum_config ) , "Loading Config if Forum Config is successfully created");
+
         if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) { // if exists,
             $re = $this->ex( "\\model\\forum\\Config::delete", $params ); // delete
             test( $re['code'] == 0, "Deleteing forum config - $params[id], " . error_string( $re ));
@@ -25,10 +36,7 @@ class Forum_Test extends \model\test\Test {
 
 
         test( is_success($re), "Creating forum config - $params[id], " . error_string( $re ));
-        $forum_config_idx = $re['data']['idx'];
 
-        $forum_config = forum_config()->load( $forum_config_idx );
-        test( is_success( $forum_config ) , "Loading Config if Forum Config is successfully created");
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]. " . error_string($re) );
@@ -62,6 +70,7 @@ $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
 
         $params['id'] = 'id-' . time();
 
+
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         if ( is_success($re) ) {
             test( is_success($re), "createForumData::config::create() " . error_string($re) );
@@ -88,7 +97,19 @@ $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
             'name'=> 'user-name-' . time()
         ];
         $session_id = $this->createUser( $data );
+        $user = user()->load_by_session_id($session_id);
         $params['session_id'] = $session_id;
+        $params['user_idx'] = $user['idx'];
+
+        $params_2 = $params;
+        $params_2['user_idx'] = $this->randomString(5);
+        $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
+        test( $re['code'] == ERROR_USER_IDX_NOT_NUMBER, "Forum Data create test user_idx not number");
+
+        $params_2 = $params;
+        $params_2['config_idx'] = $this->randomString(3);
+        $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
+        test( $re['code'] == ERROR_CONFIG_IDX_NOT_NUMBER, "Forum Data create test config_idx not number");
 
         $params_2 = $params;
         $params_2['title'] = null;
@@ -98,7 +119,11 @@ $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
         $params_2['config_idx'] = null;
         $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
         test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY , "Creating forum Data without config_idx -". $re['code'] );
+        $params_2 = $params;
 
+        $params_2['title'] = $this->randomString(257);
+        $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
+        test( $re['code'] == ERROR_TITLE_TOO_LONG , "Forum Data create test with title more than 256 characters" . $re['code'] );
         $this->forumDataGets();
 
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
@@ -109,6 +134,8 @@ $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
         test( $re['code'] == 0, "Getconfig test". $re['code']);
 
+
+        $params['user_idx'] = $user['idx'];
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == 0, "Creating forum Data - $params[title]. " . error_string( $re ));
         $forum_data_idx = $re['data']['forum_data'];
@@ -117,17 +144,47 @@ $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
         test( is_success($forumdata), "Checking posted data idx: $forumdata[idx]");
 
         $editdata = ['idx'=>$forum_data_idx, 'title'=>'edit-data', 'content' => 'edit ForumData'];
-        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
-        test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");
 
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Updating Forum Data without session_id - $editdata[title]");
+
+        $editdata['session_id'] = $this->randomString(18);
+        $editdata['user_idx'] = $user['idx'];
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == ERROR_WRONG_SESSION_ID , "Update Forum Data with wrong session_id");
+
+        $editdata['session_id'] = $session_id;
+        $editdata['user_idx'] = null;
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == ERROR_USER_IDX_NOT_NUMBER  ,"Forum Data update test with not numeric user_idx" . $re['code']);
+
+
+
+        $editdata['user_idx'] = $user['idx'];
+        $editdata2 = $editdata;
+        $editdata2['title'] = $this->randomString(257);
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata2 );
+        test( $re['code'] == ERROR_TITLE_TOO_LONG, "Forum Data edit test with more than 256 characters". $re['code']);
+
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == 0, "Update Forum Data");
         $forumdata = forum_data()->load( $forum_data_idx );
         test( $re['data']['forum_data']['title']== $forumdata['title'], "Checking edited, Edited data title matched" );
+
+        $deletedata= $editdata;
+        $deletedata['session_id'] = $this->randomString(5);
+        $re = $this->ex( "\\model\\forum\\Data::delete", $deletedata );
+        test( $re['code'] == ERROR_WRONG_SESSION_ID , "Forum Data delete test with wrong session_id" . $re['code']);
+
+        $deletedata['session_id'] = null;
+        $re = $this->ex( "\\model\\forum\\Data::delete", $deletedata );
+        test( $re['code'] == ERROR_SESSION_ID_EMPTY , "Forum Data delete test with empty sesion_id" . $re['code']);
 
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
 
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
-        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $re[code]");
     }
 
     private function forumDataGets() {

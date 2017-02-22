@@ -16,6 +16,11 @@ class Forum_Test extends \model\test\Test {
     private function createForumConfig( $params ) {
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        $forum_config_idx = $re['data']['idx'];
+
+        $forum_config = forum_config()->load( $forum_config_idx );
+        test( is_success( $forum_config ) , "Loading Config if Forum Config is successfully created");
+
         if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) { // if exists,
             $re = $this->ex( "\\model\\forum\\Config::delete", $params ); // delete
             test( $re['code'] == 0, "Deleteing forum config - $params[id], " . error_string( $re ));
@@ -24,10 +29,7 @@ class Forum_Test extends \model\test\Test {
 
 
         test( is_success($re), "Creating forum config - $params[id], " . error_string( $re ));
-        $forum_config_idx = $re['data']['idx'];
 
-        $forum_config = forum_config()->load( $forum_config_idx );
-        test( is_success( $forum_config ) , "Loading Config if Forum Config is successfully created");
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
         test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]. " . error_string($re) );
@@ -94,7 +96,8 @@ class Forum_Test extends \model\test\Test {
 
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
         test( $re['code'] == 0, "Getconfig test". $re['code']);
-
+        $user = user()->load_by_session_id($session_id);
+        print_r($user);
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == 0, "Creating forum Data - $params[title]. " . error_string( $re ));
         $forum_data_idx = $re['data']['forum_data'];
@@ -103,9 +106,14 @@ class Forum_Test extends \model\test\Test {
         test( is_success($forumdata), "Checking posted data idx: $forumdata[idx]");
 
         $editdata = ['idx'=>$forum_data_idx, 'title'=>'edit-data', 'content' => 'edit ForumData'];
-        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
-        test( $re['code'] == 0, "Updating Forum Data - $editdata[title]");
 
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Updating Forum Data without session_id - $editdata[title]");
+
+
+        $editdata['session_id'] = $session_id;
+        $re = $this->ex( "\\model\\forum\\Data::edit", $editdata );
+        test( $re['code'] == 0, "Update Forum Data");
         $forumdata = forum_data()->load( $forum_data_idx );
         test( $re['data']['forum_data']['title']== $forumdata['title'], "Checking edited, Edited data title matched" );
 

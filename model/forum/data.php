@@ -28,6 +28,7 @@ class Data extends Forum {
         success( ['forum_data'=>$forumdata_idx] );
     }
     public function edit() {
+        if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
         $data = [];
         $data['idx'] = in('idx');
         $data['title'] = in('title');

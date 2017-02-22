@@ -17,6 +17,7 @@ class Data extends Forum {
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         $user = user()->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
+
         $data = [];
         $data['user_idx'] = in('user_idx');
         $data['title'] = in('title');

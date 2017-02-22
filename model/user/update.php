@@ -31,7 +31,8 @@ class Update extends User {
         //di($data);
 
 
-        $this->load_by_session_id( in('session_id') );
+        $user = $this->load_by_session_id( in('session_id') );
+        di($user);
 
 
 

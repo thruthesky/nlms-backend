@@ -17,6 +17,7 @@ class Data extends Forum {
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         $user = user()->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
+
         $data = [];
         $data['user_idx'] = in('user_idx');
         $data['title'] = in('title');
@@ -28,6 +29,7 @@ class Data extends Forum {
         success( ['forum_data'=>$forumdata_idx] );
     }
     public function edit() {
+        if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
         $data = [];
         $data['idx'] = in('idx');
         $data['title'] = in('title');

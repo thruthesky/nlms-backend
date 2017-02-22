@@ -24,13 +24,10 @@ class Forum extends \model\base\Base
      */
     protected final function get($id)
     {
-        return db()->row(" SELECT * FROM {$this->getTable()} WHERE id='$id'");
+        return $this->load( $id );
+        // return db()->row(" SELECT * FROM {$this->getTable()} WHERE id='$id'");
     }
 
-    protected final function getWithIdx($idx)
-    {
-        return db()->row(" SELECT * FROM {$this->getTable()} WHERE idx='$idx'");
-    }
 
 
 }

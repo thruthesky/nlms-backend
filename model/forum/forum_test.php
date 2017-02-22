@@ -9,7 +9,7 @@ class Forum_Test extends \model\test\Test {
     }
     private function testForum() {
         $this->createForumConfig(['id'=>'test-forum', 'name'=>'Test ForumConfig']);
-        $this->createForumData(['title'=>'test-title-form-data', 'content'=>'Test ForumData']);
+        $this->createForumData(['id'=>'test-forum-data', 'title'=>'test-title-form-data', 'content'=>'Test ForumData']);
     }
 
 
@@ -34,32 +34,45 @@ class Forum_Test extends \model\test\Test {
         test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]. " . error_string($re) );
 
         $editconfig = ['idx'=>$forum_config_idx, 'id'=>'edit-forum', 'name'=>'edit ForumConfig'];
-        $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
-        test( $re['code'] == 0, "Updating Forum config - $params[id]");
+$re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
+            test( $re['code'] == 0, "Updating Forum config - $params[id]");
 
-        $forum_config = forum_config()->load( $forum_config_idx );
-        test( $forum_config['id'] == $editconfig['id'] , "Checking edited ForumConfig id matched " );
-        test( $forum_config['id'] == $editconfig['id'] , "Checking edited ForumConfig id matched ");
-
-        $re = $this->ex( "\\model\\forum\\Config::delete", $editconfig );
-        test( $re['code'] == 0, "Deleting forum config - $editconfig[id]");
-
-        $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Updating Forum config Not Exist - $params[id] " . error_string($re) );
-
-        $re = $this->ex( "\\model\\forum\\Config::delete", $editconfig );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Forum Config already deleted -" . error_string($re) );
+            $forum_config = forum_config()->load( $forum_config_idx );
+            test( $forum_config['id'] == $editconfig['id'] , "Checking edited ForumConfig id matched " );
 
 
+            $re = $this->ex( "\\model\\forum\\Config::delete", $editconfig );
+            test( $re['code'] == 0, "Deleting forum config - $editconfig[id]");
 
-    }
+            $re = $this->ex( "\\model\\forum\\Config::edit", $editconfig);
+            test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Updating Forum config Not Exist - $params[id] " . error_string($re) );
+
+            $re = $this->ex( "\\model\\forum\\Config::delete", $editconfig );
+            test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Forum Config already deleted -" . error_string($re) );
+
+
+
+        }
 
 
 
 
     private function createForumData( $params ) {
 
+
+        $params['id'] = 'id-' . time();
+
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        if ( is_success($re) ) {
+            test( is_success($re), "createForumData::config::create() " . error_string($re) );
+        }
+        else {
+
+            if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) {
+
+            }
+            else test( is_success($re), "createForumData::config::create() " . error_string($re) );
+        }
 
         $params['config_idx'] = $re['data']['idx'];
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
@@ -117,7 +130,7 @@ class Forum_Test extends \model\test\Test {
         test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $editdata[title]");
     }
 
-    private function forumDataGets(){
+    private function forumDataGets() {
         $params = [];
 
         $re = $this->ex( "\\model\\forum\\Data::gets", $params );

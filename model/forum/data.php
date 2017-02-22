@@ -51,7 +51,7 @@ class Data extends Forum {
     public function gets() {
         if( empty( in( 'config_idx' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
         $data['config_idx'] = in('config_idx');
-        $config = forum_config()->getWithIdx( $data['config_idx']);
+        $config = forum_config()->load( $data['config_idx']);
         if( empty($config) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
 
 

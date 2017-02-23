@@ -11,14 +11,14 @@ class Data extends Forum {
     }
     public function create() {
         if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
-        if( empty( in('config_idx') ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
-        if( ! is_numeric( in('config_idx') ) ) return error( ERROR_CONFIG_IDX_NOT_NUMBER );
+        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+        if( ! is_numeric( in('idx_config') ) ) return error( ERROR_CONFIG_IDX_NOT_NUMBER );
         $config = forum_config()->getConfig();
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         $user = user()->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
-        if( empty( in('user_idx') ) ) return error( ERROR_USER_IDX_EMPTY );
-        if( !is_numeric( in('user_idx') ) ) return error( ERROR_USER_IDX_NOT_NUMBER);
+        if( empty( in('idx_user') ) ) return error( ERROR_USER_IDX_EMPTY );
+        if( !is_numeric( in('idx_user') ) ) return error( ERROR_USER_IDX_NOT_NUMBER);
 
         $data = [];
         $data['idx_user'] = in('idx_user');
@@ -33,8 +33,8 @@ class Data extends Forum {
     }
     public function edit() {
         if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
-//        if( empty( in('user_idx') ) ) return error( ERROR_IDX_EMPTY );
-        if( !is_numeric(in('user_idx') ) ) return error( ERROR_USER_IDX_NOT_NUMBER );
+//        if( empty( in('idx_user') ) ) return error( ERROR_IDX_EMPTY );
+        if( !is_numeric(in('idx_user') ) ) return error( ERROR_USER_IDX_NOT_NUMBER );
         if( strlen( in('title') ) > 256 ) return error( ERROR_TITLE_TOO_LONG );
         $user = user()->load_by_session_id( in('session_id') );
         if( empty( $user ) ) return error( ERROR_USER_NOT_EXIST );
@@ -56,19 +56,19 @@ class Data extends Forum {
         $data = $this->load( $idx );
         $user = user()->load_by_session_id( in('session_id') );
         if( !$data ) error( ERROR_FORUM_DATA_NOT_EXIST );
-        if( $data['user_idx'] != $user['idx'] ) return error( ERROR_USER_IDX_NOT_MATCHED );
+        if( $data['idx_user'] != $user['idx'] ) return error( ERROR_USER_IDX_NOT_MATCHED );
         $this->destroy();
         success();
     }
 
     public function gets() {
-        if( empty( in( 'config_idx' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
-        $data['config_idx'] = in('config_idx');
-        $config = forum_config()->load( $data['config_idx']);
+        if( empty( in( 'idx_config' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+        $data['idx_config'] = in('idx_config');
+        $config = forum_config()->load( $data['idx_config']);
         if( empty($config) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
 
 
-        $cond = "config_idx=$data[config_idx]";
+        $cond = "idx_config=$data[idx_config]";
         $forum_data = $this->loads($cond);
 
         success(['forum_data' => $forum_data]);

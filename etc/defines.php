@@ -51,12 +51,12 @@ define('ERROR_FORUM_DATA_NOT_EXIST', -40202);               $em[ERROR_FORUM_DATA
 define('ERROR_FORUM_ID_EMPTY', -40203 );                $em[ERROR_FORUM_ID_EMPTY] = 'forum-id-is-empty';
 define('ERROR_FORUM_DATA_TITLE_EMPTY', -40204);         $em[ERROR_FORUM_DATA_TITLE_EMPTY] = 'forum-data-title-is-empty';
 define('ERROR_FORUM_DATA_CONTENT_EMPTY', -40205);            $em[ERROR_FORUM_DATA_CONTENT_EMPTY] = 'forum-data-content-is-empty';
-define('ERROR_FORUM_CONFIG_IDX_EMPTY', -40206);				$em[ERROR_FORUM_CONFIG_IDX_EMPTY] = 'forum-config-idx-is-empty';
+define('ERROR_FORUM_IDX_CONFIG_EMPTY', -40206);				$em[ERROR_FORUM_IDX_CONFIG_EMPTY] = 'forum-config-idx-is-empty';
 define('ERROR_TITLE_TOO_LONG', -40207);                     $em[ERROR_TITLE_TOO_LONG] = 'title-is-too-long';
 define('ERROR_FORUM_CONFIG_ID_IS_TOO_LONG', -40208);          $em[ERROR_FORUM_CONFIG_ID_IS_TOO_LONG] = 'forum-config-id-is-too-long';
 define('ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG', -40209);          $em[ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG] = 'forum-config-name-is-too-long';
 define('ERROR_USER_IDX_EMPTY', -40210);                     $em[ERROR_USER_IDX_EMPTY] = 'user-idx-empty';
-define('ERROR_CONFIG_IDX_NOT_NUMBER', -40211);              $em[ERROR_CONFIG_IDX_NOT_NUMBER] = 'config-idx-not-number';
+define('ERROR_IDX_CONFIG_NOT_NUMBER', -40211);              $em[ERROR_IDX_CONFIG_NOT_NUMBER] = 'config-idx-not-number';
 define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_NOT_NUMBER] = 'user-idx-not-number';
 
 

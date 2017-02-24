@@ -77,7 +77,7 @@ class Config extends Forum {
     }
 
     public function getConfig( ) {
-        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
         $idx = in('idx_config');
         $config = $this->load( $idx );
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );

@@ -109,7 +109,7 @@ class Forum_Test extends \model\test\Test {
         $params_2 = $params;
         $params_2['idx_config'] = $this->randomString(3);
         $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
-        test( $re['code'] == ERROR_CONFIG_IDX_NOT_NUMBER, "Forum Data create test config_idx not number");
+        test( $re['code'] == ERROR_IDX_CONFIG_NOT_NUMBER, "Forum Data create test config_idx not number");
 
         $params_2 = $params;
         $params_2['title'] = null;
@@ -118,7 +118,7 @@ class Forum_Test extends \model\test\Test {
 
         $params_2['idx_config'] = null;
         $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
-        test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY , "Creating forum Data without config_idx -". $re['code'] );
+        test( $re['code'] == ERROR_FORUM_IDX_CONFIG_EMPTY , "Creating forum Data without config_idx -". $re['code'] );
         $params_2 = $params;
 
         $params_2['title'] = $this->randomString(257);
@@ -191,7 +191,7 @@ class Forum_Test extends \model\test\Test {
         $params = [];
 
         $re = $this->ex( "\\model\\forum\\Data::gets", $params );
-        test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY, "Forum Data gets config_idx empty". $re['code']);
+        test( $re['code'] == ERROR_FORUM_IDX_CONFIG_EMPTY, "Forum Data gets config_idx empty". $re['code']);
 
         $params = ['idx_config' => 12312412413 . rand(100, 300)];
         $re = $this->ex( "\\model\\forum\\Data::gets", $params );
@@ -202,7 +202,7 @@ class Forum_Test extends \model\test\Test {
         $params_2 = [];
 
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params_2 );
-        test( $re['code'] == ERROR_FORUM_CONFIG_IDX_EMPTY, "getconfig test config_idx empty". $re['code']);
+        test( $re['code'] == ERROR_FORUM_IDX_CONFIG_EMPTY, "getconfig test config_idx empty". $re['code']);
 
         $params_2 = ['idx_config' => rand(100, 300)];
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params_2 );

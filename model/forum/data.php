@@ -11,8 +11,8 @@ class Data extends Forum {
     }
     public function create() {
         if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
-        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
-        if( ! is_numeric( in('idx_config') ) ) return error( ERROR_CONFIG_IDX_NOT_NUMBER );
+        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
+        if( ! is_numeric( in('idx_config') ) ) return error( ERROR_IDX_CONFIG_NOT_NUMBER );
         $config = forum_config()->getConfig();
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         $user = user()->load_by_session_id( in('session_id') );
@@ -62,7 +62,7 @@ class Data extends Forum {
     }
 
     public function gets() {
-        if( empty( in( 'idx_config' ) ) ) return error( ERROR_FORUM_CONFIG_IDX_EMPTY );
+        if( empty( in( 'idx_config' ) ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
         $data['idx_config'] = in('idx_config');
         $config = forum_config()->load( $data['idx_config']);
         if( empty($config) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );

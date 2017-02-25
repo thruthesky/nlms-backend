@@ -136,6 +136,7 @@ And withcenter team members.
 
 
 
+
 # Installation
 
 
@@ -261,6 +262,55 @@ class Create_Test extends \model\test\Test {
     ( 번역 예를 들면 'user' 모델에 'user' 클래스가 있고 'user' 클래스의 'data' 메소드를 호출 하고 싶다면 )
         * "?mc=user.data" will do.
         ( 번역: "?mc=user.user.data" 와 같이 할 필요 없이 줄여서 "?mc=user.data" 와 같이 할 수 있다 )
+
+
+
+## System
+
+
+### System version
+
+To get system version, access below;
+
+````
+http://localhost/www/backend/index.php?mc=system.version
+````
+
+
+### Produce fake erorr
+
+To produce an error, access below;
+
+````
+http://localhost/www/backend/index.php?mc=system.error
+````
+
+Note: This is just an error result. Not internal error.
+
+
+### Produce script error
+
+To produce PHP script error, access below;
+
+
+````
+http://localhost/www/backend/index.php?mc=system.scriptError
+````
+
+
+
+### Produce Internal Server Error
+
+To produce PHP script error like "500 Internal error" response.
+
+
+````
+http://localhost/www/backend/index.php?mc=system.internalerror
+````
+
+
+Note: This is an actual PHP script error. Use this to test.
+
 
 
 
@@ -434,7 +484,7 @@ Examples of usage.
 
 for user meta data.
 
-user.user_idx.code
+user.idx_user.code
 
 user.123.first_name
 
@@ -518,3 +568,13 @@ If the code is on the user table, then,
 
     * for instance, if you want to get user data, "?mc=user.user.data" should be queried.
     
+
+
+# Management
+
+## Secret post
+
+* level_write should be low like 0
+* level_list and level_view should be high like 100
+    * but one can list & view his own post.
+    * on the menu, it should have a link to list posts that are belongs to the user so, one can list his own secret posts of the forum.

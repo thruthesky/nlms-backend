@@ -35,7 +35,12 @@ define('ERROR_WRONG_PASSWORD', -40109 );             $em[ERROR_WRONG_PASSWORD] =
 define('ERROR_USER_NOT_SET', -40100);                $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
 define('ERROR_RECORD_NOT_SET', -40122);              $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
 define('ERROR_IDX_EMPTY', -40123);                      $em[ERROR_IDX_EMPTY] = 'idx-empty';
-
+define('ERROR_ID_IS_TOO_LONG', -40124);                 $em[ERROR_ID_IS_TOO_LONG] = 'id-is-too-long';
+define('ERROR_MOBILE_NOT_NUMERIC', -40125);             $em[ERROR_MOBILE_NOT_NUMERIC] = 'mobile-not-numeric';
+define('ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE', -40126);         $em[ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE] = 'password-cannot-change-here';
+define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWORD_TOO_LONG] = 'password-too-log';
+define('ERROR_MOBILE_TOO_LONG', -40128);                    $em[ERROR_MOBILE_TOO_LONG] = 'mobile-is-too-long';
+define('ERROR_USER_IDX_NOT_MATCHED' , -40129);              $em[ERROR_USER_IDX_NOT_MATCHED] = 'idx-user-not-matched';
 
 
 // forum errors. between from -40200 to -40299
@@ -46,12 +51,19 @@ define('ERROR_FORUM_DATA_NOT_EXIST', -40202);               $em[ERROR_FORUM_DATA
 define('ERROR_FORUM_ID_EMPTY', -40203 );                $em[ERROR_FORUM_ID_EMPTY] = 'forum-id-is-empty';
 define('ERROR_FORUM_DATA_TITLE_EMPTY', -40204);         $em[ERROR_FORUM_DATA_TITLE_EMPTY] = 'forum-data-title-is-empty';
 define('ERROR_FORUM_DATA_CONTENT_EMPTY', -40205);            $em[ERROR_FORUM_DATA_CONTENT_EMPTY] = 'forum-data-content-is-empty';
-
+define('ERROR_FORUM_IDX_CONFIG_EMPTY', -40206);				$em[ERROR_FORUM_IDX_CONFIG_EMPTY] = 'forum-config-idx-is-empty';
+define('ERROR_TITLE_TOO_LONG', -40207);                     $em[ERROR_TITLE_TOO_LONG] = 'title-is-too-long';
+define('ERROR_FORUM_CONFIG_ID_IS_TOO_LONG', -40208);          $em[ERROR_FORUM_CONFIG_ID_IS_TOO_LONG] = 'forum-config-id-is-too-long';
+define('ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG', -40209);          $em[ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG] = 'forum-config-name-is-too-long';
+define('ERROR_USER_IDX_EMPTY', -40210);                     $em[ERROR_USER_IDX_EMPTY] = 'user-idx-empty';
+define('ERROR_IDX_CONFIG_NOT_NUMBER', -40211);              $em[ERROR_IDX_CONFIG_NOT_NUMBER] = 'config-idx-not-number';
+define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_NOT_NUMBER] = 'user-idx-not-number';
 
 
 // permis error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';
 
+define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
 define('OK', 0);
 
 

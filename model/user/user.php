@@ -210,7 +210,7 @@ class User extends \model\base\Base {
      */
     public function data() {
 
-
+        if( empty( in('session_id')) ) return error( ERROR_SESSION_ID_EMPTY );
         $user = $this->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_WRONG_SESSION_ID );
 

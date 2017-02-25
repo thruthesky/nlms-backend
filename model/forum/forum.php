@@ -24,8 +24,11 @@ class Forum extends \model\base\Base
      */
     protected final function get($id)
     {
-        return db()->row(" SELECT * FROM {$this->getTable()} WHERE id='$id'");
+        return $this->load( $id );
+
+
     }
+
 
 
 }

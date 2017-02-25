@@ -8,7 +8,7 @@
         $re = print_r($o, true);
         $re = str_replace(" ", "&nbsp;", $re);
         $re = explode("\n", $re);
-        echo implode("<br>", $re);
+        echo implode("<br>", $re) . '<br>';
     }
 
 
@@ -178,15 +178,35 @@ function page_item_limit( $n ) {
  * @param $pattern
  * @return array
  */
-function rsearch($folder, $pattern) {
+function rsearch($dir, $pattern) {
+    $my_files = [];
+        $tree = glob(rtrim($dir, '/') . '/*');
+        if (is_array($tree)) {
+            foreach($tree as $file) {
+                if (is_dir($file)) {
+                    // echo $file . '<br/>';
+                    $_files = rsearch($file, $pattern);
+                    $my_files = array_merge( $my_files, $_files );
+                } elseif (is_file($file)) {
+                    if ( strpos( $file, $pattern ) !== false ) $my_files[] = $file;
+                }
+            }
+        }
+
+    return $my_files;
+
+
+    /*
     $dir = new \RecursiveDirectoryIterator($folder);
     $ite = new \RecursiveIteratorIterator($dir);
     $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
     $fileList = array();
+    di($folder);
     foreach($files as $file) {
         $fileList = array_merge($fileList, $file);
     }
     return $fileList;
+    */
 }
 
 

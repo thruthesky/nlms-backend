@@ -12,8 +12,7 @@ class Install extends \model\base\Base {
         parent::__construct();
 
 
-
-        $installs = rsearch( __MODEL_DIR__, '/^.*\/install\.php$/' );
+        $installs = rsearch( __MODEL_DIR__, 'install.php' );
         foreach ( $installs as $install ) {
             if ( strpos( $install, 'system' ) ) continue;
 

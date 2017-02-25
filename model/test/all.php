@@ -41,15 +41,16 @@ class All extends Test {
 
 
 
-        $files = rsearch( __MODEL_DIR__, '/.*\_test\.php$/' );
+        $files = rsearch( __MODEL_DIR__, '_test.php' );
 
         foreach ( $files as $file ) {
 
 
             $file = str_replace(".php", '', $file);
-            $arr = array_reverse(explode( DIRECTORY_SEPARATOR, $file));
+            $arr = array_reverse( preg_split( "/[\\\\\/]/", $file));
 
             $path = "model\\$arr[1]\\$arr[0]";
+
 
             $obj = new $path();
 
@@ -67,7 +68,7 @@ class All extends Test {
     private function style() {
         echo <<<EOH
 <style>
-    body { font-size: 8pt; }
+    body { font-size: 10pt; }
     .error { color: darkred; font-weight: bold; }
     .success { color: #555; }
 </style>

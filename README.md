@@ -265,6 +265,55 @@ class Create_Test extends \model\test\Test {
 
 
 
+## System
+
+
+### System version
+
+To get system version, access below;
+
+````
+http://localhost/www/backend/index.php?mc=system.version
+````
+
+
+### Produce fake erorr
+
+To produce an error, access below;
+
+````
+http://localhost/www/backend/index.php?mc=system.error
+````
+
+Note: This is just an error result. Not internal error.
+
+
+### Produce script error
+
+To produce PHP script error, access below;
+
+
+````
+http://localhost/www/backend/index.php?mc=system.scriptError
+````
+
+
+
+### Produce Internal Server Error
+
+To produce PHP script error like "500 Internal error" response.
+
+
+````
+http://localhost/www/backend/index.php?mc=system.internalerror
+````
+
+
+Note: This is an actual PHP script error. Use this to test.
+
+
+
+
 ## User Protocols
 
 

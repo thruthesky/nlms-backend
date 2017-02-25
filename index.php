@@ -5,6 +5,8 @@
  * @note starter script
  *
  */
+
+
 define('__ROOT_DIR__', __DIR__ );
 include_once 'etc/bootstrap.php';
 include_once 'etc/run.php';

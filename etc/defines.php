@@ -63,6 +63,7 @@ define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_N
 // permis error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';
 
+define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
 define('OK', 0);
 
 

@@ -16,11 +16,12 @@ class Update extends User {
             if( strlen( $mobile ) > 32 ) return error( ERROR_MOBILE_TOO_LONG );
         }
         $data = [];
-
         $data['email'] = in('email');
         $data['nickname'] = in('nickname');
         $data['name'] = in('name');
-        $data['birth_day'] = in('birth_day', 0);
+        $data['birth_day'] = in('birth_day', 00);
+        $data['birth_month'] = in('birth_month', 00);
+        $data['birth_year'] = in('birth_year', 0000);
         $data['gender'] = in('gender');
         $data['mobile'] = in('mobile');
         $data['landline'] = in('landline');

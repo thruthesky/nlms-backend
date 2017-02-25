@@ -10,7 +10,11 @@ class Update extends User {
         if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
         if ( in('id') ) return error( ERROR_CANNOT_CHANGE_USER_ID );
         if ( in('password') ) return error( ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE );
-        if ( is_string( in('mobile') ) ) return error( ERROR_MOBILE_NOT_NUMERIC );
+        $mobile = in('mobile');
+        if ( $mobile ) {
+            if ( ! is_numeric( $mobile ) ) return error( ERROR_MOBILE_NOT_NUMERIC );
+            if( strlen( $mobile ) > 32 ) return error( ERROR_MOBILE_TOO_LONG );
+        }
         $data = [];
 
         $data['email'] = in('email');

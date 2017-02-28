@@ -16,17 +16,29 @@ class Forum extends \model\base\Base
 
 
     /**
-     * @param $id
+     *
+     * HTTP interface for load
+     *
+     * @param null|string $what
      * @return mixed
      * @code
      *      $config = $this->getConfig( in('id') );
      * @endcode
      */
-    protected final function get($id)
+    public function load( $what = 'NO-ARGUMENT' )
     {
-        return $this->load( $id );
+        // If there is any value, then it is not HTTP interface call.
+
+        if ( $what != 'NO-ARGUMENT' ) return parent::load( $what );
+
+        $idx = in('idx_config');
+        if ( empty($idx) ) $idx = in('idx_data');
+        if ( empty( $idx ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
+
+        $record = parent::load( $idx );
 
 
+        return result( $record );
     }
 
 

@@ -145,6 +145,7 @@ And withcenter team members.
 * Edit 'config.php' for database connection.
 * mkdir 777 data
 * Access http://YOUR-WEBSITE.COM/?mc=system.install
+* TEST : http://localhost/?mc=test.all.run
 
 
 
@@ -171,16 +172,38 @@ And withcenter team members.
 
 * test class must have run() method to run all the test.
 
-* To test all tests.
 
-    * ?mc=test.all
+## Run All Tests
 
-* To test whole tests of a class.
+One thing to remind on runing test code is that it is simply a module::class::method call.
 
-	* ?mc=base.base_test.run
 
-* To test a method
-	* ?mc=base.base_test.method_name
+To do all tests at once, access below.
+
+````
+http://localhost/?mc=test.all.run
+````
+
+
+
+
+## Test by class
+
+It is a mandatory to have 'run()' method on each test class to run all the tests of methods. By this idea, you can run all the tests of a class like below;
+
+
+````
+http://localhost/?mc=forum.forum_config_test.run
+````
+
+
+## Test a method in a class
+
+
+````
+http://localhost/?mc=forum.forum_config_test.testCreate
+````
+
 
 ## Basic Unit Test Class
 

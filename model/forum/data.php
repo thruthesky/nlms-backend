@@ -9,11 +9,17 @@ class Data extends Forum {
         parent::__construct();
         $this->setTable('forum_data');
     }
+
+
+    /**
+     * @return mixed
+     */
     public function create() {
         if ( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
-        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
-        if( ! is_numeric( in('idx_config') ) ) return error( ERROR_IDX_CONFIG_NOT_NUMBER );
-        $config = forum_config()->getConfig();
+        if ( empty( in('idx_config') ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
+        if ( ! is_numeric( in('idx_config') ) ) return error( ERROR_IDX_CONFIG_NOT_NUMBER );
+
+        $config = forum_config()->load( in( 'idx_config' ) );
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         $user = user()->load_by_session_id( in('session_id') );
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
@@ -29,7 +35,8 @@ class Data extends Forum {
         if( strlen( $data['title'] ) > 256 ) return error( ERROR_TITLE_TOO_LONG );
         $forumdata_idx = $this->insert( $data );
         if ( $forumdata_idx <= 0 ) return error( $forumdata_idx );
-        success( ['forum_data'=>$forumdata_idx] );
+        return success( ['forum_data'=>$forumdata_idx] );
+
     }
     public function edit() {
         if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );

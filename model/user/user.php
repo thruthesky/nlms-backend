@@ -225,8 +225,6 @@ class User extends \model\base\Base {
         unset( $user['password'], $user['session_id'], $user['stamp_registration'] );
 
 
-
-
         $_meta = meta()->gets( 'user', $user['idx'] );
         $metas = [];
         foreach( $_meta as $arr ) {

@@ -14,22 +14,32 @@ class Config extends Forum {
     /**
      *
      *
-     * @return void|mixed
+     * HTTP interface
+     *
+     * @return mixed
      *
      *
      */
     public function create() {
+
+        if ( empty(in('id') ) ) return error( ERROR_FORUM_ID_EMPTY ); // @fixed. put right error message.
+
         $data = [];
         $data['id'] = in('id');
         $data['name'] = in('name');
         $data['description'] = in('description');
         if( strlen( in('id') ) > 64 ) return error( ERROR_FORUM_CONFIG_ID_IS_TOO_LONG );
         if( strlen( in('name') ) >128) return error( ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG );
-        $config = $this->get( in('id') );
-        if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST );
+
+        $config = $this->load( in('id') );
+
+
+        if ( is_error($config) ) return error( $config ); // @fixed by Mr. Song. Right error should be returned.
+        if ( $config ) return error( ERROR_FORUM_CONFIG_EXIST ); //
         $forum_idx = $this->insert( $data );
         if ( $forum_idx <= 0 ) error( $forum_idx );
         else success( ['idx'=>$forum_idx] );
+        return OK;
     }
 
     /**
@@ -47,12 +57,13 @@ class Config extends Forum {
         $no = $this->update($data);
         if ( $no == 0 ) return error( ERROR_UNKNOWN ); // strange error. this error should not happened here.
         success( ['forum_data' => $this->load( in('idx') ) ] );
+        return OK;
     }
 
     /**
      * HTTP interface
      * @param null $compatibility_arg1
-     * @return mixed|void
+     * @return mixed
      */
     public function delete( $compatibility_arg1 = null ) {
 
@@ -76,12 +87,17 @@ class Config extends Forum {
         */
     }
 
+
+    /**
+     * @deprecated Use 'load()'
+     *
+     * Unnecessary function.
+     * @return array|mixed|null
+     */
+
     public function getConfig( ) {
-        if( empty( in('idx_config') ) ) return error( ERROR_FORUM_IDX_CONFIG_EMPTY );
-        $idx = in('idx_config');
-        $config = $this->load( $idx );
-        if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
-        success($config);
-        return $config;
+        return $this->load();
     }
+
+
 }

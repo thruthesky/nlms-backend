@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
     function di($o) {
         $re = print_r($o, true);
         $re = str_replace(" ", "&nbsp;", $re);
@@ -103,17 +99,29 @@ function error_string( $re ) {
 }
 
 /**
+ *
+ *
+ * Saves success data in $system['success']
+ *
+ * @note and later, it will be served by json_result()
+ *
  * @attention when success json data printed out, it does not stop the script. Meaning the script will continue.
  * @param null $data
+ *
+ * @return $mixed
  */
 function success( $data = null ) {
     global $system;
     if ( empty($data) || is_array( $data ) ) { }
     else error( ERROR_MALFORMED_RESPONSE );
     $system['success'] = ['code'=>OK, 'data'=>$data];
+    return $data;
 }
 
 /**
+ *
+ * calls success() or error()
+ *
  * @param $re - It gets error code defined in defines.php
  */
 function result( $re ) {
@@ -123,7 +131,10 @@ function result( $re ) {
 
 
 /**
- * Returns JSON encoded string.
+ *
+ * Returns JSON encoded string with SUCCESS data OR ERROR MESSAGE
+ *
+ * @note success/error data is saved in $system variable by success() and error().
  *
  * @attention Call this method to get result After a run of 'model\class' or 'model::class->method()'
  *
@@ -145,7 +156,7 @@ function json_result() {
         $re = $system['success'];
     }
 
-    unset( $system['error'], $system['success'] );
+    unset( $system['error'], $system['success'] ); // after use of json_result(), it clears $system['success'], $system['error'], so, another call from "unit test" can be handled.
     return json_encode( $re );
 }
 
@@ -232,7 +243,13 @@ function test( $re, $code ) {
 }
 
 
-
+/**
+ * return true if the request to 'backend' was success.
+ *
+ * @param $re
+ * @return bool
+ *
+ */
 function is_success( $re ) {
     if ( is_array( $re ) ) {
         if ( array_key_exists( 'code', $re ) ) {
@@ -241,6 +258,17 @@ function is_success( $re ) {
     }
     return true;
 }
+
+/**
+ * Return ERROR_CODE if there is any error.
+ * @param $re
+ * @return bool|mixed
+ */
 function is_error( $re ) {
-    return ! is_success( $re );
+    if ( is_array( $re ) ) {
+        if ( array_key_exists( 'code', $re ) && array_key_exists( 'message', $re ) && array_key_exists( 'all', $re ) ) {
+            if ( $re['code'] ) return $re['code'];
+        }
+    }
+    return false;
 }

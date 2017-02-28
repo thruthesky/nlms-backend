@@ -13,8 +13,15 @@ class Forum_Test extends \model\test\Test {
     }
 
 
+
+
     private function createForumConfig( $params ) {
+
+
         $params2 = $params;
+
+
+
         $params2['id'] = $this->randomString(65);
         $re = $this->ex( "\\model\\forum\\Config::create", $params2 );
         test( $re['code'] == ERROR_FORUM_CONFIG_ID_IS_TOO_LONG ,"Forum Config create test with id more than 64 characters" . $re['code']);
@@ -22,15 +29,15 @@ class Forum_Test extends \model\test\Test {
         $params2['name'] = $this->randomString(129);
         $re = $this->ex( "\\model\\forum\\Config::create", $params2 );
         test( $re['code'] == ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG , "Forum Config create test with name more than 128 characters" . $re['code']);
+
+
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        $forum_config_idx = $re['data']['idx'];
 
-        $forum_config = forum_config()->load( $forum_config_idx );
-        test( is_success( $forum_config ) , "Loading Config if Forum Config is successfully created");
 
-        if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) { // if exists,
+        if ( is_error( $re ) == ERROR_FORUM_CONFIG_EXIST ) {
+
             $re = $this->ex( "\\model\\forum\\Config::delete", $params ); // delete
-            test( $re['code'] == 0, "Deleteing forum config - $params[id], " . error_string( $re ));
+            test( $re['code'] == 0, "Deleting forum config - $params[id], " . error_string( $re ));
             $re = $this->ex( "\\model\\forum\\Config::create", $params ); // create
         }
 
@@ -38,7 +45,14 @@ class Forum_Test extends \model\test\Test {
         test( is_success($re), "Creating forum config - $params[id], " . error_string( $re ));
 
 
+
+        $forum_config_idx = $re['data']['idx'];
+        $forum_config = forum_config()->load( $forum_config_idx );
+        test( is_success( $forum_config ) , "Loading Config if Forum Config is successfully created");
+
+
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
+        di($re);
         test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]. " . error_string($re) );
 
         $editconfig = ['idx'=>$forum_config_idx, 'id'=>'edit-forum', 'name'=>'edit ForumConfig'];
@@ -118,16 +132,18 @@ class Forum_Test extends \model\test\Test {
 
         $params_2['idx_config'] = null;
         $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
-        test( $re['code'] == ERROR_FORUM_IDX_CONFIG_EMPTY , "Creating forum Data without config_idx -". $re['code'] );
+        test( $re['code'] == ERROR_FORUM_IDX_CONFIG_EMPTY , "Creating forum Data without config_idx: ". $re['code'] );
         $params_2 = $params;
 
         $params_2['title'] = $this->randomString(257);
         $re = $this->ex( "\\model\\forum\\Data::create", $params_2 );
-        test( $re['code'] == ERROR_TITLE_TOO_LONG , "Forum Data create test with title more than 256 characters" . $re['code'] );
+        test( is_error( $re ), "Forum Data create test with title more than 256 characters: " . error_string( $re ));
         $this->forumDataGets();
 
-        $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );
-        test( $re['code'] == 0, "Forum Data gets Test");
+
+
+        $re = $this->ex( "\\model\\forum\\Config::load", $params );
+        test( is_success( $re ), "Config load - $params[id]. " . error_string( $re ));
 
         $this->forumConfigGet($params);
 
@@ -206,7 +222,8 @@ class Forum_Test extends \model\test\Test {
 
         $params_2 = ['idx_config' => rand(100, 300)];
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params_2 );
-        test( $re['code'] == ERROR_FORUM_CONFIG_NOT_EXIST, "Getconfig test Forum config not exist". $re['code']);
+
+        test( is_success($re) && empty($re['data']), "Getconfig test Forum config not exist". $re['code']);
 
 
         $re = $this->ex( "\\model\\forum\\Config::getconfig", $params );

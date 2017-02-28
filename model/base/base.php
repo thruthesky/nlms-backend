@@ -79,7 +79,15 @@ class Base {
      *              - If it is numeric, then it is idx. so, this method will get the record on the idx.
      *              - If it is one word string, then it is an 'ID'
      *              - If it is a string with ' ', =, <, >, then it assumes that is is a WHERE SQL clause.
-     * @return array|null
+     * @return mixed
+     *
+     *      - if error, error code will be return.
+     *          -- if there is no data, that is not error. that's just a success with no data.
+     *      - if success, array will be returned.
+     *
+     *      - if there is no data, empty array will be returned.
+     *
+     *
      */
     public function load( $what ) {
 
@@ -130,12 +138,18 @@ class Base {
     }
 
     /**
-     * Returns rows of table based on the $cond.
+     * Returns rows of entity table based on the $cond.
      *
      * @attention All request to get rows from database MUST use this method IF it is only simple 'SELECT', NOT JOIN-SELECT-QUERY.
      *
+     * @note it does 'SQL INJECTION' security check.
+     *
      * @param $cond
      * @return array|int
+     *
+     *          - Array of records will be return on success.
+     *          - ERROR_CODE will be returned on error.
+     *
      */
     public function loads( $cond )
     {

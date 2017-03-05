@@ -53,12 +53,25 @@ spl_autoload_register( function( $what ) {
 
 /**
  *
+ * Returns User object
  *
  * @return \model\user\User
  *
  */
 function user() {
     return new \model\user\User();
+}
+
+/**
+ * Returns user table record currently logged in user.
+ */
+$_currentUser;
+function currentUser() {
+    global $_currentUser;
+    if ( isset( $_currentUser ) || empty( $_currentUser ) ) $_currentUser = user()->load_by_session_id( in('session_id') );
+    $user = user();
+    $user->reset( $_currentUser );
+    return $user;
 }
 /**
  *

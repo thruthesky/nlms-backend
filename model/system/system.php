@@ -19,5 +19,9 @@ class System extends \model\base\Base {
         http_response_code(500);
         die();
     }
+    public function timeoutError() {
+        sleep(5);
+        success(['note'=>'This should be timeout error'] );
+    }
 
 }

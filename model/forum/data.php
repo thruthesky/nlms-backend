@@ -21,7 +21,8 @@ class Data extends Forum {
 
         $config = forum_config()->load( in( 'idx_config' ) );
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
-        $user = user()->load_by_session_id( in('session_id') );
+        // $user = user()->load_by_session_id( in('session_id') );
+        $user = currentUser();
         if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
         if( empty( in('idx_user') ) ) return error( ERROR_USER_IDX_EMPTY );
         if( !is_numeric( in('idx_user') ) ) return error( ERROR_USER_IDX_NOT_NUMBER);

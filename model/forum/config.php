@@ -31,7 +31,11 @@ class Config extends Forum {
         if( strlen( in('id') ) > 64 ) return error( ERROR_FORUM_CONFIG_ID_IS_TOO_LONG );
         if( strlen( in('name') ) >128) return error( ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG );
 
+
+        if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
+
         $config = $this->load( in('id') );
+
 
 
         if ( is_error($config) ) return error( $config ); // @fixed by Mr. Song. Right error should be returned.

@@ -441,8 +441,16 @@ Admin must pass 'idx' parameter or error will be returned.
         
 ## Forum Protocols
 
+### Forum Config Create
 
-        
+To create a forum,
+
+````
+http://localhost/www/backend/index.php?id=forum224718&mc=forum.config.create
+````
+
+
+
 
 ## Response
 

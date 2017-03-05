@@ -42,6 +42,7 @@ class Forum_Test extends \model\test\Test {
         }
 
 
+        // 여기서 부터.. 게시판 admin 생성을 할 때 퍼미션 에러가 발생.
         test( is_success($re), "Creating forum config - $params[id], " . error_string( $re ));
 
 
@@ -52,7 +53,7 @@ class Forum_Test extends \model\test\Test {
 
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
-        di($re);
+        // di($re);
         test( $re['code'] == ERROR_FORUM_CONFIG_EXIST, "Forum config already exist: $params[id]. " . error_string($re) );
 
         $editconfig = ['idx'=>$forum_config_idx, 'id'=>'edit-forum', 'name'=>'edit ForumConfig'];

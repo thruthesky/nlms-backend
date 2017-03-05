@@ -37,7 +37,6 @@ class User extends \model\base\Base {
 
         $session_id = $n . '-' . md5( "$i,$r,$t,$n,$p" );
 
-
         $this->update( ['session_id' => $session_id] );
 
         return $session_id;
@@ -54,9 +53,9 @@ class User extends \model\base\Base {
      * @endcode
      */
     public function load_by_session_id( $session_id ) {
-        if ( empty($session_id) ) error( ERROR_SESSION_ID_EMPTY );
+        if ( empty($session_id) ) return ERROR_SESSION_ID_EMPTY;
         $user = $this->load( "session_id='$session_id'");
-        if ( empty($user) ) error( ERROR_WRONG_SESSION_ID );
+        if ( empty($user) ) return ERROR_WRONG_SESSION_ID;
         return $user;
     }
 
@@ -64,6 +63,13 @@ class User extends \model\base\Base {
         return !! $this->record;
     }
 
+
+    /**
+     *
+     * Returns true if the login user is ADMIN.
+     *
+     * @return bool
+     */
     public function isAdmin() {
         if ( ! $this->login() ) return false;
         if ( array_key_exists( 'id', $this->record ) ) {
@@ -163,17 +169,14 @@ class User extends \model\base\Base {
     }
 
 
+    /**
+     * @param $users
+     */
     public function pres( &$users ) {
-
         foreach( $users as &$user ) {
-
             unset( $user['password'], $user['session_id'] );
-
             $user['meta'] = meta()->gets( 'user', $user['idx'] );
-
-
         }
-
     }
 
 

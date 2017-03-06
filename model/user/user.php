@@ -80,7 +80,10 @@ class User extends \model\base\Base {
 
 
     /**
+     *
      * Returns a new Session ID of a user.
+     *
+     * @use this method when you want to login a user without password.
      *
      * @attention It generates a FAKE session id and save it into user record and returns it.
      * @attention It does not check user's password.
@@ -91,6 +94,11 @@ class User extends \model\base\Base {
      *
      *      - int as error code on error
      *      - string as session-id on success.
+     *
+     *
+     * @code
+     *      $params['session_id'] = user()->forceLogin('admin');
+     * @endcode
      */
     public function forceLogin( $id ) {
         if ( empty($id ) ) return ERROR_USER_ID_EMPTY;

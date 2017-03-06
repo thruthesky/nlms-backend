@@ -43,6 +43,10 @@ define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWO
 define('ERROR_MOBILE_TOO_LONG', -40128);                    $em[ERROR_MOBILE_TOO_LONG] = 'mobile-is-too-long';
 define('ERROR_USER_IDX_NOT_MATCHED' , -40129);              $em[ERROR_USER_IDX_NOT_MATCHED] = 'idx-user-not-matched';
 
+define('ERROR_USER_NOT_LOGIN', -4010001);                      $em[ERROR_USER_NOT_LOGIN] = 'user-not-login';
+
+
+
 
 // forum errors. between from -40200 to -40299
 

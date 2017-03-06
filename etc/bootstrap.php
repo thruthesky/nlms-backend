@@ -64,15 +64,21 @@ function user() {
 
 /**
  * Returns user table record currently logged in user.
+ *
+ * @warning if there is no $_REQUEST['session_id'], then the User object is empty.
+ * @return \model\user\User
  */
 $_currentUser;
 function currentUser() {
-    global $_currentUser;
-    if ( isset( $_currentUser ) || empty( $_currentUser ) ) $_currentUser = user()->load_by_session_id( in('session_id') );
+    global $_currentUser; // memory cache.
+    if ( isset( $_currentUser ) || empty( $_currentUser ) ) { // if not set.
+        $_currentUser = user()->load_by_session_id( in('session_id') );
+    }
     $user = user();
     $user->reset( $_currentUser );
     return $user;
 }
+
 /**
  *
  *

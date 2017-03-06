@@ -31,6 +31,8 @@ class Forum_Test extends \model\test\Test {
         test( $re['code'] == ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG , "Forum Config create test with name more than 128 characters" . $re['code']);
 
 
+
+        $params['session_id'] = user()->forceLogin('admin');
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
 
 
@@ -42,7 +44,7 @@ class Forum_Test extends \model\test\Test {
         }
 
 
-        // 여기서 부터.. 게시판 admin 생성을 할 때 퍼미션 에러가 발생.
+
         test( is_success($re), "Creating forum config - $params[id], " . error_string( $re ));
 
 
@@ -84,6 +86,7 @@ class Forum_Test extends \model\test\Test {
 
 
         $params['id'] = 'id-' . time();
+        $params['session_id'] = user()->forceLogin('admin');
 
 
         $re = $this->ex( "\\model\\forum\\Config::create", $params );
@@ -91,13 +94,13 @@ class Forum_Test extends \model\test\Test {
             test( is_success($re), "createForumData::config::create() " . error_string($re) );
         }
         else {
-
             if ( $re['code'] == ERROR_FORUM_CONFIG_EXIST ) {
 
             }
             else test( is_success($re), "createForumData::config::create() " . error_string($re) );
         }
 
+        $params['session_id'] = null;
         $params['idx_config'] = $re['data']['idx'];
         $re = $this->ex( "\\model\\forum\\Data::create", $params );
         test( $re['code'] == ERROR_SESSION_ID_EMPTY, "Creating forum Data without session_id. " . error_string( $re ));
@@ -200,8 +203,9 @@ class Forum_Test extends \model\test\Test {
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
         test( $re['code'] == 0 , "Deleting forum data - $editdata[title]");
 
+
         $re = $this->ex( "\\model\\forum\\Data::delete", $editdata );
-        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $re[code]");
+        test( $re['code'] == ERROR_FORUM_DATA_NOT_EXIST , "Forum Data Already deleted - $re[code]" . error_string($re));
     }
 
     private function forumDataGets() {

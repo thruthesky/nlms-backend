@@ -22,9 +22,11 @@ class Data extends Forum {
         $config = forum_config()->load( in( 'idx_config' ) );
         if( empty( $config ) ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
         // $user = user()->load_by_session_id( in('session_id') );
-        $user = currentUser();
-        if ( empty($user) ) return error( ERROR_USER_NOT_EXIST );
-        if( empty( in('idx_user') ) ) return error( ERROR_USER_IDX_EMPTY );
+        // $user = currentUser();
+        if ( ! currentUser()->login() ) return error( ERROR_WRONG_SESSION_ID ); // since the user sent a session_id but failed to login
+
+        // if( empty( in('idx_user') ) ) return error( ERROR_USER_IDX_EMPTY ); // @error. Again, security error.
+
         if( !is_numeric( in('idx_user') ) ) return error( ERROR_USER_IDX_NOT_NUMBER);
 
         $data = [];
@@ -44,8 +46,13 @@ class Data extends Forum {
 //        if( empty( in('idx_user') ) ) return error( ERROR_IDX_EMPTY );
         if( !is_numeric(in('idx_user') ) ) return error( ERROR_USER_IDX_NOT_NUMBER );
         if( strlen( in('title') ) > 256 ) return error( ERROR_TITLE_TOO_LONG );
-        $user = user()->load_by_session_id( in('session_id') );
-        if( empty( $user ) ) return error( ERROR_USER_NOT_EXIST );
+
+        //$user = user()->load_by_session_id( in('session_id') );
+        //if( empty( $user ) ) return error( ERROR_USER_NOT_EXIST );
+
+        if ( ! currentUser()->login() ) return error( ERROR_WRONG_SESSION_ID ); // since the user sent a session_id but failed to login
+
+
         $data = [];
         $data['idx'] = in('idx');
         $data['title'] = in('title');
@@ -62,9 +69,15 @@ class Data extends Forum {
         if( empty( in('session_id') ) ) return error( ERROR_SESSION_ID_EMPTY );
         if ( empty($idx) ) $idx = "id='".in('id')."'"; // if it is not string, it is id.
         $data = $this->load( $idx );
-        $user = user()->load_by_session_id( in('session_id') );
+
+
         if( !$data ) error( ERROR_FORUM_DATA_NOT_EXIST );
-        if( $data['idx_user'] != $user['idx'] ) return error( ERROR_USER_IDX_NOT_MATCHED );
+
+        $user = currentUser();
+        if ( ! $user->login() ) return error( ERROR_WRONG_SESSION_ID ); // since the user sent a session_id but failed to login
+
+
+        if( $data['idx_user'] != $user->record['idx'] ) return error( ERROR_USER_IDX_NOT_MATCHED );
         $this->destroy();
         success();
     }
